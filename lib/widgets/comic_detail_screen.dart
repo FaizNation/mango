@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/comic.dart';
+import '../models/chapter.dart';
+import '../providers/favorites_provider.dart';
+import '../screens/chapter_detail_screen.dart';
+import '../data/chapter_data.dart';
 
 class ComicDetailScreen extends StatelessWidget {
   final Comic comic;
 
-  const ComicDetailScreen({super.key, required this.comic});
+  ComicDetailScreen({super.key, required this.comic}) {
+    chapters = getSampleChapters(comic.id);
+  }
+
+  late final List<Chapter> chapters;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // App Bar with Image
           SliverAppBar(
             expandedHeight: 300,
             pinned: true,
@@ -47,14 +55,12 @@ class ComicDetailScreen extends StatelessWidget {
             ),
           ),
 
-          // Content
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Author and Rating
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -84,7 +90,6 @@ class ComicDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Genres
                   const Text(
                     'Genres',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -96,6 +101,7 @@ class ComicDetailScreen extends StatelessWidget {
                     children: comic.genres.map((genre) {
                       return Chip(
                         label: Text(genre),
+
                         // ignore: deprecated_member_use
                         backgroundColor: Colors.blue.withOpacity(0.1),
                         labelStyle: const TextStyle(color: Colors.blue),
@@ -104,7 +110,6 @@ class ComicDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Additional Information
                   const Text(
                     'Details',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -121,7 +126,6 @@ class ComicDetailScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Description
                   const Text(
                     'Description',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -133,26 +137,63 @@ class ComicDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Action Buttons
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // Add to favorites functionality
+                        child: Consumer<FavoritesProvider>(
+                          builder: (context, favoritesProvider, child) {
+                            final isFavorite = favoritesProvider.isFavorite(
+                              comic,
+                            );
+                            return ElevatedButton.icon(
+                              onPressed: () {
+                                favoritesProvider.toggleFavorite(comic);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      isFavorite
+                                          ? 'Removed from favorites'
+                                          : 'Added to favorites',
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isFavorite ? Colors.pink : null,
+                              ),
+                              label: Text(
+                                isFavorite
+                                    ? 'Remove from Favorites'
+                                    : 'Add to Favorites',
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                              ),
+                            );
                           },
-                          icon: const Icon(Icons.favorite_border),
-                          label: const Text('Add to Favorites'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            // Start reading functionality
+                            if (chapters.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChapterDetailScreen(
+                                    chapter: chapters[0],
+                                    allChapters: chapters,
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           icon: const Icon(Icons.book),
                           label: const Text('Start Reading'),
@@ -164,6 +205,38 @@ class ComicDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    'Chapters',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: chapters.length,
+                    itemBuilder: (context, index) {
+                      final chapter = chapters[index];
+                      return ListTile(
+                        title: Text(chapter.title),
+                        subtitle: Text('Chapter ${chapter.chapterNumber}'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChapterDetailScreen(
+                                chapter: chapter,
+                                allChapters: chapters,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

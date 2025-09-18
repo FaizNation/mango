@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:mango/screens/home/home_screen.dart';
 import 'package:mango/utils/showexit.dart';
-
-// import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:mango/widgets/main_navigation_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -71,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               final confirm = await showExitConfirmationDialog(context);
               if (!mounted) return;
+
               // ignore: use_build_context_synchronously
               if (confirm) Navigator.of(context).pop();
             },
@@ -163,12 +162,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         return;
                       }
 
-                      // kalau berhasil login → langsung ke HomePage
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              MyHomePage(userEmail: email, userPass: pass),
+                          builder: (context) => MainNavigationScreen(),
                         ),
                       );
                     },
@@ -185,55 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 300),
-                  // Row(
-                  //   children: const [
-                  //     Expanded(child: Divider()),
-                  //     Padding(
-                  //       padding: EdgeInsets.symmetric(horizontal: 10),
-                  //       child: Text("Atau daftar dengan"),
-                  //     ),
-                  //     Expanded(child: Divider()),
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 20),
-                  // SizedBox(
-                  //   width: 200,
-                  //   height: 50,
-                  //   child: SignInButton(
-                  //     Buttons.Google,
-                  //     onPressed: () {},
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 16),
 
-                  // SizedBox(
-                  //   width: 220,
-                  //   height: 50,
-                  //   child: SignInButton(
-                  //     Buttons.Facebook,
-                  //     onPressed: () {},
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 16),
-
-                  // SizedBox(
-                  //   width: 220,
-                  //   height: 50,
-                  //   child: SignInButton(
-                  //     Buttons.GitHub,
-                  //     onPressed: () {},
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

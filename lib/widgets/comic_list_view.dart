@@ -31,7 +31,6 @@ class ComicListView extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Comic Cover
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
@@ -50,7 +49,7 @@ class ComicListView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Comic Details
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +77,7 @@ class ComicListView extends StatelessWidget {
                           style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 8),
-                        // Genres and Rating
+
                         Row(
                           children: [
                             Expanded(

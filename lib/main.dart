@@ -1,12 +1,18 @@
-
-import 'package:flutter/material.dart';
 import 'package:mango/screens/auth/signin_screen.dart';
 import 'package:mango/screens/auth/signup_screen.dart';
-import 'package:mango/screens/home/home_screen.dart';
 import 'package:mango/screens/splash_screen.dart';
+import 'package:mango/providers/favorites_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:mango/widgets/main_navigation_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => FavoritesProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,8 +32,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SignUpScreen(),
-        '/home': (context) => MyHomePage(userEmail: 'Guest', userPass: '-',),
-        
+        '/home': (context) => const MainNavigationScreen(),
       },
     );
   }
