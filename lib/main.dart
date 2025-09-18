@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:mango/screens/auth/signin_screen.dart';
 import 'package:mango/screens/auth/signup_screen.dart';
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SignUpScreen(),
-        '/home': (context) => MyHomePage(userEmail: 'Guest', userPass: '-'),
-        // '/animeDetail': (context) => const AnimeDetailPage(title: "Default"),
+        '/home': (context) => MyHomePage(userEmail: 'Guest', userPass: '-',),
+        
       },
     );
   }

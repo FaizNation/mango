@@ -1,6 +1,8 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:mango/screens/home/home_screen.dart';
+
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignUpScreen extends StatefulWidget {

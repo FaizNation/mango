@@ -68,6 +68,7 @@ flutter:
     - assets/images/newcomic/onePiece.png
     - assets/images/newcomic/bokuNoHero.png
     - assets/images/newcomic/jujusuKaisen.png
+    - assets/images/manhwa/Solo_Leveling.png
 
   fonts:
     - family: Anja

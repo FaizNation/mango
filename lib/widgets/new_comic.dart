@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Comic {
+class NewComic {
   final String title;
   final String imageUrl;
   final String subtitle;
 
-  Comic({required this.title, required this.imageUrl, this.subtitle = ''});
+  NewComic({required this.title, required this.imageUrl, this.subtitle = ''});
 }
 
 class ComicCarousel extends StatelessWidget {
-  final List<Comic> comics;
+  final List<NewComic> comics;
 
   const ComicCarousel({super.key, required this.comics});
 

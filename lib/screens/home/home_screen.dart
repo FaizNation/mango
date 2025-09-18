@@ -1,37 +1,28 @@
 
 import 'package:flutter/material.dart';
-import 'package:mango/content/comic.dart';
-import 'package:mango/content/detail.dart';
+import 'package:mango/data/manga_data.dart';
+import 'package:mango/data/manhua_data.dart';
+import 'package:mango/data/manhwa_data.dart';
+import 'package:mango/models/comic.dart';
+import 'package:mango/widgets/comic_list_view.dart';
+import 'package:mango/widgets/new_comic.dart';
 
 class MyHomePage extends StatelessWidget {
   final String userEmail;
   final String userPass;
 
-  final List<String> animeList = [
-    "Naruto Shippuden",
-    "One Piece",
-    "Attack on Titan",
-    "Demon Slayer",
-    "Jujutsu Kaisen",
-    "Fullmetal Alchemist",
-    "Tokyo Ghoul",
-    "Bleach",
-    "Death Note",
-    "My Hero Academia",
-  ];
-
   final sampleComics = [
-    Comic(
+    NewComic(
       title: 'One piece',
       subtitle: 'Chapter 1107 • Updated',
       imageUrl: 'assets/images/newcomic/onePiece.png',
     ),
-    Comic(
+    NewComic(
       title: 'Boku no Hero',
       subtitle: 'chapter 430 • Completed',
       imageUrl: 'assets/images/newcomic/bokuNoHero.png',
     ),
-    Comic(
+    NewComic(
       title: 'Jujutsu Kaisen',
       subtitle: 'chapter 271 • Completed',
       imageUrl: 'assets/images/newcomic/jujusuKaisen.png',
@@ -58,6 +49,9 @@ class MyHomePage extends StatelessWidget {
 
     return {"greeting": greeting, "time": formattedTime};
   }
+
+  // Getter to combine all comics
+  List<Comic> get allComics => [...mangaList, ...manhwaList, ...manhuaList];
 
   MyHomePage({super.key, required this.userEmail, required this.userPass});
 
@@ -108,73 +102,40 @@ class MyHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ComicCarousel(comics: sampleComics),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pushReplacementNamed(context, '/');
-            //   },
-            //   child: const Text('Logout'),
-            // ),
 
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Daftar Anime Favorit:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: animeList.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              AnimeDetailPage(title: animeList[index]),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      elevation: 4,
-                      color: const Color(0xFFE5F3FF),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.auto_stories,
-                              color: Color(0xFF005FB3),
-                              size: 28,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                animeList[index],
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Color(0xFF005FB3),
-                              size: 18,
-                            ),
-                          ],
-                        ),
+            DefaultTabController(
+              length: 4,
+              child: Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      child: TabBar(
+                        labelColor: Colors.blue,
+                        unselectedLabelColor: Colors.grey,
+                        isScrollable: false,
+                        tabs: [
+                          Tab(icon: Icon(Icons.library_books), text: 'All'),
+                          Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
+                          Tab(icon: Icon(Icons.phone_android), text: 'Manhwa'),
+                          Tab(icon: Icon(Icons.auto_stories), text: 'Manhua'),
+                        ],
                       ),
                     ),
-                  );
-                },
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          // All Comics Tab
+                          ComicListView(comics: allComics),
+                          // Individual Category Tabs
+                          ComicListView(comics: mangaList),
+                          ComicListView(comics: manhwaList),
+                          ComicListView(comics: manhuaList),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
