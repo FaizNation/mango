@@ -22,7 +22,7 @@ class Manhua extends Comic {
   Map<String, dynamic> getAdditionalInfo() {
     return {
       ...super.getAdditionalInfo(),
-      'Origin': 'China 📍',
+      'Origin': 'China 🇨🇳',
       'isColored': true,
     };
   }

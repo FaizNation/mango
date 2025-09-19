@@ -22,7 +22,7 @@ class Manga extends Comic {
   Map<String, dynamic> getAdditionalInfo() {
     return {
       ...super.getAdditionalInfo(),
-      'Origin': 'Japan 📍',
+      'Origin': 'Japan 🇯🇵',
       'Reading Direction': _readingDirection,
     };
   }

@@ -127,7 +127,7 @@ class ComicDetailScreen extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   const Text(
-                    'Description',
+                    'Synopsis',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),

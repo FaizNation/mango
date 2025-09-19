@@ -35,7 +35,12 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
     setState(() {
       _currentChapter = chapter;
     });
-    _scrollController.jumpTo(0);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0);
+      }
+    });
   }
 
   @override
@@ -60,8 +65,8 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
       ),
       body: Stack(
         children: [
-          
           SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               children: _currentChapter.images.map((imageUrl) {
                 return InteractiveViewer(
@@ -99,7 +104,6 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
             ),
           ),
 
-          
           Positioned(
             bottom: 16,
             right: 16,

@@ -22,7 +22,7 @@ class Manhwa extends Comic {
   Map<String, dynamic> getAdditionalInfo() {
     return {
       ...super.getAdditionalInfo(),
-      'Origin': 'Korea 📍',
+      'Origin': 'Korea 🇰🇷',
       'Reading Direction': _readingDirection,
     };
   }

@@ -3,7 +3,6 @@ class Chapter {
   final String title;
   final String comicId;
   final List<String> images;
-  final DateTime uploadDate;
   final int chapterNumber;
 
   const Chapter({
@@ -11,7 +10,6 @@ class Chapter {
     required this.title,
     required this.comicId,
     required this.images,
-    required this.uploadDate,
     required this.chapterNumber,
   });
 }

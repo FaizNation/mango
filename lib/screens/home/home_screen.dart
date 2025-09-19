@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:mango/data/manga_data.dart';
-import 'package:mango/data/manhua_data.dart';
-import 'package:mango/data/manhwa_data.dart';
+import 'package:mango/data/manga/manga_data.dart';
+import 'package:mango/data/manhua/manhua_data.dart';
+import 'package:mango/data/manhwa/manhwa_data.dart';
 import 'package:mango/models/comic.dart';
 import 'package:mango/widgets/comic_list_view.dart';
 import 'package:mango/widgets/new_comic.dart';
@@ -117,7 +117,7 @@ class MyHomePage extends StatelessWidget {
                         tabs: [
                           Tab(icon: Icon(Icons.library_books), text: 'All'),
                           Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
-                          Tab(icon: Icon(Icons.phone_android), text: 'Manhwa'),
+                          Tab(icon: Icon(Icons.chrome_reader_mode), text: 'Manhwa'),
                           Tab(icon: Icon(Icons.auto_stories), text: 'Manhua'),
                         ],
                       ),
