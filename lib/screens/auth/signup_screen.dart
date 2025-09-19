@@ -1,7 +1,6 @@
 
-
 import 'package:flutter/material.dart';
-import 'package:mango/screens/home/home_screen.dart';
+import 'package:mango/widgets/main_navigation_screen.dart';
 
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -44,7 +43,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (email.isNotEmpty && pass.isNotEmpty) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => MyHomePage(userEmail: email, userPass: pass),
+          builder: (context) => MainNavigationScreen(
+            userEmail: emailController.text.trim(),
+            userPass: passController.text.trim(),
+          ),
         ),
       );
     }
@@ -53,9 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
+      appBar: AppBar(backgroundColor: Colors.white),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -122,29 +122,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                TextField(
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    labelText: 'Confrim password',
-                    errorText: passError,
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                // TextField(
+                //   obscureText: _obscurePassword,
+                //   decoration: InputDecoration(
+                //     prefixIcon: const Icon(Icons.lock_outline),
+                //     labelText: 'Confrim password',
+                //     errorText: passError,
+                //     border: const OutlineInputBorder(
+                //       borderRadius: BorderRadius.all(Radius.circular(12)),
+                //     ),
+                //     suffixIcon: IconButton(
+                //       icon: Icon(
+                //         _obscurePassword
+                //             ? Icons.visibility_off
+                //             : Icons.visibility,
+                //       ),
+                //       onPressed: () {
+                //         setState(() {
+                //           _obscurePassword = !_obscurePassword;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: login,
