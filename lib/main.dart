@@ -1,8 +1,9 @@
+
+import 'package:flutter/material.dart';
+import 'package:mango/providers/favorites_provider.dart';
 import 'package:mango/screens/auth/signin_screen.dart';
 import 'package:mango/screens/auth/signup_screen.dart';
 import 'package:mango/screens/splash_screen.dart';
-import 'package:mango/providers/favorites_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:mango/widgets/main_navigation_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SignUpScreen(),
-        '/home': (context) => const MainNavigationScreen(),
+        '/home': (context) => const MainNavigationScreen(userEmail: '', userPass: '',),
       },
     );
   }
