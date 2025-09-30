@@ -1,9 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:mango/screens/getstarted_screen.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -37,7 +34,9 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/iconSplash.gif', height: 250),
+                Image.asset('assets/images/iconSplash.gif',
+                 height: 250
+                 ),
                 const SizedBox(height: 30),
                 const Text(
                   'WELCOME!',
