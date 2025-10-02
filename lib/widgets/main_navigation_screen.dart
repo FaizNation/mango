@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:mango/screens/favorites/favorites_screen.dart';
 import 'package:mango/screens/home/home_screen.dart';
 import 'package:mango/screens/profile/profile_screen.dart';
-
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainNavigationScreen extends StatefulWidget {

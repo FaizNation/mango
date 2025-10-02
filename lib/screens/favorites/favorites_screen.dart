@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mango/providers/favorites_provider.dart';
 import 'package:mango/widgets/comic_list_view.dart';

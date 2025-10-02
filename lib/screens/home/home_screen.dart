@@ -1,6 +1,4 @@
 import 'dart:async';
-
-
 import 'package:flutter/material.dart';
 import 'package:mango/data/manga/manga_data.dart';
 import 'package:mango/data/manhua/manhua_data.dart';

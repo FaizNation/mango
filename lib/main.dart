@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mango/providers/favorites_provider.dart';
 import 'package:mango/screens/auth/signin_screen.dart';
