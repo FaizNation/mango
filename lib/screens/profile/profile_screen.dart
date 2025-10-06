@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:getwidget/getwidget.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String userEmail;
@@ -114,6 +115,12 @@ class ProfileScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+              GFButton(
+                onPressed: () {},
+                text: "primary",
+                icon: Icon(Icons.facebook),
+                size: GFSize.SMALL,
               ),
               const Spacer(),
               GestureDetector(
