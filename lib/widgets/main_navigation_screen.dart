@@ -7,10 +7,12 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 class MainNavigationScreen extends StatefulWidget {
   final String userEmail;
   final String userPass;
+  final String userName;
   const MainNavigationScreen({
     super.key,
     required this.userEmail,
     required this.userPass,
+    required this.userName,
   });
 
   @override
@@ -26,7 +28,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void initState() {
     super.initState();
     _screens = [
-      MyHomePage(userEmail: widget.userEmail, userPass: widget.userPass),
+      MyHomePage(userName: widget.userName),
       const FavoritesScreen(),
       ProfileScreen(userEmail: widget.userEmail, userPass: widget.userPass),
     ];

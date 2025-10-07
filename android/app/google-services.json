@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "194825118119",
+    "project_id": "mango-e0232",
+    "storage_bucket": "mango-e0232.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194825118119:android:7d81786ca2d16f6a5e9682",
+        "android_client_info": {
+          "package_name": "com.example.mango"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABzocnnQEPNS-_iHkPlaoHBaaRNdP4Kfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
