@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mango/services/auth_services.dart';
 import 'package:mango/widgets/main_navigation_screen.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -11,42 +12,64 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool _obscurePassword = true;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
 
+  String? userError;
   String? emailError;
   String? passError;
 
-  void login() {
+  void login() async {
     setState(() {
+      userError = null;
       emailError = null;
       passError = null;
     });
 
-    String email = emailController.text.trim();
-    String pass = passController.text.trim();
+    final user = _userController.text.trim();
+    final email = _emailController.text.trim();
+    final pass = _passController.text.trim();
 
+    var hasError = false;
+    if (user.isEmpty) {
+      hasError = true;
+      setState(() => userError = 'User wajib diisi');
+    }
     if (email.isEmpty) {
-      setState(() {
-        emailError = "Email wajib diisi";
-      });
+      hasError = true;
+      setState(() => emailError = 'Email wajib diisi');
     }
-
     if (pass.isEmpty) {
-      setState(() {
-        passError = "Password wajib diisi";
-      });
+      hasError = true;
+      setState(() => passError = 'Password wajib diisi');
     }
+    if (hasError) return;
 
-    if (email.isNotEmpty && pass.isNotEmpty) {
-      Navigator.of(context).push(
+    final auth = AuthService();
+    try {
+      await auth.signUpWithEmail(email, pass, displayName: user);
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Registration successful')));
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => MainNavigationScreen(
-            userEmail: emailController.text.trim(),
-            userPass: passController.text.trim(),
+            userName: user,
+            userEmail: email,
+            userPass: pass,
           ),
         ),
       );
+    } catch (e) {
+      final message = e is Exception
+          ? e.toString().replaceAll('Exception: ', '')
+          : 'Registration failed';
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -84,7 +107,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 50),
                 TextField(
-                  controller: emailController,
+                  controller: _userController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.person_2_outlined),
+                    labelText: 'User',
+                    errorText: userError,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email_outlined),
                     labelText: 'Email',
@@ -96,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
-                  controller: passController,
+                  controller: _passController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock_outline),

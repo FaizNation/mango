@@ -8,13 +8,12 @@ import 'package:mango/widgets/comic_list_view.dart';
 import 'package:mango/widgets/new_comic.dart';
 
 class MyHomePage extends StatefulWidget {
-  final String userEmail;
-  final String userPass;
+  final String userName;
 
   const MyHomePage({
     super.key,
-    required this.userEmail,
-    required this.userPass,
+    required this.userName,
+
   });
 
   @override
@@ -113,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        widget.userEmail,
+                        widget.userName,
                         style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w800,
