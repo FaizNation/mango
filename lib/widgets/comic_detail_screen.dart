@@ -1,19 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// firebase handled by HistoryProvider
+import '../providers/history_provider.dart';
 import '../models/comic.dart';
 import '../models/chapter.dart';
 import '../providers/favorites_provider.dart';
 import '../screens/chapter_detail_screen.dart';
 import '../data/chapter_data.dart';
 
-class ComicDetailScreen extends StatelessWidget {
+class ComicDetailScreen extends StatefulWidget {
   final Comic comic;
 
-  ComicDetailScreen({super.key, required this.comic}) {
-    chapters = getSampleChapters(comic.id);
+  const ComicDetailScreen({super.key, required this.comic});
+
+  @override
+  State<ComicDetailScreen> createState() => _ComicDetailScreenState();
+}
+
+class _ComicDetailScreenState extends State<ComicDetailScreen> {
+  late final List<Chapter> chapters;
+
+  @override
+  void initState() {
+    super.initState();
+    chapters = getSampleChapters(widget.comic.id);
+    // Defer provider call until after the first frame so context is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final history = context.read<HistoryProvider>();
+        history.addEntry(
+          id: widget.comic.id,
+          title: widget.comic.title,
+          author: widget.comic.author,
+          description: widget.comic.description,
+          coverImage: widget.comic.coverImage,
+        );
+      } catch (_) {
+        // provider not registered or other error - ignore silently
+      }
+    });
   }
 
-  late final List<Chapter> chapters;
+  // history is now handled via HistoryProvider
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +53,7 @@ class ComicDetailScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
-                comic.coverImage,
+                widget.comic.coverImage,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
@@ -35,7 +63,7 @@ class ComicDetailScreen extends StatelessWidget {
                 },
               ),
               title: Text(
-                comic.title,
+                widget.comic.title,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -66,7 +94,7 @@ class ComicDetailScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'By ${comic.author}',
+                          'By ${widget.comic.author}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -78,7 +106,7 @@ class ComicDetailScreen extends StatelessWidget {
                           const Icon(Icons.star, color: Colors.amber),
                           const SizedBox(width: 4),
                           Text(
-                            comic.rating.toString(),
+                            widget.comic.rating.toString(),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -98,7 +126,7 @@ class ComicDetailScreen extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: comic.genres.map((genre) {
+                    children: widget.comic.genres.map((genre) {
                       return Chip(
                         label: Text(genre),
 
@@ -115,7 +143,7 @@ class ComicDetailScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  ...comic.getAdditionalInfo().entries.map((entry) {
+                  ...widget.comic.getAdditionalInfo().entries.map((entry) {
                     return Row(
                       children: [
                         Text("${entry.key}: "),
@@ -132,7 +160,7 @@ class ComicDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    comic.description,
+                    widget.comic.description,
                     style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
                   const SizedBox(height: 16),
@@ -143,11 +171,11 @@ class ComicDetailScreen extends StatelessWidget {
                         child: Consumer<FavoritesProvider>(
                           builder: (context, favoritesProvider, child) {
                             final isFavorite = favoritesProvider.isFavorite(
-                              comic,
+                              widget.comic,
                             );
                             return ElevatedButton.icon(
                               onPressed: () {
-                                favoritesProvider.toggleFavorite(comic);
+                                favoritesProvider.toggleFavorite(widget.comic);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
