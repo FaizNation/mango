@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:mango/screens/favorites/favorites_screen.dart';
+import 'package:mango/screens/history/history_screen.dart';
 import 'package:mango/screens/home/home_screen.dart';
 import 'package:mango/screens/profile/profile_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _screens = [
       MyHomePage(userName: widget.userName),
       const FavoritesScreen(),
+      const HistoryScreen(),
       ProfileScreen(userEmail: widget.userEmail, userPass: widget.userPass),
     ];
   }
@@ -51,6 +53,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             icon: const Icon(Icons.favorite),
             title: const Text('Favorites'),
             // selectedColor: Colors.pink,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.history),
+            title: const Text('History'),
+            // selectedColor: Theme.of(context).primaryColor,
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.person),
