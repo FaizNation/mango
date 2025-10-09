@@ -45,6 +45,9 @@ dependencies:
   # flutter_native_splash: ^2.4.6
   salomon_bottom_bar: ^3.3.2 # Bottom Navigation Bar (main_navigation_screen.dart)
   url_launcher: ^6.2.6 # Buat buka url github di profile
+  image_picker: ^0.8.7+5
+  firebase_storage: ^13.0.2
+  mime: ^1.0.0
   
 
 
