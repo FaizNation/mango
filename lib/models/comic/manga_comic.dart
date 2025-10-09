@@ -1,9 +1,9 @@
-import 'package:mango/models/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 
-class Manhua extends Comic {
-  final bool _isColored = true;
+class Manga extends Comic {
+  final String _readingDirection = "Right-to-Left";
 
-  Manhua({
+  Manga({
     required super.id,
     required super.title,
     required super.author,
@@ -16,17 +16,17 @@ class Manhua extends Comic {
     super.releaseYear,
   });
 
-  bool get isColored => _isColored;
+  String get readingDirection => _readingDirection;
 
   @override
   Map<String, dynamic> getAdditionalInfo() {
     return {
       ...super.getAdditionalInfo(),
-      'Origin': 'China 🇨🇳',
-      'isColored': true,
+      'Origin': 'Japan 🇯🇵',
+      'Reading Direction': _readingDirection,
     };
   }
 
   @override
-  String getType() => 'Manhua';
+  String getType() => 'Manga';
 }

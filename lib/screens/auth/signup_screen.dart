@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mango/services/auth_services.dart';
+import 'package:mango/services/auth/auth_services.dart';
 import 'package:mango/widgets/main_navigation_screen.dart';
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 

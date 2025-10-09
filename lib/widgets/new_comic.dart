@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mango/data/manga/manga_data.dart';
-import 'package:mango/models/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 import 'package:mango/widgets/comic_detail_screen.dart';
 
 

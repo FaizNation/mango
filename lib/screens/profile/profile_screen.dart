@@ -4,9 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 // upload logic moved to ProfilePhotoService
-import '../../services/profile_photo_service.dart';
+// upload logic moved to PhotoEditor utility
 import '../../utils/logout_dialog.dart';
-import '../../utils/edit_photo_dialog.dart';
+import '../../utils/photo_editor.dart';
+import '../../widgets/profile_info_card.dart';
+import 'change_password/change_password_screen.dart';
+import 'feedback/feedback_screen.dart';
+import 'about/about_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userEmail;
@@ -59,13 +63,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _showEditPhotoDialog() async {
-    final choice = await showEditPhotoDialog(context);
-    if (choice == null) return;
-    // use service to pick/upload and persist
     if (mounted) setState(() => _loading = true);
     try {
-      final service = ProfilePhotoService();
-      final result = await service.pickUploadAndSave(choice);
+      final result = await showPhotoEditor(context);
       if (result != null) {
         if (mounted) setState(() => _photoUrl = result);
         if (mounted) {
@@ -84,7 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) setState(() => _loading = false);
     }
   }
-  // upload logic moved to ProfilePhotoService
 
   @override
   Widget build(BuildContext context) {
@@ -155,24 +154,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              Card(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  leading: const Icon(Icons.email, color: Colors.blue),
-                  title: const Text("Email"),
-                  subtitle: Text(widget.userEmail),
+              // Info cards
+              const SizedBox(height: 8),
+              ProfileInfoCard(
+                icon: Icons.email,
+                title: 'Email',
+                subtitle: widget.userEmail,
+                onTap: null,
+              ),
+              const SizedBox(height: 12),
+              ProfileInfoCard(
+                icon: Icons.lock,
+                title: 'Change Password',
+                subtitle: 'Update your password',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ChangePasswordScreen(),
+                  ),
                 ),
               ),
-              Card(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  leading: const Icon(Icons.lock, color: Colors.blue),
-                  title: const Text("Password"),
-                  subtitle: Text(widget.userPass.replaceAll(RegExp(r'.'), '*')),
+              const SizedBox(height: 12),
+              ProfileInfoCard(
+                icon: Icons.bug_report,
+                title: 'Feedback/bug reports',
+                subtitle: 'Report issues or send feedback',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const FeedbackScreen()),
                 ),
               ),
-              const SizedBox(height: 30),
-              ElevatedButton.icon(
+              const SizedBox(height: 12),
+              ProfileInfoCard(
+                icon: Icons.info,
+                title: 'About Us',
+                subtitle: 'Learn more about the developer',
+                onTap: () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const AboutScreen())),
+              ),
+
+              const SizedBox(height: 24),
+              ElevatedButton(
                 onPressed: () async {
                   final confirm = await showLogoutDialog(context);
                   if (!mounted) return;
@@ -181,21 +202,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   }
                 },
-                icon: const Icon(Icons.logout),
-                label: const Text("Logout"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 0, 0),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 14,
-                  ),
+                  backgroundColor: Colors.red,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 12.0,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.logout, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -217,4 +244,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
 }

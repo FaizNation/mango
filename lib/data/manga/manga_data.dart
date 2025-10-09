@@ -1,5 +1,5 @@
-import 'package:mango/models/comic.dart';
-import 'package:mango/models/manga_comic.dart';
+import 'package:mango/models/comic/comic.dart';
+import 'package:mango/models/comic/manga_comic.dart';
 
 List<Comic> mangaList = [
   Manga(

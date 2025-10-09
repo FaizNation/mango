@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mango/models/history_entry.dart';
 import 'package:mango/widgets/comic_detail_screen.dart';
 import 'package:mango/widgets/new_comic.dart' show findComicById;
-import 'package:mango/models/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 
 class HistoryListView extends StatelessWidget {
   final List<HistoryEntry> entries;

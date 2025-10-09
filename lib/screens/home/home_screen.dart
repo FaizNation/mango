@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mango/data/manga/manga_data.dart';
 import 'package:mango/data/manhua/manhua_data.dart';
 import 'package:mango/data/manhwa/manhwa_data.dart';
-import 'package:mango/models/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 import 'package:mango/widgets/comic_list_view.dart';
 import 'package:mango/widgets/new_comic.dart';
 

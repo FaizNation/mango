@@ -9,9 +9,6 @@ import 'package:mime/mime.dart';
 class ProfilePhotoService {
   final ImagePicker _picker = ImagePicker();
 
-  /// Picks an image from [source], tries to upload to Firebase Storage.
-  /// If Storage upload fails (FirebaseException) this falls back to a data URI.
-  /// Returns the final photo URL (download URL or data URI) or null if user canceled.
   Future<String?> pickUploadAndSave(ImageSource source) async {
     final picked = await _picker.pickImage(
       source: source,
@@ -48,9 +45,6 @@ class ProfilePhotoService {
     }
   }
 
-  /// Persists the given [url] for the user's profile.
-  /// If [url] is null the profile photo is removed.
-  /// Data URIs are saved only to Firestore (not to FirebaseAuth.photoURL).
   Future<void> _persist(String uid, String? url) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('Not signed in');
@@ -66,7 +60,6 @@ class ProfilePhotoService {
     }
 
     if (url.startsWith('data:')) {
-      // Too long for Auth profile, store only in Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'photoUrl': url,
       }, SetOptions(merge: true));

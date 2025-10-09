@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/comic.dart';
+import '../models/comic/comic.dart';
 
 class FavoritesProvider extends ChangeNotifier {
   final List<Comic> _favorites = [];

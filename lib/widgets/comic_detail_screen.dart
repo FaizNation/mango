@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // firebase handled by HistoryProvider
 import '../providers/history_provider.dart';
-import '../models/comic.dart';
+import '../models/comic/comic.dart';
 import '../models/chapter.dart';
 import '../providers/favorites_provider.dart';
 import '../screens/chapter_detail_screen.dart';

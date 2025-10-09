@@ -1,4 +1,4 @@
-import 'package:mango/models/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 
 class Manhwa extends Comic {
   final String _readingDirection = "Top-to-Bottom";

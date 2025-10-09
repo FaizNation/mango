@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mango/services/auth_services.dart';
+import 'package:mango/services/auth/auth_services.dart';
 import 'package:mango/utils/showexit.dart';
 import 'package:mango/widgets/main_navigation_screen.dart';
 
