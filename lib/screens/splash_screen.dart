@@ -34,9 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/iconSplash.gif',
-                 height: 250
-                 ),
+                Image.asset('assets/images/iconSplash.gif', height: 250),
                 const SizedBox(height: 30),
                 const Text(
                   'WELCOME!',
@@ -44,6 +42,16 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Anja',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 400),
+                const Text(
+                  'Developed by Faiz Nation',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
                   ),
                   textAlign: TextAlign.center,
                 ),

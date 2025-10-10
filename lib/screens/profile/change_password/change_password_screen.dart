@@ -14,6 +14,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _newController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _loading = false;
+  bool _obscurePassword = true;
 
   Future<void> _updatePassword() async {
     if (!_formKey.currentState!.validate()) return;
@@ -35,14 +36,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(
-        
-        
         // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text('Error: ${e.message}')));
     } catch (e) {
       ScaffoldMessenger.of(
-        
         // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text('Unexpected error: $e')));
@@ -71,18 +69,45 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               TextFormField(
                 controller: _currentController,
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   labelText: 'Current password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
+
                 validator: (v) =>
                     (v == null || v.isEmpty) ? 'Enter current password' : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _newController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'New password'),
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
+                  labelText: 'New password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
                 validator: (v) {
                   if (v == null || v.isEmpty) return 'Enter new password';
                   if (v.length < 6) {
@@ -94,9 +119,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _confirmController,
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   labelText: 'Confirm new password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) return 'Confirm new password';

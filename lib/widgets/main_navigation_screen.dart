@@ -32,7 +32,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       MyHomePage(userName: widget.userName),
       const FavoritesScreen(),
       const HistoryScreen(),
-      ProfileScreen(userEmail: widget.userEmail, userPass: widget.userPass),
+      ProfileScreen(userEmail: widget.userEmail, userPass: widget.userPass, userName: widget.userName,),
     ];
   }
 
