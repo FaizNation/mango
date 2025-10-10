@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../models/chapter.dart';
 
@@ -70,8 +71,9 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
             child: Column(
               children: _currentChapter.images.map((imageUrl) {
                 return InteractiveViewer(
-                  minScale: 1.0,
-                  maxScale: 3.0,
+                  minScale: kIsWeb ? 1.0 : 1.0,
+                  maxScale: kIsWeb ? 1.0 : 3.0,
+                  scaleEnabled: !kIsWeb,
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.contain,
