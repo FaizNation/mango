@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 // history entry model used by the list widget
 
-
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
@@ -56,16 +55,23 @@ class HistoryScreen extends StatelessWidget {
           ),
         ],
       ),
-
-      body: Consumer<HistoryProvider>(
-        builder: (context, provider, child) {
-          if (provider.entries.isEmpty) {
-            return const Center(
-              child: Text('No history yet!', style: TextStyle(fontSize: 18)),
-            );
-          }
-          return HistoryListView(entries: provider.entries);
-        },
+      body: Center(
+        child: Container(
+          // On wider screens, this constrains the content to a max width of 700.
+          // On smaller screens (less than 700), this has no effect.
+          constraints: const BoxConstraints(maxWidth: 700),
+          child: Consumer<HistoryProvider>(
+            builder: (context, provider, child) {
+              if (provider.entries.isEmpty) {
+                return const Center(
+                  child:
+                      Text('No history yet!', style: TextStyle(fontSize: 18)),
+                );
+              }
+              return HistoryListView(entries: provider.entries);
+            },
+          ),
+        ),
       ),
     );
   }

@@ -32,7 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateGreeting() {
-    final now = DateTime.now();
+    // Get the current time in Indonesia (WIB is UTC+7)
+    final now = DateTime.now().toUtc().add(const Duration(hours: 7));
     final hour = now.hour;
 
     String newGreeting;
@@ -49,10 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final newTime =
         "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
 
-    setState(() {
-      greeting = newGreeting;
-      time = newTime;
-    });
+    if (mounted) {
+      setState(() {
+        greeting = newGreeting;
+        time = newTime;
+      });
+    }
   }
 
   @override
@@ -86,8 +89,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ];
 
+    final w = MediaQuery.of(context).size.width;
+    final isDesktop = w > 700;
+
     return PopScope(
-            canPop: false,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
@@ -101,86 +107,101 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         backgroundColor: const Color(0xFFE6F2FF),
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 700),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          greeting,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              greeting,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.userName,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
                         Text(
-                          widget.userName,
+                          time,
                           style: const TextStyle(
-                            fontSize: 30,
+                            fontSize: 50,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                       ],
                     ),
-                    Text(
-                      time,
-                      style: const TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.w800,
+                  ),
+                  const SizedBox(height: 10),
+                  // The ComicCarousel is now wrapped in a SizedBox to control its height from here
+                  SizedBox(
+                    height: isDesktop ? 250 : w * 0.45,
+                    child: ComicCarousel(comics: sampleComics),
+                  ),
+                  Expanded(
+                    child: DefaultTabController(
+                      length: 4,
+                      child: Column(
+                        children: [
+                          Container(
+                            color: const Color(0xFFFFFFFF),
+                            child: const TabBar(
+                              labelColor: Colors.blue,
+                              unselectedLabelColor: Colors.grey,
+                              tabs: [
+                                Tab(
+                                    icon: Icon(Icons.library_books),
+                                    text: 'All'),
+                                Tab(
+                                    icon: Icon(Icons.menu_book),
+                                    text: 'Manga'),
+                                Tab(
+                                  icon: Icon(Icons.chrome_reader_mode),
+                                  text: 'Manhwa',
+                                ),
+                                Tab(
+                                    icon: Icon(Icons.auto_stories),
+                                    text: 'Manhua'),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                ComicListView(comics: allComics),
+                                ComicListView(comics: mangaList),
+                                ComicListView(comics: manhwaList),
+                                ComicListView(comics: manhuaList),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              ComicCarousel(comics: sampleComics),
-
-              DefaultTabController(
-                length: 4,
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: const Color(0xFFFFFFFF),
-                        child: TabBar(
-                          labelColor: Colors.blue,
-                          unselectedLabelColor: Colors.grey,
-                          tabs: const [
-                            Tab(icon: Icon(Icons.library_books), text: 'All'),
-                            Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
-                            Tab(
-                              icon: Icon(Icons.chrome_reader_mode),
-                              text: 'Manhwa',
-                            ),
-                            Tab(icon: Icon(Icons.auto_stories), text: 'Manhua'),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            ComicListView(comics: allComics),
-                            ComicListView(comics: mangaList),
-                            ComicListView(comics: manhwaList),
-                            ComicListView(comics: manhuaList),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
