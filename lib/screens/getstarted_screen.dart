@@ -110,7 +110,7 @@ class GetStartedPage extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 145),
+                const Spacer(),
 
                 Align(
                   alignment: Alignment.bottomLeft,

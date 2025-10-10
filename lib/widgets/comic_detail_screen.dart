@@ -34,6 +34,8 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
           author: widget.comic.author,
           description: widget.comic.description,
           coverImage: widget.comic.coverImage,
+          rating: widget.comic.rating,
+          genres: widget.comic.genres,
         );
       } catch (_) {
         // provider not registered or other error - ignore silently

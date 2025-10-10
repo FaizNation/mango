@@ -4,17 +4,14 @@ import 'package:mango/data/manga/manga_data.dart';
 import 'package:mango/data/manhua/manhua_data.dart';
 import 'package:mango/data/manhwa/manhwa_data.dart';
 import 'package:mango/models/comic/comic.dart';
+import 'package:mango/utils/showexit.dart';
 import 'package:mango/widgets/comic_list_view.dart';
 import 'package:mango/widgets/new_comic.dart';
 
 class MyHomePage extends StatefulWidget {
   final String userName;
 
-  const MyHomePage({
-    super.key,
-    required this.userName,
-
-  });
+  const MyHomePage({super.key, required this.userName});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -89,86 +86,99 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ];
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFE6F2FF),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        greeting,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.userName,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            ComicCarousel(comics: sampleComics),
+    return PopScope(
+            canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
 
-            DefaultTabController(
-              length: 4,
-              child: Expanded(
-                child: Column(
+        final confirm = await showExitConfirmationDialog(context);
+        if (!mounted) return;
+        if (confirm) {
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFE6F2FF),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      color: const Color(0xFFFFFFFF),
-                      child: TabBar(
-                        labelColor: Colors.blue,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: const [
-                          Tab(icon: Icon(Icons.library_books), text: 'All'),
-                          Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
-                          Tab(
-                            icon: Icon(Icons.chrome_reader_mode),
-                            text: 'Manhwa',
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          greeting,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
                           ),
-                          Tab(icon: Icon(Icons.auto_stories), text: 'Manhua'),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.userName,
+                          style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          ComicListView(comics: allComics),
-                          ComicListView(comics: mangaList),
-                          ComicListView(comics: manhwaList),
-                          ComicListView(comics: manhuaList),
-                        ],
+                    Text(
+                      time,
+                      style: const TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              ComicCarousel(comics: sampleComics),
+
+              DefaultTabController(
+                length: 4,
+                child: Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        color: const Color(0xFFFFFFFF),
+                        child: TabBar(
+                          labelColor: Colors.blue,
+                          unselectedLabelColor: Colors.grey,
+                          tabs: const [
+                            Tab(icon: Icon(Icons.library_books), text: 'All'),
+                            Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
+                            Tab(
+                              icon: Icon(Icons.chrome_reader_mode),
+                              text: 'Manhwa',
+                            ),
+                            Tab(icon: Icon(Icons.auto_stories), text: 'Manhua'),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            ComicListView(comics: allComics),
+                            ComicListView(comics: mangaList),
+                            ComicListView(comics: manhwaList),
+                            ComicListView(comics: manhuaList),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

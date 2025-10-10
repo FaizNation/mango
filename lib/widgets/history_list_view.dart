@@ -44,8 +44,8 @@ class HistoryListView extends StatelessWidget {
                 author: entry.author ?? 'Unknown',
                 description: entry.description ?? 'No description available.',
                 coverImage: entry.coverImage ?? '',
-                rating: 0.0,
-                genres: <String>[],
+                rating: entry.rating ?? 0.0,
+                genres: entry.genres ?? ['Unknown'],
               );
 
               Navigator.push(
@@ -112,6 +112,55 @@ class HistoryListView extends StatelessWidget {
                             fontSize: 14,
                             color: Colors.grey[600],
                           ),
+                        ),
+
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Wrap(
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: (entry.genres ?? []).map((genre) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      // ignore: deprecated_member_use
+                                      color: Colors.blue.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      genre,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  (entry.rating ?? 0.0).toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 8),
                         Text(

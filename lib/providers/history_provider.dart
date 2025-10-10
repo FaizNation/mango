@@ -46,6 +46,8 @@ class HistoryProvider extends ChangeNotifier {
     String? coverImage,
     String? description,
     Map<String, dynamic>? extra,
+    required double rating,
+    required List<String> genres,
   }) async {
     final user = _auth.currentUser;
     if (user == null) return;
@@ -59,6 +61,9 @@ class HistoryProvider extends ChangeNotifier {
       if (author != null) 'author': author,
       if (coverImage != null) 'coverImage': coverImage,
       if (description != null) 'description': description,
+      'rating': rating,
+      if (genres.isNotEmpty) 'genres': genres,
+
     };
     if (extra != null) data.addAll(extra);
     await docRef.set({

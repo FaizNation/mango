@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
-// upload logic moved to ProfilePhotoService
-// upload logic moved to PhotoEditor utility
 import '../../utils/logout_dialog.dart';
 import '../../utils/photo_editor.dart';
 import '../../widgets/profile_info_card.dart';
@@ -13,11 +12,13 @@ import 'feedback/feedback_screen.dart';
 import 'about/about_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
+  final String userName;
   final String userEmail;
   final String userPass;
 
   const ProfileScreen({
     super.key,
+    required this.userName,
     required this.userEmail,
     required this.userPass,
   });
@@ -104,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  CircleAvatar(
+                  GFAvatar(
                     radius: 50,
                     backgroundColor: Colors.blue[200],
                     backgroundImage: _photoUrl != null && _photoUrl!.isNotEmpty
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 20),
               Text(
-                widget.userEmail,
+                widget.userName,
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -220,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(width: 8),
                       Text(
                         'Logout',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ],
                   ),
