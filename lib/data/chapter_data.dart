@@ -8,7 +8,8 @@ import 'package:mango/data/manhua/chapter/talesofdemonsandgods/talesofdemonsandg
 import 'package:mango/data/manhwa/chapter/sololeveling/sololeveling.dart';
 import 'package:mango/data/manhwa/chapter/thegotofhighschool/thegotofhighschool.dart';
 import 'package:mango/data/manhwa/chapter/windbreaker/windbreaker.dart';
-import '../models/chapter.dart';
+import 'package:mango/models/chapter.dart';
+
 
 Map<String, List<Chapter>> allComicChapters = {
   ...onepieceChapters,

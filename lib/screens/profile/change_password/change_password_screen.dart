@@ -67,8 +67,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: SingleChildScrollView(
             child: Padding(
@@ -95,8 +93,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           },
                         ),
                       ),
-                      validator: (v) =>
-                          (v == null || v.isEmpty) ? 'Enter current password' : null,
+                      validator: (v) => (v == null || v.isEmpty)
+                          ? 'Enter current password'
+                          : null,
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -145,8 +144,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Confirm new password';
-                        if (v != _newController.text) return 'Passwords do not match';
+                        if (v == null || v.isEmpty) {
+                          return 'Confirm new password';
+                        }
+                        if (v != _newController.text) {
+                          return 'Passwords do not match';
+                        }
                         return null;
                       },
                     ),

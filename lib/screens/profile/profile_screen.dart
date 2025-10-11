@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:mango/utils/logout_dialog.dart';
+import 'package:mango/utils/photo_editor.dart';
+import 'package:mango/widgets/profile_info_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
-import '../../utils/logout_dialog.dart';
-import '../../utils/photo_editor.dart';
-import '../../widgets/profile_info_card.dart';
 import 'change_password/change_password_screen.dart';
 import 'feedback/feedback_screen.dart';
 import 'about/about_screen.dart';
@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadCurrentPhoto() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
-    // prefer Firestore stored profile photo if available
+
     try {
       final doc = await FirebaseFirestore.instance
           .collection('users')
@@ -57,8 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
-
-  // logout dialog moved to utils/logout_dialog.dart
 
   Future<void> _launchGitHub() async {
     final Uri url = Uri.parse("https://github.com/FaizNation");
@@ -102,8 +100,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -118,14 +114,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundColor: Colors.blue[200],
                         backgroundImage:
                             _photoUrl != null && _photoUrl!.isNotEmpty
-                                ? (_photoUrl!.startsWith('data:')
-                                    ? MemoryImage(
-                                        base64Decode(
-                                          _photoUrl!.split(',').last,
-                                        ),
-                                      ) as ImageProvider
-                                    : NetworkImage(_photoUrl!))
-                                : null,
+                            ? (_photoUrl!.startsWith('data:')
+                                  ? MemoryImage(
+                                          base64Decode(
+                                            _photoUrl!.split(',').last,
+                                          ),
+                                        )
+                                        as ImageProvider
+                                  : NetworkImage(_photoUrl!))
+                            : null,
                         child: _photoUrl == null || _photoUrl!.isEmpty
                             ? Text(
                                 widget.userEmail.isNotEmpty
@@ -165,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // Info cards
+
                   const SizedBox(height: 8),
                   ProfileInfoCard(
                     icon: Icons.email,
@@ -208,10 +205,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       final confirm = await showLogoutDialog(context);
                       if (!mounted) return;
-                       if (confirm != null && confirm) {
+                      if (confirm != null && confirm) {
                         // ignore: use_build_context_synchronously
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
+                        Navigator.of(
+                          // ignore: use_build_context_synchronously
+                          context,
+                        ).popUntil((route) => route.isFirst);
                       }
                     },
                     style: ElevatedButton.styleFrom(

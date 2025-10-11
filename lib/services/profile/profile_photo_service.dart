@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -38,7 +37,6 @@ class ProfilePhotoService {
       await _persist(user.uid, downloadUrl);
       return downloadUrl;
     } on FirebaseException catch (_) {
-      // Fallback to storing data URI in Firestore
       final dataUri = 'data:$mimeType;base64,${base64Encode(fileBytes)}';
       await _persist(user.uid, dataUri);
       return dataUri;
@@ -64,7 +62,6 @@ class ProfilePhotoService {
         'photoUrl': url,
       }, SetOptions(merge: true));
     } else {
-      // Network URL: update both Auth profile and Firestore
       await user.updatePhotoURL(url);
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'photoUrl': url,

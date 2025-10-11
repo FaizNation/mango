@@ -7,16 +7,13 @@ class GetStartedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE6F2FF),
-      // Use LayoutBuilder to get screen constraints for responsiveness
+
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Define a breakpoint for desktop screens
           final bool isDesktop = constraints.maxWidth > 600;
 
           return Stack(
             children: [
-              // 1. Responsive blue circle background
-              // It's smaller on desktop and larger on mobile
               Positioned(
                 top: isDesktop ? -950 : -1200,
                 left: isDesktop ? -150 : -200,
@@ -30,7 +27,6 @@ class GetStartedPage extends StatelessWidget {
                 ),
               ),
 
-              // Main content area
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -45,9 +41,10 @@ class GetStartedPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 100),
 
-                      // 2. Text that centers on desktop
                       Align(
-                        alignment: isDesktop ? Alignment.center : Alignment.centerLeft,
+                        alignment: isDesktop
+                            ? Alignment.center
+                            : Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: isDesktop
                               ? CrossAxisAlignment.center
@@ -118,14 +115,10 @@ class GetStartedPage extends StatelessWidget {
                 ),
               ),
 
-              // 3. Image aligned to the bottom-left corner
               Positioned(
                 bottom: 0,
                 left: 0,
-                child: Image.asset(
-                  "assets/images/anime1.png",
-                  height: 280,
-                ),
+                child: Image.asset("assets/images/anime1.png", height: 280),
               ),
             ],
           );

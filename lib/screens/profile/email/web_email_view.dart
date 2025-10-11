@@ -24,7 +24,7 @@ class _WebEmailViewState extends State<WebEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Compose Email')),
+      appBar: AppBar(title: const Text('Email')),
       body: WebViewWidget(controller: _controller),
     );
   }

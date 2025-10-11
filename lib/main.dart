@@ -42,11 +42,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SignUpScreen(),
-        '/home': (context) => const MainNavigationScreen(
-          userName: '',
-          userEmail: '',
-          userPass: '',
-        ),
+        '/home': (context) => const MainNavigationScreen(userName: '', userEmail: '', userPass: '',),
       },
     );
   }

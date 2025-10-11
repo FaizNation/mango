@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HistoryEntry {
-  final String id; // doc id (usually comicId)
+  final String id; 
   final String title;
   final String? author;
   final String? coverImage;

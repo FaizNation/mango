@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/comic/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 import 'comic_detail_screen.dart';
 
 class ComicListView extends StatelessWidget {

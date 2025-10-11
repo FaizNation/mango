@@ -79,8 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ? err.toString().replaceAll('Exception: ', '')
           : 'Login failed';
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -107,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               final confirm = await showExitConfirmationDialog(context);
               if (!mounted) return;
+
               // ignore: use_build_context_synchronously
               if (confirm) Navigator.of(context).pop();
             },
@@ -122,16 +124,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: isDesktop ? 450 : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    // FIX: Wrapped the Column in a SingleChildScrollView
-                    // This prevents the overflow error when the keyboard appears.
+
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Added top padding to give some space when scrolling
                           const SizedBox(height: 20),
-                          Image.asset('assets/images/logoMango.png',
-                              height: 120),
+                          Image.asset(
+                            'assets/images/logoMango.png',
+                            height: 120,
+                          ),
                           const SizedBox(height: 35),
                           const Text(
                             'Welcome👋!',
@@ -159,8 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelText: 'Email',
                               errorText: emailError,
                               border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
                               ),
                             ),
                           ),
@@ -173,8 +176,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelText: 'Password',
                               errorText: passError,
                               border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -190,19 +194,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: const Text("forgot password?"),
-                            ),
-                          ),
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: TextButton(
+                          //     onPressed: () {},
+                          //     child: const Text("forgot password?"),
+                          //   ),
+                          // ),
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: login,
                             style: ElevatedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               backgroundColor: const Color(0xFF2563EB),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -211,12 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               "LogIn",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 18),
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
-                          // FIX: Replaced Spacer with a SizedBox.
-                          // A Spacer cannot be used in a scrollable view,
-                          // so this provides fixed spacing instead.
+
                           const SizedBox(height: 150),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -233,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
-                          // Add some final padding at the bottom
+
                           const SizedBox(height: 40),
                         ],
                       ),

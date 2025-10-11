@@ -1,17 +1,15 @@
-import 'dart:ui'; // Import this to use PointerDeviceKind
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mango/data/manga/manga_data.dart';
 import 'package:mango/models/comic/comic.dart';
 import 'package:mango/widgets/comic_detail_screen.dart';
 
-// FIX 1: Add a custom scroll behavior class.
-// This tells Flutter to allow scrolling with a mouse pointer.
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        ...super.dragDevices,
-        PointerDeviceKind.mouse,
-      };
+    ...super.dragDevices,
+    PointerDeviceKind.mouse,
+  };
 }
 
 Comic? findComicById(String id, BuildContext context) {
@@ -46,8 +44,7 @@ class ComicCarousel extends StatelessWidget {
 
     return SizedBox(
       height: w * 0.45,
-      // FIX 2: Wrap the ListView in a ScrollConfiguration
-      // and apply the custom behavior.
+
       child: ScrollConfiguration(
         behavior: MyCustomScrollBehavior(),
         child: ListView.separated(
@@ -82,8 +79,9 @@ class ComicCarousel extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (context, err, st) => Container(
                           color: Colors.grey[300],
-                          child:
-                              const Center(child: Icon(Icons.image, size: 48)),
+                          child: const Center(
+                            child: Icon(Icons.image, size: 48),
+                          ),
                         ),
                       ),
                       Positioned(
@@ -129,4 +127,3 @@ class ComicCarousel extends StatelessWidget {
     );
   }
 }
-

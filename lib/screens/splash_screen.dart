@@ -23,8 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ambil ukuran layar
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -33,12 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
               final width = constraints.maxWidth;
               final height = constraints.maxHeight;
 
-              // skala proporsional
               double imageHeight = height * 0.3;
-              double welcomeFontSize = width * 0.07; // proporsional terhadap lebar
+              double welcomeFontSize = width * 0.07;
               double creditFontSize = width * 0.025;
 
-              // batas minimum & maksimum biar tetap nyaman
               if (welcomeFontSize < 24) welcomeFontSize = 24;
               if (welcomeFontSize > 48) welcomeFontSize = 48;
 

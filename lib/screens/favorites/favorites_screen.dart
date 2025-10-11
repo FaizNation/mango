@@ -16,22 +16,21 @@ class FavoritesScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFE6F2FF),
       ),
-      // Apply the responsive centering pattern here
+
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: Consumer<FavoritesProvider>(
             builder: (context, favoritesProvider, child) {
-              // If the favorites list is empty, display a message
               if (favoritesProvider.favorites.isEmpty) {
                 return const Center(
-                  child:
-                      Text('No favorites yet!', style: TextStyle(fontSize: 18)),
+                  child: Text(
+                    'No favorites yet!',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 );
               }
-              // Otherwise, display the list of favorite comics
+
               return ComicListView(comics: favoritesProvider.favorites);
             },
           ),

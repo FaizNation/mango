@@ -1,5 +1,6 @@
+import 'package:mango/models/comic/comic.dart';
 import 'package:mango/models/comic/manhua_comic.dart';
-import '../../models/comic/comic.dart';
+
 
 List<Comic> manhuaList = [
   Manhua(

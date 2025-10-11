@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mango/screens/profile/email/web_email_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../email/web_email_view.dart';
+
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -54,6 +55,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       }
     } catch (e) {
       ScaffoldMessenger.of(
+        
         // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to open mail client: $e')));
@@ -79,8 +81,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       ),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
+          
+          
           constraints: const BoxConstraints(maxWidth: 700),
           child: Padding(
             padding: const EdgeInsets.all(16.0),

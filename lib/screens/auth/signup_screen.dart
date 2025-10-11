@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mango/services/auth/auth_services.dart';
 import 'package:mango/utils/showexit.dart';
 import 'package:mango/widgets/main_navigation_screen.dart';
-// import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -91,27 +90,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFFE6F2FF),
         appBar: AppBar(backgroundColor: const Color(0xFFE6F2FF)),
-        // Use LayoutBuilder to create a responsive layout
+
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Check if the screen width is wide enough for a desktop layout
             final bool isDesktop = constraints.maxWidth > 600;
 
             return SafeArea(
               child: Center(
-                // Center the content
                 child: SizedBox(
-                  // Constrain the width on desktop for shorter text fields
                   width: isDesktop ? 450 : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    // FIX: Wrapped the Column in a SingleChildScrollView
-                    // This prevents the overflow error when the keyboard appears.
+
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Added top padding to give some space when scrolling
                           const SizedBox(height: 20),
                           Image.asset(
                             'assets/images/logoMango.png',
@@ -209,8 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          // FIX: Replaced Spacer with a SizedBox.
-                          // A Spacer cannot be used in a scrollable view.
+
                           const SizedBox(height: 80),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +220,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ],
                           ),
-                          // Add some final padding at the bottom
+
                           const SizedBox(height: 40),
                         ],
                       ),

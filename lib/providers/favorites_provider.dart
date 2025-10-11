@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/comic/comic.dart';
+import 'package:mango/models/comic/comic.dart';
 
 class FavoritesProvider extends ChangeNotifier {
   final List<Comic> _favorites = [];
@@ -19,7 +19,6 @@ class FavoritesProvider extends ChangeNotifier {
   Future<void> toggleFavorite(Comic comic) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      // Not authenticated — just update local state
       _localToggle(comic);
       return;
     }
@@ -32,16 +31,12 @@ class FavoritesProvider extends ChangeNotifier {
         .doc(comic.id);
 
     if (isFavorite(comic)) {
-      // remove
       _favorites.removeWhere((element) => element.id == comic.id);
       notifyListeners();
       try {
         await docRef.delete();
-      } catch (_) {
-        // ignore firestore errors for now
-      }
+      } catch (_) {}
     } else {
-      // add
       _favorites.add(comic);
       notifyListeners();
       try {
@@ -55,9 +50,7 @@ class FavoritesProvider extends ChangeNotifier {
           'genres': comic.genres,
           'addedAt': FieldValue.serverTimestamp(),
         });
-      } catch (_) {
-        // ignore firestore errors for now
-      }
+      } catch (_) {}
     }
   }
 
@@ -107,7 +100,7 @@ class FavoritesProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      // ignore load errors
+      //
     }
   }
 }

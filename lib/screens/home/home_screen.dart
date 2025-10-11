@@ -32,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateGreeting() {
-    // Get the current time in Indonesia (WIB is UTC+7)
     final now = DateTime.now().toUtc().add(const Duration(hours: 7));
     final hour = now.hour;
 
@@ -149,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // The ComicCarousel is now wrapped in a SizedBox to control its height from here
+
                   SizedBox(
                     height: isDesktop ? 250 : w * 0.45,
                     child: ComicCarousel(comics: sampleComics),
@@ -166,18 +165,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               unselectedLabelColor: Colors.grey,
                               tabs: [
                                 Tab(
-                                    icon: Icon(Icons.library_books),
-                                    text: 'All'),
-                                Tab(
-                                    icon: Icon(Icons.menu_book),
-                                    text: 'Manga'),
+                                  icon: Icon(Icons.library_books),
+                                  text: 'All',
+                                ),
+                                Tab(icon: Icon(Icons.menu_book), text: 'Manga'),
                                 Tab(
                                   icon: Icon(Icons.chrome_reader_mode),
                                   text: 'Manhwa',
                                 ),
                                 Tab(
-                                    icon: Icon(Icons.auto_stories),
-                                    text: 'Manhua'),
+                                  icon: Icon(Icons.auto_stories),
+                                  text: 'Manhua',
+                                ),
                               ],
                             ),
                           ),
@@ -204,4 +203,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

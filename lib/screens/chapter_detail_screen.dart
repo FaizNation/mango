@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../models/chapter.dart';
+import 'package:mango/models/chapter.dart';
 
 class ChapterDetailScreen extends StatefulWidget {
   final Chapter chapter;
@@ -68,8 +68,6 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
       ),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: Stack(
             children: [
@@ -91,10 +89,10 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                             height: 400,
                             child: Center(
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
+                                value:
+                                    loadingProgress.expectedTotalBytes != null
                                     ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
+                                          loadingProgress.expectedTotalBytes!
                                     : null,
                               ),
                             ),
@@ -153,7 +151,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   void _showChaptersList(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      // Center the bottom sheet content as well for desktop
+
       builder: (context) => Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 700),

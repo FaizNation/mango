@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mango/data/chapter_data.dart';
+import 'package:mango/models/chapter.dart';
+import 'package:mango/models/comic/comic.dart';
+import 'package:mango/providers/favorites_provider.dart';
+import 'package:mango/providers/history_provider.dart';
+import 'package:mango/screens/chapter_detail_screen.dart';
 import 'package:provider/provider.dart';
-// firebase handled by HistoryProvider
-import '../providers/history_provider.dart';
-import '../models/comic/comic.dart';
-import '../models/chapter.dart';
-import '../providers/favorites_provider.dart';
-import '../screens/chapter_detail_screen.dart';
-import '../data/chapter_data.dart';
 
 class ComicDetailScreen extends StatefulWidget {
   final Comic comic;
@@ -24,7 +23,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
   void initState() {
     super.initState();
     chapters = getSampleChapters(widget.comic.id);
-    // Defer provider call until after the first frame so context is available
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final history = context.read<HistoryProvider>();
@@ -37,13 +36,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
           rating: widget.comic.rating,
           genres: widget.comic.genres,
         );
-      } catch (_) {
-        // provider not registered or other error - ignore silently
-      }
+      } catch (_) {}
     });
   }
-
-  // history is now handled via HistoryProvider
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +46,6 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
       backgroundColor: const Color(0xFFE6F2FF),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: CustomScrollView(
             slivers: [
@@ -128,7 +121,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                       const Text(
                         'Genres',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Wrap(
@@ -147,7 +142,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                       const Text(
                         'Details',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       ...widget.comic.getAdditionalInfo().entries.map((entry) {
@@ -158,7 +155,8 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                               Text(
                                 "${entry.key}: ",
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               Expanded(
                                 child: Text(
@@ -174,7 +172,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                       const Text(
                         'Synopsis',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -187,14 +187,15 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                           Expanded(
                             child: Consumer<FavoritesProvider>(
                               builder: (context, favoritesProvider, child) {
-                                final isFavorite =
-                                    favoritesProvider.isFavorite(widget.comic);
+                                final isFavorite = favoritesProvider.isFavorite(
+                                  widget.comic,
+                                );
                                 return ElevatedButton.icon(
                                   onPressed: () {
-                                    favoritesProvider
-                                        .toggleFavorite(widget.comic);
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
+                                    favoritesProvider.toggleFavorite(
+                                      widget.comic,
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           isFavorite
@@ -233,8 +234,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChapterDetailScreen(
+                                      builder: (context) => ChapterDetailScreen(
                                         chapter: chapters[0],
                                         allChapters: chapters,
                                       ),
@@ -245,8 +245,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                               icon: const Icon(Icons.book),
                               label: const Text('Start Reading'),
                               style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Colors.white,
                               ),
@@ -258,7 +259,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                       const Text(
                         'Chapters',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       ListView.builder(
@@ -271,7 +274,9 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             margin: const EdgeInsets.symmetric(vertical: 4),
                             child: ListTile(
                               title: Text(chapter.title),
-                              subtitle: Text('Chapter ${chapter.chapterNumber}'),
+                              subtitle: Text(
+                                'Chapter ${chapter.chapterNumber}',
+                              ),
                               trailing: const Icon(Icons.chevron_right),
                               onTap: () {
                                 Navigator.push(

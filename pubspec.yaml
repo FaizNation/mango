@@ -1,5 +1,5 @@
 name: mango
-description: "A new Flutter project."
+description: "A comics reading app"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -31,18 +31,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # english_words: ^4.0.0
+
   getwidget: ^7.0.0
   provider: ^6.1.5+1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  # cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.8
   firebase_core: ^4.1.1
   firebase_auth: ^6.1.0
   cloud_firestore: ^6.0.2
-  # google_fonts: ^6.2.1
-  # flutter_signin_button: ^2.0.0
-  # flutter_native_splash: ^2.4.6
   salomon_bottom_bar: ^3.3.2 # Bottom Navigation Bar (main_navigation_screen.dart)
   url_launcher: ^6.2.6 # Buat buka url github di profile
   image_picker: ^0.8.7+5
