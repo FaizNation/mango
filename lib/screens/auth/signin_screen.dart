@@ -29,10 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final pass = passController.text.trim();
 
     if (email.isEmpty) {
-      setState(() => emailError = 'Email wajib diisi');
+      setState(() => emailError = 'Yo! Don’t forget your email');
     }
     if (pass.isEmpty) {
-      setState(() => passError = 'Password wajib diisi');
+      setState(() => passError = 'No password, no entry');
     }
     if (email.isEmpty || pass.isEmpty) return;
 
@@ -79,9 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ? err.toString().replaceAll('Exception: ', '')
           : 'Login failed';
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -100,7 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: const Color(0xFFE6F2FF),
         appBar: AppBar(
+          backgroundColor: const Color(0xFFE6F2FF),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () async {
@@ -111,125 +112,131 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           ),
         ),
-        // Use LayoutBuilder to create a responsive layout
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Check if the screen width is wide enough for a desktop layout
             final bool isDesktop = constraints.maxWidth > 600;
 
             return SafeArea(
               child: Center(
-                // Center the content
                 child: SizedBox(
-                  // Constrain the width on desktop for shorter text fields
                   width: isDesktop ? 450 : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Image.asset('assets/images/logoMango.png', height: 120),
-                        const SizedBox(height: 35),
-                        const Text(
-                          'Welcome👋!',
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const Text(
-                          'Ready to continue your adventure?',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 9, 9, 9),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 50),
-                        TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.email_outlined),
-                            labelText: 'Email',
-                            errorText: emailError,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
+                    // FIX: Wrapped the Column in a SingleChildScrollView
+                    // This prevents the overflow error when the keyboard appears.
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Added top padding to give some space when scrolling
+                          const SizedBox(height: 20),
+                          Image.asset('assets/images/logoMango.png',
+                              height: 120),
+                          const SizedBox(height: 35),
+                          const Text(
+                            'Welcome👋!',
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0),
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: passController,
-                          obscureText: _obscurePassword,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            labelText: 'Password',
-                            errorText: passError,
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
+                          const Text(
+                            'Ready to continue your adventure?',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: Color.fromARGB(255, 9, 9, 9),
                             ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
-                            ),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: const Text("forgot password?"),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: login,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: const Color(0xFF2563EB),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            "LogIn",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                        // Use a Spacer to push the content below it to the bottom
-                        // This replaces the large SizedBox and prevents scrolling
-                        const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Haven’t any account? "),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, '/signin');
-                              },
-                              child: const Text(
-                                "Sign up",
-                                style: TextStyle(color: Colors.blue),
+                          const SizedBox(height: 50),
+                          TextField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              labelText: 'Email',
+                              errorText: emailError,
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
                               ),
                             ),
-                          ],
-                        ),
-                        // Add some final padding at the bottom
-                        const SizedBox(height: 20),
-                      ],
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: passController,
+                            obscureText: _obscurePassword,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              labelText: 'Password',
+                              errorText: passError,
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: const Text("forgot password?"),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: login,
+                            style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: const Color(0xFF2563EB),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              "LogIn",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          // FIX: Replaced Spacer with a SizedBox.
+                          // A Spacer cannot be used in a scrollable view,
+                          // so this provides fixed spacing instead.
+                          const SizedBox(height: 150),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Haven’t any account? "),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/signin');
+                                },
+                                child: const Text(
+                                  "Sign up",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Add some final padding at the bottom
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
                   ),
                 ),
