@@ -1,8 +1,18 @@
+import 'dart:ui'; // Import this to use PointerDeviceKind
 import 'package:flutter/material.dart';
 import 'package:mango/data/manga/manga_data.dart';
 import 'package:mango/models/comic/comic.dart';
 import 'package:mango/widgets/comic_detail_screen.dart';
 
+// FIX 1: Add a custom scroll behavior class.
+// This tells Flutter to allow scrolling with a mouse pointer.
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        ...super.dragDevices,
+        PointerDeviceKind.mouse,
+      };
+}
 
 Comic? findComicById(String id, BuildContext context) {
   final manga = mangaList.where((comic) => comic.id == id).firstOrNull;
@@ -36,81 +46,87 @@ class ComicCarousel extends StatelessWidget {
 
     return SizedBox(
       height: w * 0.45,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        scrollDirection: Axis.horizontal,
-        itemCount: comics.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          final c = comics[index];
-          return GestureDetector(
-            onTap: () {
-              final comic = findComicById(c.id, context);
-              if (comic != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ComicDetailScreen(comic: comic),
-                  ),
-                );
-              }
-            },
-            child: SizedBox(
-              width: 380,
-              height: 130,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.asset(
-                      c.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, err, st) => Container(
-                        color: Colors.grey[300],
-                        child: const Center(child: Icon(Icons.image, size: 48)),
-                      ),
+      // FIX 2: Wrap the ListView in a ScrollConfiguration
+      // and apply the custom behavior.
+      child: ScrollConfiguration(
+        behavior: MyCustomScrollBehavior(),
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          scrollDirection: Axis.horizontal,
+          itemCount: comics.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 12),
+          itemBuilder: (context, index) {
+            final c = comics[index];
+            return GestureDetector(
+              onTap: () {
+                final comic = findComicById(c.id, context);
+                if (comic != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ComicDetailScreen(comic: comic),
                     ),
-
-                    Positioned(
-                      left: 12,
-                      bottom: 12,
-                      right: 12,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            c.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          if (c.subtitle.isNotEmpty)
+                  );
+                }
+              },
+              child: SizedBox(
+                width: 380,
+                height: 130,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        c.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, err, st) => Container(
+                          color: Colors.grey[300],
+                          child:
+                              const Center(child: Icon(Icons.image, size: 48)),
+                        ),
+                      ),
+                      Positioned(
+                        left: 12,
+                        bottom: 12,
+                        right: 12,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                             Text(
-                              c.subtitle,
+                              c.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                // ignore: deprecated_member_use
-                                color: Colors.white.withOpacity(0.9),
-                                fontSize: 13,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                        ],
+                            if (c.subtitle.isNotEmpty)
+                              Text(
+                                c.subtitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  // ignore: deprecated_member_use
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: 13,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 }
+
