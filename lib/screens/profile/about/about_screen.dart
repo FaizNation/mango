@@ -14,8 +14,6 @@ class AboutScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          // On wider screens, this constrains the content to a max width of 700.
-          // On smaller screens (less than 700), this has no effect.
           constraints: const BoxConstraints(maxWidth: 700),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -25,7 +23,7 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 const GFAvatar(
                   radius: 48,
-                  backgroundImage: AssetImage('assets/images/icon.png'),
+                  backgroundImage: AssetImage('assets/images/masjenar.png'),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -39,16 +37,17 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'This app is developed by Faiz Nation, especially those that help readers discover and enjoy comics from across the world. If you have feedback or find a bug, please let me know.',
+                  'This app is developed by Faiz Nation, This application was developed to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
+                  // 'This app is developed by Faiz Nation, especially those that help readers discover and enjoy comics from across the world. If you have feedback or find a bug, please let me know.'
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, height: 1.4),
                 ),
-                const Spacer(), // Use Spacer to push the button to the bottom
+                const Spacer(),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Close'),
                 ),
-                const SizedBox(height: 24), // Add some padding at the bottom
+                const SizedBox(height: 24),
               ],
             ),
           ),
