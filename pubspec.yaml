@@ -78,6 +78,7 @@ flutter:
     - assets/images/newcomic/bokuNoHero.png
     - assets/images/newcomic/jujusuKaisen.png
     - assets/images/manhwa/Solo_Leveling.png
+    - assets/images/masjenar.png
 
   fonts:
     - family: Anja

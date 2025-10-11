@@ -60,95 +60,107 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Change Password')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _currentController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Current password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+      backgroundColor: const Color(0xFFE6F2FF),
+      appBar: AppBar(
+        title: const Text('Change Password'),
+        backgroundColor: const Color(0xFFE6F2FF),
+      ),
+      body: Center(
+        child: Container(
+          // On wider screens, this constrains the content to a max width of 700.
+          // On smaller screens (less than 700), this has no effect.
+          constraints: const BoxConstraints(maxWidth: 700),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _currentController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Current password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (v) =>
+                          (v == null || v.isEmpty) ? 'Enter current password' : null,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
-                ),
-
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'Enter current password' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _newController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'New password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _newController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'New password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Enter new password';
+                        if (v.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
-                ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Enter new password';
-                  if (v.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _confirmController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Confirm new password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _confirmController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm new password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Confirm new password';
+                        if (v != _newController.text) return 'Passwords do not match';
+                        return null;
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _loading ? null : _updatePassword,
+                      child: _loading
+                          ? const CircularProgressIndicator()
+                          : const Text('Update Password'),
+                    ),
+                  ],
                 ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Confirm new password';
-                  if (v != _newController.text) return 'Passwords do not match';
-                  return null;
-                },
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _loading ? null : _updatePassword,
-                child: _loading
-                    ? const CircularProgressIndicator()
-                    : const Text('Update Password'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

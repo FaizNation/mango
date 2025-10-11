@@ -72,35 +72,48 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Feedback / Bug Report')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _subjectController,
-              decoration: const InputDecoration(labelText: 'Subject'),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: TextField(
-                controller: _bodyController,
-                decoration: const InputDecoration(
-                  labelText: 'Describe the issue or feedback',
+      backgroundColor: const Color(0xFFE6F2FF),
+      appBar: AppBar(
+        title: const Text('Feedback / Bug Report'),
+        backgroundColor: const Color(0xFFE6F2FF),
+      ),
+      body: Center(
+        child: Container(
+          // On wider screens, this constrains the content to a max width of 700.
+          // On smaller screens (less than 700), this has no effect.
+          constraints: const BoxConstraints(maxWidth: 700),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _subjectController,
+                  decoration: const InputDecoration(labelText: 'Subject'),
                 ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                expands: true,
-              ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _bodyController,
+                    decoration: const InputDecoration(
+                      labelText: 'Describe the issue or feedback',
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    expands: true,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _sending ? null : _sendEmail,
+                  child: _sending
+                      ? const CircularProgressIndicator()
+                      : const Text('Send'),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: _sending ? null : _sendEmail,
-              child: _sending
-                  ? const CircularProgressIndicator()
-                  : const Text('Send'),
-            ),
-          ],
+          ),
         ),
       ),
     );
