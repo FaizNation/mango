@@ -20,6 +20,17 @@ Future<ImageSource?> showEditPhotoDialog(BuildContext context) {
             icon: const Icon(Icons.camera_alt),
             label: const Text('Take photo'),
           ),
+          const SizedBox(height: 16),
+          Text(
+            'The photo update feature on the website is unavailable!',
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Please use the mobile app to change your profile photo.',
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
       actions: [

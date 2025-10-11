@@ -125,8 +125,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : null,
                         child: _photoUrl == null || _photoUrl!.isEmpty
                             ? Text(
-                                widget.userEmail.isNotEmpty
-                                    ? widget.userEmail[0].toUpperCase()
+                                widget.userName.isNotEmpty
+                                    ? widget.userName[0].toUpperCase()
                                     : "U",
                                 style: const TextStyle(
                                   fontSize: 40,
