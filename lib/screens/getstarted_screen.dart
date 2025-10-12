@@ -7,40 +7,36 @@ class GetStartedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE6F2FF),
-
       body: LayoutBuilder(
         builder: (context, constraints) {
           final bool isDesktop = constraints.maxWidth > 600;
-
           return Stack(
             children: [
               Positioned(
-                top: isDesktop ? -950 : -1200,
+                top: isDesktop ? -950 : -950,
                 left: isDesktop ? -150 : -200,
                 right: isDesktop ? -150 : -200,
                 child: Container(
-                  height: isDesktop ? 1200 : 2000,
+                  height: isDesktop ? 1200 : 1500,
                   decoration: const BoxDecoration(
                     color: Color(0xFF007BFF),
                     shape: BoxShape.circle,
                   ),
                 ),
               ),
-
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      const SizedBox(height: 80),
+                      SizedBox(height: isDesktop ? 80 : 60),
                       const Center(
                         child: CircleAvatar(
                           radius: 40,
                           backgroundImage: AssetImage("assets/images/icon.png"),
                         ),
                       ),
-                      const SizedBox(height: 100),
-
+                      SizedBox(height: isDesktop ? 100 : 80),
                       Align(
                         alignment: isDesktop
                             ? Alignment.center
@@ -49,11 +45,11 @@ class GetStartedPage extends StatelessWidget {
                           crossAxisAlignment: isDesktop
                               ? CrossAxisAlignment.center
                               : CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               "Let’s Begin",
                               style: TextStyle(
-                                fontSize: 60,
+                                fontSize: isDesktop ? 60 : 50,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.black,
                               ),
@@ -61,7 +57,7 @@ class GetStartedPage extends StatelessWidget {
                             Text(
                               "the Story",
                               style: TextStyle(
-                                fontSize: 60,
+                                fontSize: isDesktop ? 60 : 50,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.black,
                               ),
@@ -69,7 +65,7 @@ class GetStartedPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50),
+                      SizedBox(height: isDesktop ? 50 : 40),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, "/signin");
@@ -77,21 +73,21 @@ class GetStartedPage extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF007BFF),
                           shape: const StadiumBorder(),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 14,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isDesktop ? 40 : 30,
+                            vertical: isDesktop ? 14 : 12,
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "Get started",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: isDesktop ? 20 : 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: isDesktop ? 20 : 15),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -114,11 +110,13 @@ class GetStartedPage extends StatelessWidget {
                   ),
                 ),
               ),
-
               Positioned(
                 bottom: 0,
                 left: 0,
-                child: Image.asset("assets/images/anime1.png", height: 280),
+                child: Image.asset(
+                  "assets/images/anime1.png",
+                  height: isDesktop ? 280 : 200,
+                ),
               ),
             ],
           );
