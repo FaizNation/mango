@@ -5,7 +5,7 @@ import '../models/chapter.dart';
 class ApiService {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'COBA TANYA MAS PAIS DULU!!!',
+      baseUrl: 'TANYAA MASS JENARR DULU',
       connectTimeout: const Duration(seconds: 8),
       receiveTimeout: const Duration(seconds: 8),
     ),
