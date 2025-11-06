@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/utils/logout_dialog.dart';
 import 'package:mango/utils/photo_editor.dart';
 import 'package:mango/widgets/profile_info_card.dart';
@@ -7,9 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
-import 'change_password/change_password_screen.dart';
-import 'feedback/feedback_screen.dart';
-import 'about/about_screen.dart';
+// import 'change_password/change_password_screen.dart';
+// import 'feedback/feedback_screen.dart';
+// import 'about/about_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userName;
@@ -175,29 +176,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.lock,
                     title: 'Change Password',
                     subtitle: 'Update your password',
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const ChangePasswordScreen(),
-                      ),
-                    ),
+                    onTap: () => context.push('/profile/change-password'),
                   ),
                   const SizedBox(height: 12),
                   ProfileInfoCard(
                     icon: Icons.bug_report,
                     title: 'Feedback/bug reports',
                     subtitle: 'Report issues or send feedback',
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const FeedbackScreen()),
-                    ),
+                    onTap: () => context.push('/profile/feedback'),
                   ),
                   const SizedBox(height: 12),
                   ProfileInfoCard(
                     icon: Icons.info,
                     title: 'About Us',
                     subtitle: 'Learn more about the developer',
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const AboutScreen()),
-                    ),
+                    onTap: () => context.push('/profile/about'),
                   ),
 
                   const SizedBox(height: 24),
@@ -207,10 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (!mounted) return;
                       if (confirm != null && confirm) {
                         // ignore: use_build_context_synchronously
-                        Navigator.of(
-                          // ignore: use_build_context_synchronously
-                          context,
-                        ).popUntil((route) => route.isFirst);
+                        context.go('/login');
                       }
                     },
                     style: ElevatedButton.styleFrom(

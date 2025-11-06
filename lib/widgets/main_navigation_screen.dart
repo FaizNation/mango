@@ -1,68 +1,53 @@
-import 'package:mango/screens/favorites/favorites_screen.dart';
-import 'package:mango/screens/history/history_screen.dart';
-import 'package:mango/screens/home/home_screen.dart';
-import 'package:mango/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class MainNavigationScreen extends StatefulWidget {
-  final String userEmail;
-  final String userPass;
-  final String userName;
+// 1. Ubah menjadi StatelessWidget
+class MainNavigationScreen extends StatelessWidget {
+  
+  // 2. Hapus parameter userEmail, userPass, dan userName.
+  //    Widget "Shell" ini seharusnya tidak perlu tahu tentang data ini.
+  //    Data ini akan diteruskan ke halaman (seperti ProfileScreen)
+  //    oleh konfigurasi GoRouter Anda.
+  
+  final StatefulNavigationShell navigationShell;
+
   const MainNavigationScreen({
     super.key,
-    required this.userEmail,
-    required this.userPass,
-    required this.userName,
+    required this.navigationShell,
   });
-
-  @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
-}
-
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0;
-
-  late List<Widget> _screens;
-
-  @override
-  void initState() {
-    super.initState();
-    _screens = [
-      MyHomePage(userName: widget.userName),
-      const FavoritesScreen(),
-      const HistoryScreen(),
-      ProfileScreen(userEmail: widget.userEmail, userPass: widget.userPass, userName: widget.userName,),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      // 3. 'body' SEKARANG ADALAH navigationShell
+      //    Ini adalah IndexedStack yang sudah dikelola oleh GoRouter.
+      //    (Hapus: IndexedStack(index: _currentIndex, children: _screens))
+      body: navigationShell,
+      
       bottomNavigationBar: SalomonBottomBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        // 4. 'currentIndex' diambil dari navigationShell
+        currentIndex: navigationShell.currentIndex,
+        
+        // 5. 'onTap' memanggil 'goBranch' untuk berpindah tab/halaman
+        onTap: (index) => navigationShell.goBranch(index),
+        
         items: [
           SalomonBottomBarItem(
             icon: const Icon(Icons.home),
             title: const Text('Home'),
-            // selectedColor: Theme.of(context).primaryColor,
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.favorite),
             title: const Text('Favorites'),
-            // selectedColor: Colors.pink,
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.history),
             title: const Text('History'),
-            // selectedColor: Theme.of(context).primaryColor,
           ),
           SalomonBottomBarItem(
             icon: const Icon(Icons.person),
             title: const Text('Profile'),
-            // selectedColor: Colors.teal,
           ),
         ],
       ),

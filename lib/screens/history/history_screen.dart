@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mango/providers/history_provider.dart';
-import 'package:mango/widgets/history_list_view.dart';
+import 'package:flutter/material.dart';
+import 'package:mango/widgets/history_widget.dart';
 import 'package:provider/provider.dart';
+import '../../providers/history_provider.dart';
+
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -10,7 +11,6 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
       backgroundColor: const Color(0xFFE6F2FF),
       appBar: AppBar(

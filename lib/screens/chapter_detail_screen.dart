@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mango/models/chapter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../models/chapter.dart';
+import '../services/api_service.dart' as service;
+import '../cubits/chapter/chapter_cubit.dart';
 
 class ChapterDetailScreen extends StatefulWidget {
   final Chapter chapter;
@@ -17,133 +19,154 @@ class ChapterDetailScreen extends StatefulWidget {
 }
 
 class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
-  late Chapter _currentChapter;
+  late final ChapterCubit _cubit;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _currentChapter = widget.chapter;
+    _cubit = ChapterCubit(
+      initialChapter: widget.chapter,
+      allChapters: widget.allChapters,
+      apiService: service.ApiService(),
+    );
+    // kick off image load for initial chapter
+    _cubit.ensureImagesForChapter(widget.chapter);
   }
 
   @override
   void dispose() {
+    _cubit.close();
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _navigateToChapter(Chapter chapter) {
-    setState(() {
-      _currentChapter = chapter;
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(0);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    int currentChapterIndex = widget.allChapters.indexOf(_currentChapter);
-    bool hasNextChapter = currentChapterIndex > 0;
-    bool hasPreviousChapter =
-        currentChapterIndex < widget.allChapters.length - 1;
+    return BlocProvider.value(
+      value: _cubit,
+      child: BlocListener<ChapterCubit, ChapterState>(
+        listenWhen: (prev, curr) =>
+            prev.currentChapter.id != curr.currentChapter.id,
+        listener: (context, state) {
+          // scroll to top when chapter changes
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) _scrollController.jumpTo(0);
+          });
+        },
+        child: BlocBuilder<ChapterCubit, ChapterState>(
+          builder: (context, state) {
+            final current = state.currentChapter;
+            int currentChapterIndex = state.allChapters.indexWhere(
+              (c) => c.id == current.id,
+            );
+            if (currentChapterIndex == -1) currentChapterIndex = 0;
+            final hasNextChapter = currentChapterIndex > 0;
+            final hasPreviousChapter =
+                currentChapterIndex < state.allChapters.length - 1;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFE6F2FF),
-      appBar: AppBar(
-        title: Text(_currentChapter.title),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFE6F2FF),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            onPressed: () {
-              _showChaptersList(context);
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 700),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  children: _currentChapter.images.map((imageUrl) {
-                    return InteractiveViewer(
-                      minScale: kIsWeb ? 1.0 : 1.0,
-                      maxScale: kIsWeb ? 1.0 : 3.0,
-                      scaleEnabled: !kIsWeb,
-                      child: Image.network(
-                        imageUrl,
-                        fit: BoxFit.contain,
-                        width: double.infinity,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                value:
-                                    loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return const SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: Icon(Icons.broken_image, size: 64),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }).toList(),
-                ),
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(current.title),
+                centerTitle: true,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.list),
+                    onPressed: () {
+                      _showChaptersList(context);
+                    },
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 16,
-                right: 16,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (hasNextChapter)
-                      FloatingActionButton(
-                        heroTag: 'nextChapter',
-                        onPressed: () {
-                          _navigateToChapter(
-                            widget.allChapters[currentChapterIndex - 1],
-                          );
-                        },
-                        child: const Icon(Icons.keyboard_arrow_up),
-                      ),
-                    const SizedBox(height: 8),
-                    if (hasPreviousChapter)
-                      FloatingActionButton(
-                        heroTag: 'prevChapter',
-                        onPressed: () {
-                          _navigateToChapter(
-                            widget.allChapters[currentChapterIndex + 1],
-                          );
-                        },
-                        child: const Icon(Icons.keyboard_arrow_down),
-                      ),
-                  ],
-                ),
+              body: Stack(
+                children: [
+                  _buildBodyFromState(state),
+                  Positioned(
+                    bottom: 16,
+                    right: 16,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (hasNextChapter)
+                          FloatingActionButton(
+                            heroTag: 'nextChapter',
+                            onPressed: () {
+                              context.read<ChapterCubit>().navigateToChapter(
+                                state.allChapters[currentChapterIndex - 1],
+                              );
+                            },
+                            child: const Icon(Icons.keyboard_arrow_up),
+                          ),
+                        const SizedBox(height: 8),
+                        if (hasPreviousChapter)
+                          FloatingActionButton(
+                            heroTag: 'prevChapter',
+                            onPressed: () {
+                              context.read<ChapterCubit>().navigateToChapter(
+                                state.allChapters[currentChapterIndex + 1],
+                              );
+                            },
+                            child: const Icon(Icons.keyboard_arrow_down),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
+      ),
+    );
+  }
+
+  Widget _buildBodyFromState(ChapterState state) {
+    if (state.error != null) {
+      return Center(
+        child: Text(state.error!, style: const TextStyle(color: Colors.red)),
+      );
+    }
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (state.currentChapter.images.isEmpty) {
+      return const Center(child: Text('No images available'));
+    }
+
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Column(
+        children: state.currentChapter.images.map((imageUrl) {
+          return InteractiveViewer(
+            minScale: 1.0,
+            maxScale: 3.0,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return SizedBox(
+                  height: 400,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const SizedBox(
+                  height: 400,
+                  child: Center(child: Icon(Icons.broken_image, size: 64)),
+                );
+              },
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -151,51 +174,52 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   void _showChaptersList(BuildContext context) {
     showModalBottomSheet(
       context: context,
-
-      builder: (context) => Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 700),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Chapters',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Chapters',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.allChapters.length,
-                  itemBuilder: (context, index) {
-                    final chapter = widget.allChapters[index];
-                    bool isCurrentChapter = chapter.id == _currentChapter.id;
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.allChapters.length,
+                itemBuilder: (context, index) {
+                  final chapter = widget.allChapters[index];
+                  // get current id from cubit
+                  final currentId = context
+                      .read<ChapterCubit>()
+                      .state
+                      .currentChapter
+                      .id;
+                  bool isCurrentChapter = chapter.id == currentId;
 
-                    return ListTile(
-                      title: Text(
-                        chapter.title,
-                        style: TextStyle(
-                          fontWeight: isCurrentChapter
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
+                  return ListTile(
+                    title: Text(
+                      chapter.title,
+                      style: TextStyle(
+                        fontWeight: isCurrentChapter
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
-                      tileColor: isCurrentChapter
-                          // ignore: deprecated_member_use
-                          ? Theme.of(context).primaryColor.withOpacity(0.1)
-                          : null,
-                      onTap: () {
-                        Navigator.pop(context);
-                        _navigateToChapter(chapter);
-                      },
-                    );
-                  },
-                ),
+                    ),
+                    tileColor: isCurrentChapter
+                        ? Theme.of(context).primaryColor.withAlpha(25)
+                        : null,
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.read<ChapterCubit>().navigateToChapter(chapter);
+                    },
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

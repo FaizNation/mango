@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GetStartedPage extends StatelessWidget {
   const GetStartedPage({super.key});
@@ -67,9 +68,10 @@ class GetStartedPage extends StatelessWidget {
                       ),
                       SizedBox(height: isDesktop ? 50 : 40),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/signin");
-                        },
+                        onPressed: () => context.go('/signup'),
+                        //  {
+                        //   Navigator.pushNamed(context, "/signin");
+                        // },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF007BFF),
                           shape: const StadiumBorder(),
@@ -93,9 +95,10 @@ class GetStartedPage extends StatelessWidget {
                         children: [
                           const Text("Already have an account? "),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/login');
-                            },
+                            onTap: () => context.go('/login'),
+                            //  {
+                            //   Navigator.pushNamed(context, '/login');
+                            // },
                             child: const Text(
                               "Sign in",
                               style: TextStyle(

@@ -1,15 +1,15 @@
 import 'package:mango/providers/favorites_provider.dart';
 import 'package:mango/providers/history_provider.dart';
-import 'package:mango/screens/auth/signin_screen.dart';
-import 'package:mango/screens/auth/signup_screen.dart';
-import 'package:mango/screens/splash_screen.dart';
-import 'package:mango/widgets/main_navigation_screen.dart';
+import 'package:mango/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'firebase/firebase_options.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
+  usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
@@ -28,22 +28,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: goRouter,
       title: 'FaizNation',
-      debugShowCheckedModeBanner: false,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(scrollbars: false),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1a94ff)),
         fontFamily: 'Poppins',
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/signin': (context) => const SignUpScreen(),
-        '/home': (context) => const MainNavigationScreen(userName: '', userEmail: '', userPass: '',),
-      },
     );
   }
 }
