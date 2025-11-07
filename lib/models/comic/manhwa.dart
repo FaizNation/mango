@@ -11,7 +11,7 @@ class Manhwa extends Comic {
     super.synopsis,
     required super.imageUrl,
     required super.genres,
-    required super.rating,
+    // required super.rating,
     super.status,
     super.chapters,
     super.availableChapters,
@@ -55,11 +55,11 @@ class Manhwa extends Comic {
           .toList();
     }
 
-    double rating = 0.0;
-    try {
-      final r = json['rating'] ?? json['score'] ?? json['rate'];
-      if (r != null) rating = double.tryParse(r.toString()) ?? 0.0;
-    } catch (_) {}
+    // double rating = 0.0;
+    // try {
+    //   final r = json['rating'] ?? json['score'] ?? json['rate'];
+    //   if (r != null) rating = double.tryParse(r.toString()) ?? 0.0;
+    // } catch (_) {}
 
     final author = (json['author'] ?? json['pengarang'] ?? json['artist'])
         ?.toString();
@@ -77,7 +77,7 @@ class Manhwa extends Comic {
       synopsis: synopsis,
       imageUrl: ImageProxy.proxy(image),
       genres: genres,
-      rating: rating,
+      // rating: rating,
       status: json['status']?.toString(),
       chapters: json['chapter_count'] is int
           ? json['chapter_count'] as int

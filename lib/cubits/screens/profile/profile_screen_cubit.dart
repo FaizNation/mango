@@ -41,8 +41,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   void setPhotoUrl(String newUrl) {
     emit(state.copyWith(photoUrl: newUrl));
   }
-  
-  // --- FUNGSI BARU UNTUK MENGGANTIKAN setState ---
 
   // Dipanggil saat tombol edit (pensil) ditekan
   void startDialogLoading() {

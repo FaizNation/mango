@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // <-- Impor Bloc
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
-// Impor file Cubit & State yang baru kita buat
 import 'package:mango/cubits/screens/comic_detail_cubit.dart';
 import 'package:mango/cubits/screens/comic_detail_state.dart';
-
-
 import 'package:mango/screens/chapter_detail_screen.dart';
-import '../providers/history_provider.dart';
-import '../models/comic/comic.dart';
-import '../models/chapter.dart';
-import '../utils/image_proxy.dart';
-import '../providers/favorites_provider.dart';
-import '../services/api_service.dart' as service;
+import 'package:mango/providers/history_provider.dart';
+import 'package:mango/models/comic/comic.dart';
+import 'package:mango/models/chapter.dart';
+import 'package:mango/utils/image_proxy.dart';
+import 'package:mango/providers/favorites_provider.dart';
+import 'package:mango/services/api_service.dart' as service;
 
 class ComicDetailScreen extends StatefulWidget {
   final Comic comic;
@@ -25,20 +21,10 @@ class ComicDetailScreen extends StatefulWidget {
 }
 
 class _ComicDetailScreenState extends State<ComicDetailScreen> {
-  // HAPUS SEMUA VARIABEL STATE LAMA:
-  // List<Chapter> chapters = []; <-- Hapus
-  // bool _isLoading = false; <-- Hapus
-  // String? _error; <-- Hapus
-  // final service.ApiService _apiService = service.ApiService(); <-- Hapus
-  // Future<void> _loadChapters() async { ... } <-- Hapus
-
   @override
   void initState() {
     super.initState();
-    // JANGAN panggil fetchChapters di sini, karena Cubit belum tersedia.
-    // Kita akan memanggilnya di dalam BlocProvider.create
 
-    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final history = context.read<HistoryProvider>();
@@ -46,20 +32,20 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
           comicId: widget.comic.id.toString(),
           title: widget.comic.titleEnglish ?? widget.comic.title,
           genres: widget.comic.genres,
+          imageUrl: widget.comic.imageUrl,
+          author: widget.comic.author,
+          synopsis: widget.comic.synopsis,
         );
-      } catch (_) {
-        // provider not registered or other error - ignore silently
-      }
+      } catch (_) {}
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // 1. Sediakan Cubit untuk widget tree di bawahnya
     return BlocProvider(
-      create: (context) => ComicDetailCubit(
-        service.ApiService(), // Buat instance ApiService di sini
-      )..fetchChapters(int.parse(widget.comic.id)), // Panggil fetchChapters saat Cubit dibuat
+      create: (context) =>
+          ComicDetailCubit(service.ApiService())
+            ..fetchChapters(int.parse(widget.comic.id)),
       child: Scaffold(
         backgroundColor: const Color(0xFFE6F2FF),
         body: Center(
@@ -133,7 +119,6 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                         const SizedBox(height: 16),
 
                         if (widget.comic.genres.isNotEmpty) ...[
-                          // ... (Bagian Genre tetap sama)
                           const Text(
                             'Genres',
                             style: TextStyle(
@@ -148,6 +133,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             children: widget.comic.genres.map((genre) {
                               return Chip(
                                 label: Text(genre),
+
                                 // ignore: deprecated_member_use
                                 backgroundColor: Colors.blue.withOpacity(0.1),
                                 labelStyle: const TextStyle(color: Colors.blue),
@@ -165,13 +151,11 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // ... (Bagian Details tetap sama)
+
                         ...widget.comic
                             .getAdditionalInfo()
                             .entries
-                            .where(
-                              (e) => e.value != null,
-                            ) // Filter out null values
+                            .where((e) => e.value != null)
                             .map(
                               (e) => Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
@@ -198,7 +182,6 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             ),
 
                         if (widget.comic.status != null)
-                          // ... (Bagian Status tetap sama)
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Row(
@@ -212,14 +195,11 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             ),
                           ),
                         if (widget.comic.chapters != null)
-                          // ... (Bagian Total Chapters tetap sama)
                           Row(
                             children: [
                               const Text(
                                 'Total Chapters: ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Text('${widget.comic.chapters}'),
                             ],
@@ -228,7 +208,6 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                         const SizedBox(height: 24),
 
                         if (widget.comic.synopsis != null) ...[
-                          // ... (Bagian Synopsis tetap sama)
                           const Text(
                             'Synopsis',
                             style: TextStyle(
@@ -248,17 +227,17 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                           children: [
                             Expanded(
                               child: Consumer<FavoritesProvider>(
-                                // ... (Bagian FavoriteProvider tetap sama)
                                 builder: (context, favoritesProvider, child) {
-                                  final isFavorite = favoritesProvider.isFavorite(
-                                    widget.comic,
-                                  );
+                                  final isFavorite = favoritesProvider
+                                      .isFavorite(widget.comic);
                                   return ElevatedButton.icon(
                                     onPressed: () {
                                       favoritesProvider.toggleFavorite(
                                         widget.comic,
                                       );
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             isFavorite
@@ -292,45 +271,48 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             if (widget.comic.chapters != null) ...[
                               const SizedBox(width: 16),
                               Expanded(
-                                // 2. Gunakan BlocBuilder untuk tombol "Start Reading"
-                                child: BlocBuilder<ComicDetailCubit, ComicDetailState>(
-                                  builder: (context, state) {
-                                    // Ambil list chapter JIKA state-nya Loaded
-                                    final loadedChapters =
-                                        (state is ComicDetailLoaded)
+                                child:
+                                    BlocBuilder<
+                                      ComicDetailCubit,
+                                      ComicDetailState
+                                    >(
+                                      builder: (context, state) {
+                                        final loadedChapters =
+                                            (state is ComicDetailLoaded)
                                             ? state.chapters
                                             : <Chapter>[];
 
-                                    return ElevatedButton.icon(
-                                      onPressed: loadedChapters.isNotEmpty
-                                          ? () {
-                                              // Navigasi dengan data dari state
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChapterDetailScreen(
-                                                    chapter: loadedChapters[0],
-                                                    allChapters: loadedChapters,
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          : null, // Nonaktifkan tombol jika chapter belum load
-                                      icon: const Icon(Icons.book),
-                                      label: const Text('Start Reading'),
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 12,
-                                        ),
-                                        backgroundColor: Theme.of(
-                                          context,
-                                        ).primaryColor,
-                                        foregroundColor: Colors.white,
-                                      ),
-                                    );
-                                  },
-                                ),
+                                        return ElevatedButton.icon(
+                                          onPressed: loadedChapters.isNotEmpty
+                                              ? () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChapterDetailScreen(
+                                                            chapter:
+                                                                loadedChapters[0],
+                                                            allChapters:
+                                                                loadedChapters,
+                                                          ),
+                                                    ),
+                                                  );
+                                                }
+                                              : null,
+                                          icon: const Icon(Icons.book),
+                                          label: const Text('Start Reading'),
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                            ),
+                                            backgroundColor: Theme.of(
+                                              context,
+                                            ).primaryColor,
+                                            foregroundColor: Colors.white,
+                                          ),
+                                        );
+                                      },
+                                    ),
                               ),
                             ],
                           ],
@@ -338,14 +320,15 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
 
                         const SizedBox(height: 24),
 
-                        // 3. Ganti blok if/else _isLoading dengan BlocBuilder
                         BlocBuilder<ComicDetailCubit, ComicDetailState>(
                           builder: (context, state) {
-                            // Tampilkan UI berdasarkan state saat ini
-                            if (state is ComicDetailLoading || state is ComicDetailInitial) {
-                              return const Center(child: CircularProgressIndicator());
-                            } 
-                            
+                            if (state is ComicDetailLoading ||
+                                state is ComicDetailInitial) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
                             if (state is ComicDetailError) {
                               return Padding(
                                 padding: const EdgeInsets.all(16),
@@ -354,11 +337,10 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                   style: const TextStyle(color: Colors.red),
                                 ),
                               );
-                            } 
-                            
+                            }
+
                             if (state is ComicDetailLoaded) {
                               if (state.chapters.isNotEmpty) {
-                                // Jika berhasil dan ada chapter, tampilkan list
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -372,24 +354,30 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                     const SizedBox(height: 8),
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemCount: state.chapters.length,
                                       itemBuilder: (context, index) {
                                         final chapter = state.chapters[index];
                                         return Card(
-                                          margin: const EdgeInsets.symmetric(vertical: 4),
+                                          margin: const EdgeInsets.symmetric(
+                                            vertical: 4,
+                                          ),
                                           child: ListTile(
                                             title: Text(chapter.title),
-                                            trailing: const Icon(Icons.chevron_right),
+                                            trailing: const Icon(
+                                              Icons.chevron_right,
+                                            ),
                                             onTap: () {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChapterDetailScreen(
-                                                    chapter: chapter,
-                                                    allChapters: state.chapters,
-                                                  ),
+                                                        chapter: chapter,
+                                                        allChapters:
+                                                            state.chapters,
+                                                      ),
                                                 ),
                                               );
                                             },
@@ -400,12 +388,12 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                   ],
                                 );
                               } else {
-                                // Jika berhasil tapi tidak ada chapter
-                                return const Center(child: Text("No chapters found."));
+                                return const Center(
+                                  child: Text("No chapters found."),
+                                );
                               }
                             }
-                            
-                            // State default jika terjadi sesuatu (seharusnya tidak terjadi)
+
                             return const SizedBox.shrink();
                           },
                         ),

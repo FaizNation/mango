@@ -174,52 +174,55 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   void _showChaptersList(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        height: MediaQuery.of(context).size.height * 0.6,
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Chapters',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      builder: (context) => BlocProvider.value(
+        value: _cubit,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Chapters',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.allChapters.length,
-                itemBuilder: (context, index) {
-                  final chapter = widget.allChapters[index];
-                  // get current id from cubit
-                  final currentId = context
-                      .read<ChapterCubit>()
-                      .state
-                      .currentChapter
-                      .id;
-                  bool isCurrentChapter = chapter.id == currentId;
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.allChapters.length,
+                  itemBuilder: (context, index) {
+                    final chapter = widget.allChapters[index];
+                    // get current id from cubit
+                    final currentId = context
+                        .read<ChapterCubit>()
+                        .state
+                        .currentChapter
+                        .id;
+                    bool isCurrentChapter = chapter.id == currentId;
 
-                  return ListTile(
-                    title: Text(
-                      chapter.title,
-                      style: TextStyle(
-                        fontWeight: isCurrentChapter
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                    return ListTile(
+                      title: Text(
+                        chapter.title,
+                        style: TextStyle(
+                          fontWeight: isCurrentChapter
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
                       ),
-                    ),
-                    tileColor: isCurrentChapter
-                        ? Theme.of(context).primaryColor.withAlpha(25)
-                        : null,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.read<ChapterCubit>().navigateToChapter(chapter);
-                    },
-                  );
-                },
+                      tileColor: isCurrentChapter
+                          ? Theme.of(context).primaryColor.withAlpha(25)
+                          : null,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.read<ChapterCubit>().navigateToChapter(chapter);
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

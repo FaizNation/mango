@@ -6,12 +6,10 @@ import 'package:mango/utils/logout_dialog.dart';
 import 'package:mango/utils/photo_editor.dart';
 import 'package:mango/widgets/profile_info_card.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 import 'package:mango/cubits/screens/profile/profile_screen_cubit.dart';
 import 'package:mango/cubits/screens/profile/profile_screen_state.dart';
 
-// 1. Ubah menjadi StatelessWidget
 class ProfileScreen extends StatelessWidget {
   final String userName;
   final String userEmail;
@@ -24,10 +22,6 @@ class ProfileScreen extends StatelessWidget {
     required this.userPass,
   });
 
-  // HAPUS: State class (_ProfileScreenState)
-  // HAPUS: initState()
-  // HAPUS: bool _loading = false;
-
   Future<void> _launchGitHub() async {
     final Uri url = Uri.parse("https://github.com/FaizNation");
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -35,28 +29,26 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
-  // 2. Ubah fungsi _showEditPhotoDialog
-  // Tambahkan 'BuildContext context' sebagai argumen
   Future<void> _showEditPhotoDialog(BuildContext context) async {
-    // 3. Panggil Cubit untuk start loading
     context.read<ProfileCubit>().startDialogLoading();
     try {
       final result = await showPhotoEditor(context);
       if (result != null) {
-        // 'mounted' tidak ada di StatelessWidget,
-        // tapi Bloc akan menangani jika context sudah hilang
+        // ignore: use_build_context_synchronously
         context.read<ProfileCubit>().setPhotoUrl(result);
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile photo updated')),
-        );
+
+        ScaffoldMessenger.of(
+          // ignore: use_build_context_synchronously
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Profile photo updated')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update photo: $e'))
-      );
+      ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to update photo: $e')));
     } finally {
-      // 4. Panggil Cubit untuk stop loading
+      // ignore: use_build_context_synchronously
       context.read<ProfileCubit>().stopDialogLoading();
     }
   }
@@ -81,9 +73,7 @@ class ProfileScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // 5. BlocBuilder untuk Avatar & Tombol Edit
                     BlocBuilder<ProfileCubit, ProfileState>(
-                      // buildWhen agar hanya rebuild saat foto atau status loading berubah
                       buildWhen: (prev, current) =>
                           prev.status != current.status ||
                           prev.photoUrl != current.photoUrl ||
@@ -95,18 +85,22 @@ class ProfileScreen extends StatelessWidget {
                         if (state.status == ProfileStatus.loading ||
                             state.status == ProfileStatus.initial) {
                           child = const Center(
-                            child: CircularProgressIndicator(color: Colors.white),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           );
                         } else if (photoUrl == null || photoUrl.isEmpty) {
                           child = Text(
-                            userName.isNotEmpty ? userName[0].toUpperCase() : "U",
+                            userName.isNotEmpty
+                                ? userName[0].toUpperCase()
+                                : "U",
                             style: const TextStyle(
                               fontSize: 40,
                               color: Colors.white,
                             ),
                           );
                         }
-                        
+
                         return Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -115,21 +109,21 @@ class ProfileScreen extends StatelessWidget {
                               backgroundColor: Colors.blue[200],
                               backgroundImage:
                                   photoUrl != null && photoUrl.isNotEmpty
-                                      ? (photoUrl.startsWith('data:')
-                                          ? MemoryImage(
-                                              base64Decode(
-                                                photoUrl.split(',').last,
-                                              ),
-                                            ) as ImageProvider
-                                          : NetworkImage(photoUrl))
-                                      : null,
+                                  ? (photoUrl.startsWith('data:')
+                                        ? MemoryImage(
+                                                base64Decode(
+                                                  photoUrl.split(',').last,
+                                                ),
+                                              )
+                                              as ImageProvider
+                                        : NetworkImage(photoUrl))
+                                  : null,
                               child: child,
                             ),
                             Positioned(
                               right: 0,
                               bottom: 0,
                               child: GestureDetector(
-                                // 6. Baca state.isDialogLoading dari Cubit
                                 onTap: state.isDialogLoading
                                     ? null
                                     : () => _showEditPhotoDialog(context),
@@ -148,7 +142,7 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    
+
                     const SizedBox(height: 20),
                     Text(
                       userName,
@@ -188,15 +182,15 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () => context.push('/profile/about'),
                     ),
                     const SizedBox(height: 24),
-                    
-                    // 7. Tombol Logout (perlu 'context' dari Builder)
+
                     Builder(
                       builder: (context) {
                         return ElevatedButton(
                           onPressed: () async {
                             final confirm = await showLogoutDialog(context);
-                            // mounted check tidak ada lagi, tapi 'context.go' aman
+
                             if (confirm == true) {
+                              // ignore: use_build_context_synchronously
                               context.go('/login');
                             }
                           },
@@ -227,7 +221,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                         );
-                      }
+                      },
                     ),
                     const SizedBox(height: 40),
                     GestureDetector(

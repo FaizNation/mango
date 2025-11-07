@@ -7,6 +7,7 @@ class HistoryEntry {
   final String? coverImage;
   final String? description;
   final DateTime? openedAt;
+  final List<String> genres;
 
   HistoryEntry({
     required this.id,
@@ -15,6 +16,8 @@ class HistoryEntry {
     this.coverImage,
     this.description,
     this.openedAt,
+    this.genres = const [],
+    
   });
 
   factory HistoryEntry.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -29,6 +32,7 @@ class HistoryEntry {
       coverImage: data['coverImage'] as String?,
       description: data['description'] as String?,
       openedAt: opened,
+      genres: List<String>.from(data['genres'] ?? []),
     );
   }
 

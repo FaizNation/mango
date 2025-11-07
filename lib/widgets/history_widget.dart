@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/history_entry.dart';
-import '../models/comic/manga.dart';
-import '../widgets/comic_detail_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mango/utils/image_proxy.dart';
+import 'package:mango/models/history_entry.dart';
 
 class HistoryListView extends StatelessWidget {
   final List<HistoryEntry> entries;
@@ -25,23 +25,7 @@ class HistoryListView extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           child: InkWell(
             onTap: () {
-              final entry = entries[index];
-              final manga = Manga(
-                id: entry.id,
-                title: entry.title,
-                author: entry.author,
-                synopsis: entry.description,
-                imageUrl: entry.coverImage ?? '',
-                rating: 0.0,
-                genres: <String>[],
-              );
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ComicDetailScreen(comic: manga),
-                ),
-              );
+              context.go('/comic/${Uri.encodeComponent(entry.id)}');
             },
             child: Padding(
               padding: const EdgeInsets.all(12),
@@ -53,10 +37,13 @@ class HistoryListView extends StatelessWidget {
                     child:
                         entry.coverImage != null && entry.coverImage!.isNotEmpty
                         ? Image.network(
-                            entry.coverImage!,
-                            width: 100,
-                            height: 150,
-                            fit: BoxFit.cover,
+                            ImageProxy.proxyWithOptions(
+                              entry.coverImage!,
+                              width: 100,
+                              height: 150,
+                              fit: 'cover',
+                            ),
+
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
                                 width: 100,
@@ -80,22 +67,28 @@ class HistoryListView extends StatelessWidget {
                       children: [
                         Text(
                           entry.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Text(
                           entry.author ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 8),
                         Text(
                           entry.description ?? '',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],

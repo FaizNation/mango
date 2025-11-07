@@ -1,7 +1,7 @@
 import 'package:mango/models/comic/comic.dart';
 import 'package:mango/utils/image_proxy.dart';
 import 'package:flutter/material.dart';
-import 'comic_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class ComicListView extends StatelessWidget {
   final List<Comic> comics;
@@ -58,7 +58,6 @@ class ComicListView extends StatelessWidget {
         itemCount: comics.length + (isLoading ? 1 : 0),
         padding: const EdgeInsets.all(8),
         itemBuilder: (context, index) {
-          
           if (index == comics.length) {
             return const Center(
               child: Padding(
@@ -74,12 +73,7 @@ class ComicListView extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ComicDetailScreen(comic: comic),
-                  ),
-                );
+                context.go('/comic/${Uri.encodeComponent(comic.id)}');
               },
 
               child: Padding(
@@ -128,44 +122,43 @@ class ComicListView extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 8),
-                            Text( 
-                              comic.synopsis ?? 'No synopsis available',
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                            Expanded(
-                              child: Wrap(
-                                spacing: 4,
-                                runSpacing: 4,
-                                children: comic.genres.map((genre) {
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.blue.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      genre,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.blue,
+                          const SizedBox(height: 8),
+                          Text(
+                            comic.synopsis ?? 'No synopsis available',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  children: comic.genres.map((genre) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
                                       ),
-                                    ),
-                                  );
-                                }).toList(),
+                                      decoration: BoxDecoration(
+                                        // ignore: deprecated_member_use
+                                        color: Colors.blue.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        genre,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                            ),
-                              ],
-                            ),
-
+                            ],
+                          ),
                         ],
                       ),
                     ),

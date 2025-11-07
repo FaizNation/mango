@@ -12,7 +12,7 @@ class Manga extends Comic {
     super.synopsis,
     required super.imageUrl,
     required super.genres,
-    required super.rating,
+
     super.status,
     super.chapters,
     super.availableChapters,
@@ -31,34 +31,6 @@ class Manga extends Comic {
     };
   }
 
-  // // Original Jikan factory kept for compatibility
-  // factory Manga.fromApi(Map<String, dynamic> json) {
-  //   final idVal = json['mal_id'] ?? json['id'];
-  //   return Manga(
-  //     id: idVal?.toString() ?? '',
-  //     title: json['title'] ?? '',
-  //     titleEnglish: json['title_english'],
-  //     synopsis: json['synopsis'],
-  //     imageUrl:
-  //         json['images']?['jpg']?['large_image_url'] ??
-  //         json['images']?['jpg']?['image_url'] ??
-  //         '',
-  //     genres:
-  //         (json['genres'] as List?)
-  //             ?.map((g) => g['name'].toString())
-  //             .toList() ??
-  //         [],
-  //     rating: (json['score'] ?? 0.0).toDouble(),
-  //     status: json['status'],
-  //     chapters: json['chapters'],
-  //     author: (json['authors'] as List?)?.isNotEmpty == true
-  //         ? '${json['authors'][0]['name']}'
-  //         : null,
-  //     availableChapters: [],
-  //   );
-  // }
-
-  // Factory for the komiku-faiznation API (and similar)
   factory Manga.fromApi(Map<String, dynamic> json) {
     final id = (json['id'])?.toString() ?? '';
     final title = (json['title']).toString();
@@ -85,11 +57,6 @@ class Manga extends Comic {
           .toList();
     }
 
-    double rating = 0.0;
-    try {
-      final r = json['rating'] ?? json['score'] ?? json['rate'];
-      if (r != null) rating = double.tryParse(r.toString()) ?? 0.0;
-    } catch (_) {}
     final author = (json['author'])?.toString();
     final type = normalizeType(json['type'] ?? json['comic_type']);
 
@@ -100,7 +67,7 @@ class Manga extends Comic {
       synopsis: synopsis,
       imageUrl: ImageProxy.proxy(image),
       genres: genres,
-      rating: rating,
+
       status: json['status']?.toString(),
       chapters: json['chapter_count'] is int
           ? json['chapter_count'] as int
@@ -110,7 +77,6 @@ class Manga extends Comic {
       availableChapters: [],
       author: author,
       type: type,
-      // readingDirection and origin are set by default, not from API
     );
   }
 }

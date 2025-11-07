@@ -15,14 +15,14 @@ String? normalizeType(dynamic t) {
 /// Base class for all comic types (manga, manhwa, manhua)
 /// Encapsulates common fields and provides a hook for subclasses
 /// to expose additional information via `getAdditionalInfo()`.
-abstract class Comic {
+ class Comic {
   final String id;
   final String title;
   final String? titleEnglish;
   final String? synopsis;
   final String imageUrl;
   final List<String> genres;
-  final double rating;
+  // final double rating;
   final String? status;
   final int? chapters;
   final List<Chapter> availableChapters;
@@ -36,7 +36,7 @@ abstract class Comic {
     this.synopsis,
     required this.imageUrl,
     required this.genres,
-    required this.rating,
+    // required this.rating,
     this.status,
     this.chapters,
     this.availableChapters = const [],

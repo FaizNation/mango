@@ -65,8 +65,8 @@ class HistoryProvider extends ChangeNotifier {
       'title': title,
       'titleEnglish': titleEnglish,
       'author': author,
-      'synopsis': synopsis,
-      'imageUrl': proxiedImageUrl,
+      'description': synopsis,
+      'coverImage': proxiedImageUrl,
       'genres': genres,
       'openedAt': FieldValue.serverTimestamp(),
     });

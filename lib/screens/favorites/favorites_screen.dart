@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:mango/providers/favorites_provider.dart';
 import 'package:mango/widgets/manga_widget.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/favorites_provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -30,7 +30,7 @@ class FavoritesScreen extends StatelessWidget {
                 );
               }
 
-              return ComicListView(comics: [],);
+              return ComicListView(comics: favoritesProvider.favorites);
             },
           ),
         ),

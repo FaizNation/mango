@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Impor ini boleh ada/tidak
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mango/cubits/screens/profile/change/change_password_screen_cubit.dart';
 import 'package:mango/cubits/screens/profile/change/change_password_screen_state.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  // FIX 1: Menggunakan super.key untuk konstruktor modern
   const ChangePasswordScreen({super.key});
 
   @override
-  // FIX 2: Menggunakan State<ChangePasswordScreen>
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
@@ -21,7 +19,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   void dispose() {
-    // FIX 3: Pastikan untuk memanggil dispose() pada controller
     _currentController.dispose();
     _newController.dispose();
     _confirmController.dispose();
@@ -31,9 +28,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _submitForm() {
     if (!_formKey.currentState!.validate()) return;
     context.read<ChangePasswordCubit>().updatePassword(
-          _currentController.text,
-          _newController.text,
-        );
+      _currentController.text,
+      _newController.text,
+    );
   }
 
   @override
@@ -41,7 +38,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return BlocProvider(
       create: (context) => ChangePasswordCubit(),
       child: Scaffold(
-        // Menambahkan AppBar kembali agar lengkap
         appBar: AppBar(
           title: const Text('Change Password'),
           backgroundColor: const Color(0xFFE6F2FF),
@@ -57,27 +53,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             }
             if (state.status == ChangePasswordStatus.failure) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.error ?? 'Unknown error'}')),
+                SnackBar(
+                  content: Text('Error: ${state.error ?? 'Unknown error'}'),
+                ),
               );
             }
           },
           child: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-            // buildWhen ini sudah benar, hanya rebuild saat visibility berubah
-            buildWhen: (previous, current) => previous.isObscure != current.isObscure,
+            buildWhen: (previous, current) =>
+                previous.isObscure != current.isObscure,
             builder: (context, state) {
               return Center(
                 child: Container(
-                  // Menambahkan constraints kembali
                   constraints: const BoxConstraints(maxWidth: 700),
                   child: SingleChildScrollView(
                     child: Padding(
-                      // Mengganti padding ke EdgeInsets.all agar konsisten
                       padding: const EdgeInsets.all(16.0),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           children: [
-                            // --- Current Password ---
                             TextFormField(
                               controller: _currentController,
                               obscureText: state.isObscure,
@@ -90,20 +85,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         : Icons.visibility,
                                   ),
                                   onPressed: () {
-                                    context.read<ChangePasswordCubit>().togglePasswordVisibility();
+                                    context
+                                        .read<ChangePasswordCubit>()
+                                        .togglePasswordVisibility();
                                   },
                                 ),
                               ),
-                              // FIX 4: Menambahkan validator yang hilang
+
                               validator: (v) => (v == null || v.isEmpty)
                                   ? 'Enter current password'
                                   : null,
                             ),
 
-                            // FIX 5: Menambahkan SizedBox
                             const SizedBox(height: 12),
 
-                            // --- New Password ---
                             TextFormField(
                               controller: _newController,
                               obscureText: state.isObscure,
@@ -116,11 +111,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         : Icons.visibility,
                                   ),
                                   onPressed: () {
-                                    context.read<ChangePasswordCubit>().togglePasswordVisibility();
+                                    context
+                                        .read<ChangePasswordCubit>()
+                                        .togglePasswordVisibility();
                                   },
                                 ),
                               ),
-                              // FIX 6: Validator yang benar untuk New Password
+
                               validator: (v) {
                                 if (v == null || v.isEmpty) {
                                   return 'Please enter a new password';
@@ -130,13 +127,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 }
                                 return null;
                               },
-                            ), // <-- FIX 7: TextFormField New Password selesai di sini
+                            ),
 
-                            // FIX 5: Menambahkan SizedBox
                             const SizedBox(height: 12),
 
-                            // --- Confirm Password ---
-                            // FIX 8: Memindahkan TextFormField Confirm Password ke LUAR
                             TextFormField(
                               controller: _confirmController,
                               obscureText: state.isObscure,
@@ -149,7 +143,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         : Icons.visibility,
                                   ),
                                   onPressed: () {
-                                    context.read<ChangePasswordCubit>().togglePasswordVisibility();
+                                    context
+                                        .read<ChangePasswordCubit>()
+                                        .togglePasswordVisibility();
                                   },
                                 ),
                               ),
@@ -164,20 +160,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               },
                             ),
 
-                            // FIX 5: Menambahkan SizedBox
                             const SizedBox(height: 24),
 
-                            // --- Tombol ---
-                            BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-                              // buildWhen ini sudah benar, hanya rebuild saat status loading berubah
-                              buildWhen: (previous, current) => previous.status != current.status,
+                            BlocBuilder<
+                              ChangePasswordCubit,
+                              ChangePasswordState
+                            >(
+                              buildWhen: (previous, current) =>
+                                  previous.status != current.status,
                               builder: (context, state) {
-                                final isLoading = state.status == ChangePasswordStatus.loading;
+                                final isLoading =
+                                    state.status ==
+                                    ChangePasswordStatus.loading;
                                 return ElevatedButton(
                                   onPressed: isLoading ? null : _submitForm,
                                   child: isLoading
                                       ? const CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         )
                                       : const Text('Update Password'),
                                 );
