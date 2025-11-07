@@ -1,1 +1,1 @@
-"TANYA MAS JENAR DULUUU!!!!!"
+Tanya Mas Jenar
