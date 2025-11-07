@@ -29,6 +29,24 @@ class Manhwa extends Comic {
     };
   }
 
+  factory Manhwa.fromFirestore(Map<String, dynamic> data, String docId) {
+    return Manhwa(
+      id: data['id'] ?? docId,
+      title: data['title'] ?? '',
+      titleEnglish: data['titleEnglish'],
+      synopsis: data['synopsis'],
+      imageUrl: data['imageUrl'] ?? '',
+      genres:
+          (data['genres'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      status: data['status'],
+      chapters: data['chapters'],
+      author: data['author'],
+      type: data['type'],
+      readingDirection: data['readingDirection'] ?? 'Left to Right',
+      availableChapters: const [], 
+    );
+  }
+
   factory Manhwa.fromApi(Map<String, dynamic> json) {
     final id =
         (json['id'] ?? json['_id'] ?? json['comic_id'] ?? json['slug'])
@@ -37,7 +55,8 @@ class Manhwa extends Comic {
     final title = (json['title'] ?? json['name'] ?? json['judul'] ?? '')
         .toString();
     final image =
-        (json['cover_image'] ?? json['image'] ?? json['cover'])?.toString() ?? '';
+        (json['cover_image'] ?? json['image'] ?? json['cover'])?.toString() ??
+        '';
     final synopsis = (json['synopsis'] ?? json['description'])?.toString();
 
     List<String> genres = [];

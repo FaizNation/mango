@@ -31,6 +31,25 @@ class Manhua extends Comic {
     };
   }
 
+  factory Manhua.fromFirestore(Map<String, dynamic> data, String docId) {
+    return Manhua(
+      id: data['id'] ?? docId,
+      title: data['title'] ?? '',
+      titleEnglish: data['titleEnglish'],
+      synopsis: data['synopsis'],
+      imageUrl: data['imageUrl'] ?? '',
+      genres:
+          (data['genres'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      status: data['status'],
+      chapters: data['chapters'],
+      author: data['author'],
+      type: data['type'],
+      isColored: data['isColored'] ?? true,
+      origin: data['origin'] ?? 'China 🇨🇳',
+      availableChapters: const [], 
+    );
+  }
+
   factory Manhua.fromApi(Map<String, dynamic> json) {
     final id =
         (json['id'] ?? json['_id'] ?? json['comic_id'] ?? json['slug'])

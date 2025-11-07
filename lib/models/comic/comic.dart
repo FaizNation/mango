@@ -3,7 +3,6 @@ import 'package:mango/models/comic/manga.dart';
 import 'package:mango/models/comic/manhwa.dart';
 import 'package:mango/models/comic/manhua.dart';
 
-// Utility to normalize API "type" fields across different providers.
 String? normalizeType(dynamic t) {
   if (t == null) return null;
   if (t is String) return t;
@@ -12,10 +11,7 @@ String? normalizeType(dynamic t) {
   return t.toString();
 }
 
-/// Base class for all comic types (manga, manhwa, manhua)
-/// Encapsulates common fields and provides a hook for subclasses
-/// to expose additional information via `getAdditionalInfo()`.
- class Comic {
+class Comic {
   final String id;
   final String title;
   final String? titleEnglish;
@@ -44,8 +40,6 @@ String? normalizeType(dynamic t) {
     this.type,
   });
 
-  /// Return a map of additional info for UI/detail screens.
-  /// Subclasses should override and include `...super.getAdditionalInfo()`.
   Map<String, dynamic> getAdditionalInfo() {
     return {
       // 'Title': title,
@@ -82,5 +76,22 @@ String? normalizeType(dynamic t) {
 
     // Fallback default: Manga
     return Manga.fromApi(json);
+  }
+
+  factory Comic.fromFirestore(Map<String, dynamic> data, String docId) {
+    return Comic(
+      id: data['id'] ?? docId,
+      title: data['title'] ?? '',
+      titleEnglish: data['titleEnglish'],
+      synopsis: data['synopsis'],
+      imageUrl: data['imageUrl'] ?? '',
+      genres:
+          (data['genres'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      status: data['status'],
+      chapters: data['chapters'],
+      author: data['author'],
+      type: data['type'],
+      availableChapters: const [], 
+    );
   }
 }

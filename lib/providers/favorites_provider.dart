@@ -52,19 +52,8 @@ class FavoritesProvider extends ChangeNotifier {
             _favorites.clear();
             for (var doc in snapshot.docs) {
               final data = doc.data();
-              final comic = Comic.fromApi({
-                'id': data['id'] ?? doc.id,
-                'title': data['title'] ?? '',
-                'titleEnglish': data['titleEnglish'],
-                'author': data['author'],
-                'synopsis': data['synopsis'],
-                'imageUrl': data['imageUrl'],
-                'genres':
-                    (data['genres'] as List?)
-                        ?.map((e) => e.toString())
-                        .toList() ??
-                    [],
-              });
+              // Use fromFirestore factory which is specifically designed for Firestore document shape
+              final comic = Comic.fromFirestore(data, doc.id);
               _favorites.add(comic);
             }
             notifyListeners();

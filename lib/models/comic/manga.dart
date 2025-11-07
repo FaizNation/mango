@@ -31,6 +31,25 @@ class Manga extends Comic {
     };
   }
 
+  factory Manga.fromFirestore(Map<String, dynamic> data, String docId) {
+    return Manga(
+      id: data['id'] ?? docId,
+      title: data['title'] ?? '',
+      titleEnglish: data['titleEnglish'],
+      synopsis: data['synopsis'],
+      imageUrl: data['imageUrl'] ?? '',
+      genres:
+          (data['genres'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      status: data['status'],
+      chapters: data['chapters'],
+      author: data['author'],
+      type: data['type'],
+      readingDirection: data['readingDirection'] ?? 'Right to Left',
+      origin: data['origin'] ?? 'Japan 🇯🇵',
+      availableChapters: const [],
+    );
+  }
+
   factory Manga.fromApi(Map<String, dynamic> json) {
     final id = (json['id'])?.toString() ?? '';
     final title = (json['title']).toString();
