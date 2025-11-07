@@ -1,3 +1,5 @@
+import 'package:mango/router/comic/chapter_route.dart';
+import 'package:mango/router/comic/comic_detail_route.dart';
 import 'package:mango/screens/auth/signin_screen.dart';
 import 'package:mango/screens/auth/signup_screen.dart';
 import 'package:mango/screens/getstarted_screen.dart';
@@ -47,6 +49,27 @@ final goRouter = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
+    // Comic detail by id
+    GoRoute(
+      path: '/comic/:comicId',
+      name: 'comicDetail',
+      builder: (context, state) {
+        final comicId = state.pathParameters['comicId'] ?? '';
+        return ComicDetailRoute(comicId: comicId);
+      },
+    ),
+
+    // Chapter route: comic id + chapter id
+    GoRoute(
+      path: '/comic/:comicId/chapter/:chapterId',
+      name: 'chapterDetail',
+      builder: (context, state) {
+        final comicId = state.pathParameters['comicId'] ?? '';
+        final chapterId = state.pathParameters['chapterId'] ?? '';
+        return ChapterRoute(comicId: comicId, chapterId: chapterId);
+      },
+    ),
+
     // Shell route for main navigation
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
@@ -89,7 +112,8 @@ final goRouter = GoRouter(
                 final extra = state.extra as Map<String, dynamic>?;
                 return ProfileScreen(
                   userEmail: extra?['userEmail'] as String? ?? '',
-                  userPass: extra?['userPass'] as String? ?? '', userName: '',
+                  userPass: extra?['userPass'] as String? ?? '',
+                  userName: '',
                 );
               },
               routes: [
