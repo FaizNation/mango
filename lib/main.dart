@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'firebase/firebase_options.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   usePathUrlStrategy();
@@ -18,7 +19,19 @@ void main() async {
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
       ],
-      child: const MyApp(),
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MaterialApp.router(
+            routerConfig: goRouter,
+            title: 'FaizNation',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1a94ff)),
+              fontFamily: 'Poppins',
+            ),
+          );
+        },
+      ),
     ),
   );
 }
