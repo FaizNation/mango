@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // <-- Impor
 import '../../services/api_service.dart' as service;
-import '../../models/chapter.dart';
+// import '../../models/chapter.dart'; // <-- Tidak perlu
 import '../../screens/chapter_detail_screen.dart';
 
-class ChapterRoute extends StatefulWidget {
+// Impor Cubit & State baru
+import 'package:mango/cubits/router/chapter_cubit.dart';
+import 'package:mango/cubits/router/chapter_state.dart';
+
+// 1. Ubah menjadi StatelessWidget
+class ChapterRoute extends StatelessWidget {
   final String comicId;
   final String chapterId;
 
@@ -13,65 +19,48 @@ class ChapterRoute extends StatefulWidget {
     required this.chapterId,
   });
 
-  @override
-  State<ChapterRoute> createState() => _ChapterRouteState();
-}
-
-class _ChapterRouteState extends State<ChapterRoute> {
-  final service.ApiService _api = service.ApiService();
-  List<Chapter> _chapters = [];
-  Chapter? _chapter;
-  String? _error;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      final list = await _api.getChapters(widget.comicId);
-      _chapters = list;
-      try {
-        _chapter = _chapters.firstWhere((c) => c.id == widget.chapterId);
-      } catch (_) {
-        if (_chapters.isNotEmpty) {
-          _chapter = _chapters[0];
-        } else {
-          _chapter = null;
-        }
-      }
-      if (_chapter == null) _error = 'Chapter not found';
-    } catch (e) {
-      _error = 'Failed to load chapters: $e';
-    } finally {
-      setState(() {
-        _loading = false;
-      });
-    }
-  }
+  // HAPUS: Seluruh _ChapterRouteState
+  // HAPUS: initState(), _load(), _loading, _error, dll.
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if (_error != null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Chapter')),
-        body: Center(child: Text(_error!)),
-      );
-    }
-    if (_chapter == null) {
-      return const Scaffold(body: Center(child: Text('Chapter not found')));
-    }
+    // 2. Sediakan Cubit
+    return BlocProvider(
+      create: (context) => ChapterRouteCubit(service.ApiService())
+        ..loadChapterData(comicId, chapterId), // Panggil load di sini
+      
+      // 3. Gunakan BlocBuilder untuk menampilkan UI
+      child: BlocBuilder<ChapterRouteCubit, ChapterRouteState>(
+        builder: (context, state) {
+          // Bandingkan dengan 'build' Anda yang lama, logikanya sama persis!
+          
+          if (state is ChapterRouteLoading) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-    return ChapterDetailScreen(chapter: _chapter!, allChapters: _chapters);
+          if (state is ChapterRouteError) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Chapter')),
+              body: Center(child: Text(state.message)),
+            );
+          }
+
+          if (state is ChapterRouteSuccess) {
+            // Jika sukses, tampilkan screen yang sesungguhnya
+            return ChapterDetailScreen(
+              chapter: state.chapter,
+              allChapters: state.allChapters,
+            );
+          }
+          
+          // Fallback jika terjadi state aneh (seharusnya tidak terjadi)
+          return const Scaffold(
+            body: Center(child: Text('Unknown error occurred')),
+          );
+        },
+      ),
+    );
   }
 }

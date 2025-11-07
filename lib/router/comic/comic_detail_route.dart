@@ -1,59 +1,57 @@
 import 'package:flutter/material.dart';
-import '../../models/comic/comic.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // <-- Impor
+// import '../../models/comic/comic.dart'; // <-- Tidak perlu
 import '../../services/api_service.dart' as service;
 import '../../widgets/comic_detail_screen.dart';
 
-class ComicDetailRoute extends StatefulWidget {
+// Impor Cubit & State baru
+import 'package:mango/cubits/router/comic_detail_cubit.dart';
+import 'package:mango/cubits/router/comic_detail_state.dart';
+
+// 1. Ubah menjadi StatelessWidget
+class ComicDetailRoute extends StatelessWidget {
   final String comicId;
 
   const ComicDetailRoute({super.key, required this.comicId});
 
-  @override
-  State<ComicDetailRoute> createState() => _ComicDetailRouteState();
-}
-
-class _ComicDetailRouteState extends State<ComicDetailRoute> {
-  final service.ApiService _api = service.ApiService();
-  Comic? _comic;
-  String? _error;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      final c = await _api.getComicDetail(widget.comicId);
-      setState(() => _comic = c);
-    } catch (e) {
-      setState(() => _error = 'Failed to load comic: $e');
-    } finally {
-      setState(() => _loading = false);
-    }
-  }
+  // HAPUS: Seluruh _ComicDetailRouteState
+  // HAPUS: initState(), _load(), _loading, _error, dll.
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if (_error != null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Comic')),
-        body: Center(child: Text(_error!)),
-      );
-    }
-    if (_comic == null) {
-      return const Scaffold(body: Center(child: Text('Comic not found')));
-    }
+    // 2. Sediakan Cubit
+    return BlocProvider(
+      create: (context) => ComicDetailRouteCubit(service.ApiService())
+        ..loadComic(comicId), // Panggil load di sini
+      
+      // 3. Gunakan BlocBuilder untuk menampilkan UI
+      child: BlocBuilder<ComicDetailRouteCubit, ComicDetailRouteState>(
+        builder: (context, state) {
+          
+          if (state is ComicDetailRouteLoading) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-    return ComicDetailScreen(comic: _comic!);
+          if (state is ComicDetailRouteError) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Comic')),
+              body: Center(child: Text(state.message)),
+            );
+          }
+
+          if (state is ComicDetailRouteSuccess) {
+            // Jika sukses, tampilkan screen yang sesungguhnya
+            return ComicDetailScreen(comic: state.comic);
+          }
+          
+          // Fallback (seharusnya tidak pernah terjadi)
+          return const Scaffold(
+            body: Center(child: Text('An unknown error occurred.')),
+          );
+        },
+      ),
+    );
   }
 }
