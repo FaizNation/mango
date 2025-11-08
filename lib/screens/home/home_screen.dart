@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../cubits/home/home_cubit.dart';
 import '../../cubits/home/home_state.dart';
-import '../../widgets/manga_widget.dart';
+import '../../widgets/manga_widget.dart'; // Pastikan widget ini juga responsif!
 
 class MyHomePage extends StatelessWidget {
   final String userName;
@@ -24,8 +24,18 @@ class _MyHomePageView extends StatelessWidget {
 
   const _MyHomePageView({required this.userName});
 
+  // Tentukan breakpoint. 600 pixels sering dipakai sebagai batas
+  // antara HP (portrait) dan Tablet (landscape/portrait).
+  static const double kMobileBreakpoint = 600.0;
+
   @override
   Widget build(BuildContext context) {
+    // Dapatkan lebar layar saat ini
+    final double screenWidth = MediaQuery.of(context).size.width;
+    
+    // Tentukan apakah ini tampilan mobile
+    final bool isMobile = screenWidth < kMobileBreakpoint;
+
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Scaffold(
@@ -39,30 +49,41 @@ class _MyHomePageView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            state.greeting,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
+                      // Gunakan Expanded agar Greeting/Username
+                      // tidak terdorong oleh Waktu jika namanya panjang
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.greeting,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            userName,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w800,
+                            const SizedBox(height: 8),
+                            Text(
+                              userName,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800,
+                              ),
+                              overflow: TextOverflow.ellipsis, // Hindari overflow
+                              maxLines: 1,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      // Tambahkan sedikit spasi
+                      const SizedBox(width: 16),
+                      
+                      // Waktu (Time) dengan FONT ADAPTIF
                       Text(
                         state.time,
-                        style: const TextStyle(
-                          fontSize: 50,
+                        style: TextStyle(
+                          // Jika mobile, font 36. Jika tidak (tablet/web), font 50.
+                          fontSize: isMobile ? 36 : 50,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -74,22 +95,29 @@ class _MyHomePageView extends StatelessWidget {
                 // Search box
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search manga...',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  // Buat lebar search box tidak terlalu lebar di desktop
+                  // Kita bisa membungkusnya dengan Center & ConstrainedBox
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700), // Batas lebar maks
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search manga...',
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        onSubmitted: (query) {
+                          if (query.trim().isEmpty) return;
+                          context.push(
+                            '/search/${Uri.encodeComponent(query.trim())}',
+                          );
+                        },
                       ),
-                      filled: true,
-                      fillColor: Colors.white,
                     ),
-                    onSubmitted: (query) {
-                      if (query.trim().isEmpty) return;
-                      context.push(
-                        '/search/${Uri.encodeComponent(query.trim())}',
-                      );
-                    },
                   ),
                 ),
 
@@ -130,6 +158,10 @@ class _MyHomePageView extends StatelessWidget {
                         Expanded(
                           child: TabBarView(
                             children: [
+                              // PENTING:
+                              // Pastikan `ComicListView` di bawah ini
+                              // SUDAH DIBUAT RESPONSIVE
+                              // (lihat Langkah 2 di bawah)
                               ComicListView(
                                 comics: state.allManga,
                                 isLoading: state.isLoading,

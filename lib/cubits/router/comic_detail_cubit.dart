@@ -12,6 +12,7 @@ class ComicDetailRouteCubit extends Cubit<ComicDetailRouteState> {
   // Ini adalah fungsi _load yang sudah dipindah
   Future<void> loadComic(String comicId) async {
     try {
+      // ignore: unnecessary_nullable_for_final_variable_declarations
       final Comic? comic = await _api.getComicDetail(comicId);
       
       if (comic != null) {
