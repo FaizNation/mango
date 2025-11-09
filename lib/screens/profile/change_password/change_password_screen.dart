@@ -5,7 +5,14 @@ import 'package:mango/cubits/screens/profile/change/change_password_screen_cubit
 import 'package:mango/cubits/screens/profile/change/change_password_screen_state.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+  final String userEmail;
+  final String userPass;
+
+  const ChangePasswordScreen({
+    super.key,
+    required this.userEmail,
+    required this.userPass,
+  });
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -25,13 +32,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
-    if (!_formKey.currentState!.validate()) return;
-    context.read<ChangePasswordCubit>().updatePassword(
-      _currentController.text,
-      _newController.text,
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +174,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     state.status ==
                                     ChangePasswordStatus.loading;
                                 return ElevatedButton(
-                                  onPressed: isLoading ? null : _submitForm,
+                                  onPressed: isLoading
+                                      ? null
+                                      : () {
+                                          if (!_formKey.currentState!
+                                              .validate()) {
+                                            return;
+                                          }
+                                          context
+                                              .read<ChangePasswordCubit>()
+                                              .updatePassword(
+                                                _currentController.text,
+                                                _newController.text,
+                                              );
+                                        },
                                   child: isLoading
                                       ? const CircularProgressIndicator(
                                           valueColor:

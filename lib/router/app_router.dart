@@ -113,13 +113,19 @@ final goRouter = GoRouter(
                 return ProfileScreen(
                   userEmail: extra?['userEmail'] as String? ?? '',
                   userPass: extra?['userPass'] as String? ?? '',
-                  userName: '',
+                  userName: extra?['userName'] as String? ?? '',
                 );
               },
               routes: [
                 GoRoute(
                   path: 'change-password',
-                  builder: (context, state) => const ChangePasswordScreen(),
+                  builder: (context, state) {
+                    final extra = state.extra as Map<String, dynamic>?;
+                    return ChangePasswordScreen(
+                      userEmail: extra?['userEmail'] as String? ?? '',
+                      userPass: extra?['userPass'] as String? ?? '',
+                    );
+                  },
                 ),
                 GoRoute(
                   path: 'feedback',

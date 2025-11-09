@@ -165,7 +165,13 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.lock,
                       title: 'Change Password',
                       subtitle: 'Update your password',
-                      onTap: () => context.go('/profile/change-password'),
+                      onTap: () => context.go(
+                        '/profile/change-password',
+                        extra: {
+                          'userEmail': userEmail,
+                          'userPass': userPass,
+                        },
+                      ),
                     ),
                     const SizedBox(height: 12),
                     ProfileInfoCard(
