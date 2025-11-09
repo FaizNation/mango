@@ -3,6 +3,7 @@ import 'package:mango/services/auth/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sizer/sizer.dart';
 
 // import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -51,32 +52,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
           body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/logoMango.png', height: 120),
-                    const SizedBox(height: 35),
-                    const Text(
+                    Image.asset('assets/images/logoMango.png', height: 35.h),
+                    SizedBox(height: 10.h),
+                    Text(
                       'Hajimemashite😺!',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 27.sp,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const Text(
+                    Text(
                       "Let's start your new journey at Mango!",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w400,
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 50),
+                    SizedBox(height: 15.h),
                     BlocBuilder<SignupCubit, SignupState>(
                       builder: (context, state) {
                         return TextField(
@@ -85,16 +86,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             prefixIcon: const Icon(Icons.person_2_outlined),
                             labelText: 'User',
                             errorText: state.userError,
-                            border: const OutlineInputBorder(
+                            border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
-                                Radius.circular(12),
+                                Radius.circular(8.w),
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 2.h),
                     BlocBuilder<SignupCubit, SignupState>(
                       builder: (context, state) {
                         return TextField(
@@ -103,16 +104,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             prefixIcon: const Icon(Icons.email_outlined),
                             labelText: 'Email',
                             errorText: state.emailError,
-                            border: const OutlineInputBorder(
+                            border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
-                                Radius.circular(12),
+                                Radius.circular(8.w),
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 2.h),
                     BlocBuilder<SignupCubit, SignupState>(
                       builder: (context, state) {
                         return TextField(
@@ -122,9 +123,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             prefixIcon: const Icon(Icons.lock_outline),
                             labelText: 'Password',
                             errorText: state.passError,
-                            border: const OutlineInputBorder(
+                            border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
-                                Radius.circular(12),
+                                Radius.circular(8.w),
                               ),
                             ),
                             suffixIcon: IconButton(
@@ -143,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         );
                       },
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 3.h),
                     BlocBuilder<SignupCubit, SignupState>(
                       builder: (context, state) {
                         return ElevatedButton(
@@ -155,32 +156,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   _passController.text,
                                 ),
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 3.h,
+                              horizontal: 4.w,
+                            ),
                             backgroundColor: const Color(0xFF2563EB),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(3.w),
                             ),
                           ),
                           child: state.isLoading
-                              ? const SizedBox(
-                                  height: 16,
-                                  width: 16,
+                              ? SizedBox(
+                                  height: 6.w,
+                                  width: 6.w,
                                   child: CircularProgressIndicator(
-                                    strokeWidth: 2,
+                                    strokeWidth: 1.w,
                                     color: Colors.white,
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   "Create Account",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 16.sp,
                                   ),
                                 ),
                         );
                       },
                     ),
-                    const SizedBox(height: 250),
+                    SizedBox(height: 62.5.h),
                     // Row(
                     //   children: const [
                     //     Expanded(child: Divider()),
@@ -229,18 +233,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     //     ),
                     //   ),
                     // ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: 7.5.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already have an account? "),
+                        Text(
+                          "Already have an account? ",
+                          style: TextStyle(fontSize: 18.sp),
+                        ),
                         GestureDetector(
                           onTap: () {
                             context.go('/login');
                           },
-                          child: const Text(
+                          child: Text(
                             " Sign in",
-                            style: TextStyle(color: Colors.blue),
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 18.sp,
+                            ),
                           ),
                         ),
                       ],

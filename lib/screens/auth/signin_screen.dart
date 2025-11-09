@@ -4,6 +4,7 @@ import 'package:mango/cubits/auth/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sizer/sizer.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -66,24 +68,25 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             body: SafeArea(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.all(4.w),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset('assets/images/logoMango.png', height: 120),
-                      const SizedBox(height: 35),
-                      const Text(
-                        'Welcome👋!',
+                      SizedBox(height: 5.h),
+                      Text(
+                        'Welcome Back👋!',
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const Text(
+                      SizedBox(height: 2.h),
+                      Text(
                         'Ready to continue your adventure?',
                         style: TextStyle(
                           fontSize: 18,
@@ -92,38 +95,36 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 50),
+                      SizedBox(height: 3.h),
                       BlocBuilder<LoginCubit, LoginState>(
                         builder: (context, state) {
-                          return TextField(
+                          return TextFormField(
                             controller: emailController,
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.email_outlined),
                               labelText: 'Email',
-                              errorText: state.emailError,
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(12),
-                                ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2.w),
                               ),
                             ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Email is required';
+                              }
+                              return null;
+                            },
                           );
                         },
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 2.h),
                       BlocBuilder<LoginCubit, LoginState>(
                         builder: (context, state) {
-                          return TextField(
+                          return TextFormField(
                             controller: passController,
                             obscureText: state.obscurePassword,
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.lock_outline),
                               labelText: 'Password',
-                              errorText: state.passError,
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(12),
-                                ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2.w),
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -138,31 +139,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                               ),
                             ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Password is required';
+                              }
+                              return null;
+                            },
                           );
                         },
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text("forgot password?"),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 4.h),
                       BlocBuilder<LoginCubit, LoginState>(
                         builder: (context, state) {
                           return ElevatedButton(
                             onPressed: state.isLoading
                                 ? null
-                                : () => context.read<LoginCubit>().submit(
-                                    emailController.text,
-                                    passController.text,
-                                  ),
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.read<LoginCubit>().submit(
+                                            emailController.text,
+                                            passController.text,
+                                          );
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              padding: EdgeInsets.symmetric(vertical: 3.h),
                               backgroundColor: const Color(0xFF2563EB),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(2.w),
                               ),
                             ),
                             child: state.isLoading
@@ -174,18 +178,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                       color: Colors.white,
                                     ),
                                   )
-                                : const Text(
+                                : Text(
                                     "LogIn",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 18,
+                                      fontSize: 16.sp,
                                     ),
                                   ),
                           );
                         },
                       ),
-                      const SizedBox(height: 300),
-
+                      SizedBox(height: 300),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

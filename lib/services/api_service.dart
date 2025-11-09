@@ -5,7 +5,7 @@ import '../models/chapter.dart';
 class ApiService {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'APA MASS?',
+      baseUrl: 'https://api-komiku-faiznation.up.railway.app',
       connectTimeout: const Duration(seconds: 8),
       receiveTimeout: const Duration(seconds: 8),
     ),
