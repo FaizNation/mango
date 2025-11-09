@@ -119,17 +119,14 @@ final goRouter = GoRouter(
               routes: [
                 GoRoute(
                   path: 'change-password',
-                  parentNavigatorKey: _rootNavigatorKey,
                   builder: (context, state) => const ChangePasswordScreen(),
                 ),
                 GoRoute(
                   path: 'feedback',
-                  parentNavigatorKey: _rootNavigatorKey,
                   builder: (context, state) => const FeedbackScreen(),
                 ),
                 GoRoute(
                   path: 'about',
-                  parentNavigatorKey: _rootNavigatorKey,
                   builder: (context, state) => const AboutScreen(),
                 ),
               ],
