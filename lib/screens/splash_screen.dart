@@ -1,7 +1,7 @@
-// import 'package:belajar_flutter/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -15,19 +15,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
+  }
 
-    Timer(const Duration(seconds: 4), () {
-      if (mounted) {
-        context.go('/getstarted');
-      }
-      
-      // Navigator.pushReplacement<void, void>(
-      //   context,
-      //   MaterialPageRoute<void>(
-      //     builder: (BuildContext context) => const MyHomePage(userName: '',),
-      //   ),
-      // );
-    });
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userName = prefs.getString('userName');
+    final userEmail = prefs.getString('userEmail');
+
+    // Wait for 4 seconds for the splash screen
+    await Future.delayed(const Duration(seconds: 4));
+
+    if (!mounted) return;
+
+    if (userName != null && userEmail != null) {
+      context.go('/home', extra: {'userName': userName, 'userEmail': userEmail});
+    } else {
+      context.go('/getstarted');
+    }
   }
 
   @override

@@ -1,20 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../cubits/home/home_cubit.dart';
 import '../../cubits/home/home_state.dart';
 import '../../widgets/manga_widget.dart'; // Pastikan widget ini juga responsif!
 
-class MyHomePage extends StatelessWidget {
-  final String userName;
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
-  const MyHomePage({super.key, required this.userName});
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String _userName = '';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userName = prefs.getString('userName') ?? 'Guest';
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return BlocProvider(
       create: (_) => HomeCubit(),
-      child: _MyHomePageView(userName: userName),
+      child: _MyHomePageView(userName: _userName),
     );
   }
 }

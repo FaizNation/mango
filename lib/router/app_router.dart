@@ -80,10 +80,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/home',
               builder: (context, state) {
-                final extra = state.extra as Map<String, dynamic>?;
-                return MyHomePage(
-                  userName: extra?['userName'] as String? ?? '',
-                );
+                return const MyHomePage();
               },
             ),
           ],
@@ -109,12 +106,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/profile',
               builder: (context, state) {
-                final extra = state.extra as Map<String, dynamic>?;
-                return ProfileScreen(
-                  userEmail: extra?['userEmail'] as String? ?? '',
-                  userPass: extra?['userPass'] as String? ?? '',
-                  userName: extra?['userName'] as String? ?? '',
-                );
+                return const ProfileScreen();
               },
               routes: [
                 GoRoute(

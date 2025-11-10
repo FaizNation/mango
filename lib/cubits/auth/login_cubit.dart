@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mango/services/auth/auth_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_state.dart';
 
@@ -68,6 +69,11 @@ class LoginCubit extends Cubit<LoginState> {
         }
       }
       if (userName.isEmpty) userName = e;
+
+      // Save user data to SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userName', userName);
+      await prefs.setString('userEmail', e);
 
       emit(
         state.copyWith(

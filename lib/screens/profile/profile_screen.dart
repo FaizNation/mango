@@ -5,22 +5,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mango/utils/logout_dialog.dart';
 import 'package:mango/utils/photo_editor.dart';
 import 'package:mango/widgets/profile_info_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:mango/cubits/screens/profile/profile_screen_cubit.dart';
 import 'package:mango/cubits/screens/profile/profile_screen_state.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final String userName;
-  final String userEmail;
-  final String userPass;
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
-  const ProfileScreen({
-    super.key,
-    required this.userName,
-    required this.userEmail,
-    required this.userPass,
-  });
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String _userName = '';
+  String _userEmail = '';
+  String _userPass = ''; // This might not be available or secure to store
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userName = prefs.getString('userName') ?? 'No Name';
+      _userEmail = prefs.getString('userEmail') ?? 'No Email';
+      // Note: Storing password in SharedPreferences is not recommended.
+      // Assuming it's not stored or needed here.
+      _userPass = ''; 
+      _isLoading = false;
+    });
+  }
 
   Future<void> _launchGitHub() async {
     final Uri url = Uri.parse("https://github.com/FaizNation");
@@ -55,6 +75,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return BlocProvider(
       create: (context) => ProfileCubit()..loadCurrentPhoto(),
       child: Scaffold(
@@ -91,8 +117,8 @@ class ProfileScreen extends StatelessWidget {
                           );
                         } else if (photoUrl == null || photoUrl.isEmpty) {
                           child = Text(
-                            userName.isNotEmpty
-                                ? userName[0].toUpperCase()
+                            _userName.isNotEmpty
+                                ? _userName[0].toUpperCase()
                                 : "U",
                             style: const TextStyle(
                               fontSize: 40,
@@ -109,15 +135,14 @@ class ProfileScreen extends StatelessWidget {
                               backgroundColor: Colors.blue[200],
                               backgroundImage:
                                   photoUrl != null && photoUrl.isNotEmpty
-                                  ? (photoUrl.startsWith('data:')
-                                        ? MemoryImage(
-                                                base64Decode(
-                                                  photoUrl.split(',').last,
-                                                ),
-                                              )
-                                              as ImageProvider
-                                        : NetworkImage(photoUrl))
-                                  : null,
+                                      ? (photoUrl.startsWith('data:')
+                                          ? MemoryImage(
+                                              base64Decode(
+                                                photoUrl.split(',').last,
+                                              ),
+                                            ) as ImageProvider
+                                          : NetworkImage(photoUrl))
+                                      : null,
                               child: child,
                             ),
                             Positioned(
@@ -145,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
 
                     const SizedBox(height: 20),
                     Text(
-                      userName,
+                      _userName,
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -157,7 +182,7 @@ class ProfileScreen extends StatelessWidget {
                     ProfileInfoCard(
                       icon: Icons.email,
                       title: 'Email',
-                      subtitle: userEmail,
+                      subtitle: _userEmail,
                       onTap: null,
                     ),
                     const SizedBox(height: 12),
@@ -168,8 +193,8 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () => context.go(
                         '/profile/change-password',
                         extra: {
-                          'userEmail': userEmail,
-                          'userPass': userPass,
+                          'userEmail': _userEmail,
+                          'userPass': _userPass,
                         },
                       ),
                     ),
@@ -196,6 +221,9 @@ class ProfileScreen extends StatelessWidget {
                             final confirm = await showLogoutDialog(context);
 
                             if (confirm == true) {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.clear();
                               // ignore: use_build_context_synchronously
                               context.go('/login');
                             }
