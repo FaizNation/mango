@@ -50,214 +50,185 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Scaffold(
           appBar: AppBar(backgroundColor: Colors.white),
           body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/logoMango.png', height: 35.h),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Hajimemashite😺!',
-                      style: TextStyle(
-                        fontSize: 27.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      "Let's start your new journey at Mango!",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 15.h),
-                    BlocBuilder<SignupCubit, SignupState>(
-                      builder: (context, state) {
-                        return TextField(
-                          controller: _userController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.person_2_outlined),
-                            labelText: 'User',
-                            errorText: state.userError,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.w),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isDesktop = constraints.maxWidth > 600;
+                return Center(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      constraints:
+                          BoxConstraints(maxWidth: isDesktop ? 50.w : 90.w),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: isDesktop ? 20 : 8.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/logoMango.png',
+                                height: isDesktop ? 100 : 20.h),
+                            SizedBox(height: isDesktop ? 20 : 5.h),
+                            Text(
+                              'Hajimemashite😺!',
+                              style: TextStyle(
+                                fontSize: isDesktop ? 24 : 24.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0),
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-                    BlocBuilder<SignupCubit, SignupState>(
-                      builder: (context, state) {
-                        return TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email_outlined),
-                            labelText: 'Email',
-                            errorText: state.emailError,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.w),
+                            Text(
+                              "Let's start your new journey at Mango!",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 0, 0, 0),
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-                    BlocBuilder<SignupCubit, SignupState>(
-                      builder: (context, state) {
-                        return TextField(
-                          controller: _passController,
-                          obscureText: state.obscurePassword,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            labelText: 'Password',
-                            errorText: state.passError,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.w),
-                              ),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                state.obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                context
-                                    .read<SignupCubit>()
-                                    .togglePasswordVisibility();
+                            SizedBox(height: isDesktop ? 30 : 8.h),
+                            BlocBuilder<SignupCubit, SignupState>(
+                              builder: (context, state) {
+                                return TextField(
+                                  controller: _userController,
+                                  decoration: InputDecoration(
+                                    prefixIcon:
+                                        const Icon(Icons.person_2_outlined),
+                                    labelText: 'User',
+                                    errorText: state.userError,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                );
                               },
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 3.h),
-                    BlocBuilder<SignupCubit, SignupState>(
-                      builder: (context, state) {
-                        return ElevatedButton(
-                          onPressed: state.isLoading
-                              ? null
-                              : () => context.read<SignupCubit>().submit(
-                                  _userController.text,
-                                  _emailController.text,
-                                  _passController.text,
-                                ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 3.h,
-                              horizontal: 4.w,
-                            ),
-                            backgroundColor: const Color(0xFF2563EB),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3.w),
-                            ),
-                          ),
-                          child: state.isLoading
-                              ? SizedBox(
-                                  height: 6.w,
-                                  width: 6.w,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.w,
-                                    color: Colors.white,
+                            SizedBox(height: isDesktop ? 20 : 2.h),
+                            BlocBuilder<SignupCubit, SignupState>(
+                              builder: (context, state) {
+                                return TextField(
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    prefixIcon:
+                                        const Icon(Icons.email_outlined),
+                                    labelText: 'Email',
+                                    errorText: state.emailError,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  "Create Account",
+                                );
+                              },
+                            ),
+                            SizedBox(height: isDesktop ? 20 : 2.h),
+                            BlocBuilder<SignupCubit, SignupState>(
+                              builder: (context, state) {
+                                return TextField(
+                                  controller: _passController,
+                                  obscureText: state.obscurePassword,
+                                  decoration: InputDecoration(
+                                    prefixIcon:
+                                        const Icon(Icons.lock_outline),
+                                    labelText: 'Password',
+                                    errorText: state.passError,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        state.obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                      ),
+                                      onPressed: () {
+                                        context
+                                            .read<SignupCubit>()
+                                            .togglePasswordVisibility();
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: isDesktop ? 30 : 3.h),
+                            BlocBuilder<SignupCubit, SignupState>(
+                              builder: (context, state) {
+                                return ElevatedButton(
+                                  onPressed: state.isLoading
+                                      ? null
+                                      : () =>
+                                          context.read<SignupCubit>().submit(
+                                              _userController.text,
+                                              _emailController.text,
+                                              _passController.text,
+                                            ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: isDesktop ? 20 : 2.5.h,
+                                      horizontal: 4.w,
+                                    ),
+                                    backgroundColor:
+                                        const Color(0xFF2563EB),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: state.isLoading
+                                      ? SizedBox(
+                                          height: 6.w,
+                                          width: 6.w,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 1.w,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Text(
+                                          "Create Account",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: isDesktop ? 16 : 16.sp,
+                                          ),
+                                        ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: isDesktop ? 100 : 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Already have an account? ",
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.sp,
+                                      fontSize: isDesktop ? 14 : 14.sp),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.go('/login');
+                                  },
+                                  child: Text(
+                                    " Sign in",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: isDesktop ? 14 : 14.sp,
+                                    ),
                                   ),
                                 ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 62.5.h),
-                    // Row(
-                    //   children: const [
-                    //     Expanded(child: Divider()),
-                    //     Padding(
-                    //       padding: EdgeInsets.symmetric(horizontal: 10),
-                    //       child: Text("Atau daftar dengan"),
-                    //     ),
-                    //     Expanded(child: Divider()),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 20),
-                    // SizedBox(
-                    //   width: 200,
-                    //   height: 50,
-                    //   child: SignInButton(
-                    //     Buttons.Google,
-                    //     onPressed: () {},
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
-
-                    // SizedBox(
-                    //   width: 220,
-                    //   height: 50,
-                    //   child: SignInButton(
-                    //     Buttons.Facebook,
-                    //     onPressed: () {},
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
-
-                    // SizedBox(
-                    //   width: 220,
-                    //   height: 50,
-                    //   child: SignInButton(
-                    //     Buttons.GitHub,
-                    //     onPressed: () {},
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(height: 7.5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have an account? ",
-                          style: TextStyle(fontSize: 18.sp),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            context.go('/login');
-                          },
-                          child: Text(
-                            " Sign in",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 18.sp,
+                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ),
