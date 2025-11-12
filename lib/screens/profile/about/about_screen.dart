@@ -26,19 +26,44 @@ class AboutScreen extends StatelessWidget {
                   backgroundImage: AssetImage('assets/images/masjenar.png'),
                 ),
                 const SizedBox(height: 16),
+
+                // --- PERUBAHAN DIMULAI DI SINI ---
+                // Mengganti "Faiz Nation" menjadi "Tim Pengembang" sebagai judul utama
                 const Text(
-                  'Faiz Nation',
+                  'Tim Pengembang', // Judul utama
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12), // Sedikit dirapikan
+
+                // Menghapus sub-judul "Tim Pengembang:"
+                // dan langsung mendaftar anggota di bawah judul utama
+
+                // Menambahkan "Faiz Nation" sebagai Ketua Tim
                 const Text(
-                  'Depeloper males',
-                  style: TextStyle(color: Colors.grey),
+                  "Faiz Nation",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                // Nama Anda
+                const Text(
+                  "Faqih Rafasha Argandhi",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                // Placeholder untuk Jenar
+                const Text(
+                  "Jenar (Tambahkan nama lengkap)",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                // --- AKHIR PERUBAHAN ---
+
                 const SizedBox(height: 24),
                 const Text(
-                  'This app is developed by Faiz Nation, This application was developed to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
-                  // 'This app is developed by Faiz Nation, especially those that help readers discover and enjoy comics from across the world. If you have feedback or find a bug, please let me know.'
+                  // --- DESKRIPSI DIMODIFIKASI ---
+                  'This application was developed by our team to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
+                  // Teks asli: 'This app is developed by Faiz Nation, This application was developed...'
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, height: 1.4),
                 ),
