@@ -10,6 +10,8 @@ class ComicListView extends StatelessWidget {
   final bool isLoading;
   final VoidCallback? onLoadMore;
   final String? error;
+  // --- 1. TAMBAHKAN PARAMETER INI ---
+  final String? emptyText;
 
   const ComicListView({
     super.key,
@@ -17,6 +19,8 @@ class ComicListView extends StatelessWidget {
     this.isLoading = false,
     this.onLoadMore,
     this.error,
+    // --- 2. TAMBAHKAN PARAMETER INI DI CONSTRUCTOR ---
+    this.emptyText,
   });
 
   @override
@@ -44,8 +48,14 @@ class ComicListView extends StatelessWidget {
     }
 
     if (comics.isEmpty) {
-      // ... (kode 'no comics' sudah bagus)
-      return const Center(child: Text('No comics found'));
+      // --- 3. MODIFIKASI BAGIAN INI ---
+      // Gunakan emptyText jika ada, jika tidak, gunakan teks default
+      return Center(
+          child: Text(
+        emptyText ?? 'No comics found',
+        style: const TextStyle(fontSize: 16, color: Colors.grey),
+      ));
+      // --- AKHIR MODIFIKASI ---
     }
 
     // --- INI PERUBAHANNYA ---
@@ -129,8 +139,8 @@ class ComicListView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 // style: const TextStyle(
-                                //   fontSize: 18,
-                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 18,
+                                //   fontWeight: FontWeight.bold,
                                 // ),
                               ),
                               const SizedBox(height: 4),
