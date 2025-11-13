@@ -83,6 +83,7 @@ flutter:
     - assets/images/newcomic/jujusuKaisen.png
     - assets/images/manhwa/Solo_Leveling.png
     - assets/images/masjenar.png
+    - assets/images/masakbar.png
 
   fonts:
     - family: Anja
