@@ -40,7 +40,7 @@ class AboutScreen extends StatelessWidget {
 
                 // Menambahkan "Faiz Nation" sebagai Ketua Tim
                 const Text(
-                  "Faiz Nation",
+                  " King Faiz Nation",
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
                 const SizedBox(height: 4), // Spasi antar nama
@@ -67,7 +67,39 @@ class AboutScreen extends StatelessWidget {
 
                 // Placeholder untuk Jenar
                 const Text(
-                  "Jenar (Tambahkan nama lengkap)",
+                  "Jenar",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+
+                const Text(
+                  " Mia",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                // Nama Anda
+                const Text(
+                  "Manda",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                // Nama Anda
+                const Text(
+                  "Felicia",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                const Text(
+                  "Keisa",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                // Placeholder untuk Jenar
+                const Text(
+                  "Leonbot",
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
                 // --- AKHIR PERUBAHAN ---
