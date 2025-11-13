@@ -52,6 +52,19 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4), // Spasi antar nama
 
+                // Nama Anda
+                const Text(
+                  "Febriana Nur Aini",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
+                const Text(
+                  "Dezkrazzer",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                const SizedBox(height: 4), // Spasi antar nama
+
                 // Placeholder untuk Jenar
                 const Text(
                   "Jenar (Tambahkan nama lengkap)",
