@@ -6,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'firebase/firebase_options.dart';
 // ignore: depend_on_referenced_packages
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
-  usePathUrlStrategy();
+  // usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
