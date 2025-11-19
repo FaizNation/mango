@@ -1,14 +1,38 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:mango/utils/image_compressor.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ProfilePhotoService {
   final ImagePicker _picker = ImagePicker();
 
   Future<String?> pickUploadAndSave(ImageSource source) async {
+    if (!kIsWeb) {
+      PermissionStatus status;
+      if (source == ImageSource.gallery) {
+        status = await Permission.photos.status;
+        if (!status.isGranted) {
+          status = await Permission.photos.request();
+        }
+      } else {
+        status = await Permission.camera.status;
+        if (!status.isGranted) {
+          status = await Permission.camera.request();
+        }
+      }
+
+      if (!status.isGranted) {
+        if (status.isPermanentlyDenied) {
+          openAppSettings();
+        }
+        throw Exception('Permission not granted');
+      }
+    }
+
     final picked = await _picker.pickImage(source: source);
     if (picked == null) return null;
 
@@ -16,13 +40,9 @@ class ProfilePhotoService {
     if (user == null) throw Exception('Not signed in');
 
     final fileBytes = await picked.readAsBytes();
-
-    // Use the universal compressor
     final compressedBytes = await compressImage(fileBytes);
-
-    final mimeType = lookupMimeType(picked.path, headerBytes: compressedBytes) ?? 'image/jpeg';
-
-    // Always use the data URI path
+    final mimeType =
+        lookupMimeType(picked.path, headerBytes: compressedBytes) ?? 'image/jpeg';
     final dataUri = 'data:$mimeType;base64,${base64Encode(compressedBytes)}';
     await _persist(user.uid, dataUri);
     return dataUri;
