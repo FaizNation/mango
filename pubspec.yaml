@@ -31,13 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   getwidget: ^7.0.0
   provider: ^6.1.5+1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   firebase_core: ^4.1.1
+  get_it: ^7.7.0
   firebase_auth: ^6.1.0
   cloud_firestore: ^6.0.2
   salomon_bottom_bar: ^3.3.2 # Bottom Navigation Bar (main_navigation_screen.dart)
@@ -54,8 +54,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_image_compress: ^2.4.0
   permission_handler: ^12.0.1
-  
-
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
@@ -88,7 +87,7 @@ flutter:
 
   fonts:
     - family: Anja
-      fonts: 
+      fonts:
         - asset: assets/fonts/AnjaEliane.ttf
     - family: Poppins
       fonts:
@@ -189,6 +188,5 @@ flutter_launcher_icons:
     generate: true
     image_path: "path/to/image.png"
 
-
 flutter_native_splash:
-    colorcolor: "#42a5f5"
+  colorcolor: "#42a5f5"
