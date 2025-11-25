@@ -1,11 +1,10 @@
-import 'package:equatable/equatable.dart';
-import 'package:mango/core/domain/entities/chapter.dart';
+part of 'chapter_route_cubit.dart';
 
 abstract class ChapterRouteState extends Equatable {
   const ChapterRouteState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class ChapterRouteLoading extends ChapterRouteState {}
@@ -17,7 +16,7 @@ class ChapterRouteSuccess extends ChapterRouteState {
   const ChapterRouteSuccess({required this.chapter, required this.allChapters});
 
   @override
-  List<Object?> get props => [chapter, allChapters];
+  List<Object> get props => [chapter, allChapters];
 }
 
 class ChapterRouteError extends ChapterRouteState {
@@ -26,5 +25,5 @@ class ChapterRouteError extends ChapterRouteState {
   const ChapterRouteError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }

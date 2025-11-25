@@ -4,17 +4,17 @@ import 'package:mango/core/domain/entities/chapter.dart';
 import 'package:mango/features/reader/domain/usecases/get_chapter_images.dart';
 import 'package:mango/core/utils/image_proxy.dart';
 
-part 'chapter_state.dart';
+part 'reader_screen_state.dart';
 
-class ChapterCubit extends Cubit<ChapterState> {
+class ReaderScreenCubit extends Cubit<ReaderScreenState> {
   final GetChapterImages getChapterImages;
 
-  ChapterCubit({
+  ReaderScreenCubit({
     required Chapter initialChapter,
     required List<Chapter> allChapters,
     required this.getChapterImages,
   }) : super(
-          ChapterState(
+          ReaderScreenState(
             currentChapter: initialChapter,
             allChapters: List<Chapter>.from(allChapters),
             isLoading: false,
