@@ -1,25 +1,25 @@
-part of 'chapter_cubit.dart';
+part of 'reader_screen_cubit.dart';
 
-class ChapterState extends Equatable {
+class ReaderScreenState extends Equatable {
   final Chapter currentChapter;
   final List<Chapter> allChapters;
   final bool isLoading;
   final String? error;
 
-  const ChapterState({
+  const ReaderScreenState({
     required this.currentChapter,
     required this.allChapters,
     required this.isLoading,
     this.error,
   });
 
-  ChapterState copyWith({
+  ReaderScreenState copyWith({
     Chapter? currentChapter,
     List<Chapter>? allChapters,
     bool? isLoading,
     String? error,
   }) {
-    return ChapterState(
+    return ReaderScreenState(
       currentChapter: currentChapter ?? this.currentChapter,
       allChapters: allChapters ?? this.allChapters,
       isLoading: isLoading ?? this.isLoading,
