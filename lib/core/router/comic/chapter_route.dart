@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // <-- Impor
-import 'package:mango/core/router/cubits/chapter_state.dart';
 // import '../../models/chapter.dart'; // <-- Tidak perlu
 import 'package:mango/features/reader/presentation/screens/chapter_detail_screen.dart';
 
 // Impor Cubit & State baru
-import 'package:mango/core/router/cubits/chapter_cubit.dart';
-import 'package:mango/injection.dart';
+import 'package:mango/features/reader/presentation/cubit/chapter_route_cubit.dart';
+import 'package:mango/injection.dart';  
 
 // 1. Ubah menjadi StatelessWidget
 class ChapterRoute extends StatelessWidget {

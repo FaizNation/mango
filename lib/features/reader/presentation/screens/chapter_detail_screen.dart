@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mango/core/domain/entities/chapter.dart';
-import '../cubit/chapter_cubit.dart';
+import '../cubit/reader_screen_cubit.dart';
 import 'package:mango/injection.dart';
 import 'package:mango/features/reader/domain/usecases/get_chapter_images.dart';
 
@@ -20,13 +20,13 @@ class ChapterDetailScreen extends StatefulWidget {
 }
 
 class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
-  late final ChapterCubit _cubit;
+  late final ReaderScreenCubit _cubit;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _cubit = ChapterCubit(
+    _cubit = ReaderScreenCubit(
       initialChapter: widget.chapter,
       allChapters: widget.allChapters,
       getChapterImages: sl<GetChapterImages>(),
@@ -46,7 +46,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _cubit,
-      child: BlocListener<ChapterCubit, ChapterState>(
+      child: BlocListener<ReaderScreenCubit, ReaderScreenState>(
         listenWhen: (prev, curr) =>
             prev.currentChapter.id != curr.currentChapter.id,
         listener: (context, state) {
@@ -55,7 +55,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
             if (_scrollController.hasClients) _scrollController.jumpTo(0);
           });
         },
-        child: BlocBuilder<ChapterCubit, ChapterState>(
+        child: BlocBuilder<ReaderScreenCubit, ReaderScreenState>(
           builder: (context, state) {
             final current = state.currentChapter;
             int currentChapterIndex = state.allChapters.indexWhere(
@@ -92,7 +92,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                           FloatingActionButton(
                             heroTag: 'nextChapter',
                             onPressed: () {
-                              context.read<ChapterCubit>().navigateToChapter(
+                              context.read<ReaderScreenCubit>().navigateToChapter(
                                 state.allChapters[currentChapterIndex - 1],
                               );
                             },
@@ -103,7 +103,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                           FloatingActionButton(
                             heroTag: 'prevChapter',
                             onPressed: () {
-                              context.read<ChapterCubit>().navigateToChapter(
+                              context.read<ReaderScreenCubit>().navigateToChapter(
                                 state.allChapters[currentChapterIndex + 1],
                               );
                             },
@@ -121,7 +121,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
     );
   }
 
-  Widget _buildBodyFromState(ChapterState state) {
+  Widget _buildBodyFromState(ReaderScreenState state) {
     if (state.error != null) {
       return Center(
         child: Text(state.error!, style: const TextStyle(color: Colors.red)),
@@ -196,7 +196,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                     final chapter = widget.allChapters[index];
                     // get current id from cubit
                     final currentId = context
-                        .read<ChapterCubit>()
+                        .read<ReaderScreenCubit>()
                         .state
                         .currentChapter
                         .id;
@@ -216,7 +216,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                           : null,
                       onTap: () {
                         Navigator.pop(context);
-                        context.read<ChapterCubit>().navigateToChapter(chapter);
+                        context.read<ReaderScreenCubit>().navigateToChapter(chapter);
                       },
                     );
                   },

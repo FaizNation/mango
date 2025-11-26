@@ -53,9 +53,15 @@ import 'package:mango/features/search/data/repositories/search_repository_impl.d
 import 'package:mango/features/search/domain/repositories/search_repository.dart';
 import 'package:mango/features/search/domain/usecases/search_comics.dart';
 
+// Comic Detail
+import 'package:mango/features/comic_detail/data/datasources/comic_detail_remote_data_source.dart';
+import 'package:mango/features/comic_detail/data/repositories/comic_detail_repository_impl.dart';
+import 'package:mango/features/comic_detail/domain/repositories/comic_detail_repository.dart';
+import 'package:mango/features/comic_detail/domain/usecases/get_comic_detail.dart';
+
 // Router cubits
-import 'package:mango/core/router/cubits/chapter_cubit.dart';
-import 'package:mango/core/router/cubits/comic_detail_cubit.dart';
+import 'package:mango/features/reader/presentation/cubit/chapter_route_cubit.dart';
+import 'package:mango/features/comic_detail/presentation/cubit/comic_detail_cubit.dart';
 import 'package:mango/features/home/presentation/cubit/comic_detail_cubit.dart';
 
 final GetIt sl = GetIt.instance;
@@ -100,6 +106,9 @@ Future<void> init() async {
       firestore: sl<FirebaseFirestore>(),
     ),
   );
+  sl.registerLazySingleton<ComicDetailRemoteDataSource>(
+    () => ComicDetailRemoteDataSourceImpl(apiClient: sl<ApiClient>()),
+  );
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -143,6 +152,10 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<ComicDetailRepository>(
+    () => ComicDetailRepositoryImpl(remoteDataSource: sl<ComicDetailRemoteDataSource>()),
+  );
+
   // Usecases - Auth
   sl.registerLazySingleton(() => GetUserStream(sl<AuthRepository>()));
   sl.registerLazySingleton(() => SignOut(sl<AuthRepository>()));
@@ -152,6 +165,9 @@ Future<void> init() async {
   // Usecases - Home
   sl.registerLazySingleton(() => GetComics(sl<HomeRepository>()));
   sl.registerLazySingleton(() => GetComicsByType(sl<HomeRepository>()));
+
+  // Usecases - Comic Detail
+  sl.registerLazySingleton(() => GetComicDetail(sl<ComicDetailRepository>()));
 
   // Usecases - Favorites
   sl.registerLazySingleton(() => GetFavorites(sl<FavoritesRepository>()));
@@ -172,10 +188,10 @@ Future<void> init() async {
   );
 
   // Chapter route cubit (router)
-  sl.registerFactory(() => ChapterRouteCubit(sl<ApiClient>()));
+  sl.registerFactory(() => ChapterRouteCubit(getChapters: sl<GetChapters>()));
 
   // Comic detail route cubit (router)
-  sl.registerFactory(() => ComicDetailRouteCubit(sl<ApiClient>()));
+  sl.registerFactory(() => ComicDetailRouteCubit(getComicDetail: sl<GetComicDetail>()));
 
   // Comic detail screen cubit
   sl.registerFactory(() => ComicDetailCubit(sl<ApiClient>()));
