@@ -64,7 +64,7 @@ class AboutScreen extends StatelessWidget {
       TeamMember(
         name: 'Manda Fatimah A',
         role: 'Backend Developer',
-        description: 'Membangun API dan memastikan performa server.',
+        description: 'Membangun.',
         imagePath: 'assets/images/user_placeholder.png',
         githubUrl: 'https://github.com/mandaazaziah',
         instagramUrl: 'https://instagram.com/manda',
