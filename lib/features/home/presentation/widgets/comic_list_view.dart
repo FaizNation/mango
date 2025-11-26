@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/core/utils/image_proxy.dart';
 import 'package:mango/features/home/domain/entities/comic_entity.dart';
 import 'package:sizer/sizer.dart';
 
@@ -86,10 +87,12 @@ class ComicListView extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
-                            comic.imageUrl,
-                            width: 100,
-                            height: 150,
-                            fit: BoxFit.cover,
+                            ImageProxy.proxyWithOptions(
+                              comic.imageUrl,
+                              width: 100,
+                              height: 150,
+                              fit: 'cover',
+                            ),
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
                                 width: 100,

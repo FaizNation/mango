@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart'; // <-- Impor
 import 'package:mango/features/home/presentation/screens/comic_detail_screen.dart';
 
 // Impor Cubit & State baru
-import 'package:mango/core/router/cubits/comic_detail_cubit.dart';
-import 'package:mango/core/router/cubits/comic_detail_state.dart';
+import 'package:mango/features/comic_detail/presentation/cubit/comic_detail_cubit.dart';
+import 'package:mango/features/comic_detail/presentation/cubit/comic_detail_state.dart';
 import 'package:mango/injection.dart';
 
 // 1. Ubah menjadi StatelessWidget
