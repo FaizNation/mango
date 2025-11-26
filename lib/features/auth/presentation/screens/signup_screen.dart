@@ -42,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Registration successful')),
             );
-            context.go('/home');
+            context.go('/login');
           } else if (state.errorMessage != null) {
             ScaffoldMessenger.of(
               context,
