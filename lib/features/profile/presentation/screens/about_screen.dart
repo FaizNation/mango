@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -38,11 +37,12 @@ class AboutScreen extends StatelessWidget {
         instagramUrl: 'https://instagram.com/Jenar',
       ),
       TeamMember(
-        name: 'Mia',
+        name: 'MiaAu',
         role: 'UI/UX Designer',
-        description: 'Bertanggung jawab atas desain antarmuka pengguna, Dan Pengimplementasian UI.',
+        description:
+            'Bertanggung jawab atas desain antarmuka pengguna, dan pengimplementasian UI.',
         imagePath: 'assets/images/user_placeholder.png',
-        githubUrl: 'https://github.com/Mia',
+        githubUrl: 'https://github.com/MyaruL',
         instagramUrl: 'https://instagram.com/Mia',
       ),
       TeamMember(
@@ -115,7 +115,10 @@ class AboutScreen extends StatelessWidget {
                 const Text(
                   'Our Team',
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold, height: 1.2),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -126,48 +129,59 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // LEADS: King Faiz & Dezkrazzer (always at top, side by side)
-                LayoutBuilder(builder: (context, constraints) {
-                  final double cardWidth =
-                      constraints.maxWidth > 800 ? 420 : constraints.maxWidth / 1.05;
-                  return Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: leadMembers
-                        .map((m) => SizedBox(
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double cardWidth = constraints.maxWidth > 800
+                        ? 420
+                        : constraints.maxWidth / 1.05;
+                    return Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: leadMembers
+                          .map(
+                            (m) => SizedBox(
                               width: cardWidth,
                               child: TeamCard(member: m, isLead: true),
-                            ))
-                        .toList(),
-                  );
-                }),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 28),
 
                 // OTHER MEMBERS (8 members) - grid-like responsive
-                LayoutBuilder(builder: (context, constraints) {
-                  const double spacing = 16;
-                  final double maxW = constraints.maxWidth;
-                  // Breakpoints:
-                  // >=1000 -> 4 columns (desktop)
-                  // >=700  -> 3 columns (tablet)
-                  // <700   -> 2 columns (phone)
-                  final int columns = maxW >= 1000 ? 4 : (maxW >= 700 ? 3 : 2);
-                  final double totalSpacing = spacing * (columns - 1);
-                  final double itemWidth = (maxW - totalSpacing) / columns;
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    const double spacing = 16;
+                    final double maxW = constraints.maxWidth;
+                    // Breakpoints:
+                    // >=1000 -> 4 columns (desktop)
+                    // >=700  -> 3 columns (tablet)
+                    // <700   -> 2 columns (phone)
+                    final int columns = maxW >= 1000
+                        ? 4
+                        : (maxW >= 700 ? 3 : 2);
+                    final double totalSpacing = spacing * (columns - 1);
+                    final double itemWidth = (maxW - totalSpacing) / columns;
 
-                  return Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: spacing,
-                    runSpacing: 16,
-                    children: otherMembers
-                        .map((m) => SizedBox(
+                    return Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: spacing,
+                      runSpacing: 16,
+                      children: otherMembers
+                          .map(
+                            (m) => SizedBox(
                               width: itemWidth.clamp(200, 420),
                               child: TeamCard(member: m),
-                            ))
-                        .toList(),
-                  );
-                }),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 28),
 
@@ -176,7 +190,11 @@ class AboutScreen extends StatelessWidget {
                   child: Text(
                     'This application was developed by our team to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, height: 1.4, color: Colors.black87),
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.4,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
 
@@ -223,9 +241,9 @@ class TeamCard extends StatelessWidget {
   const TeamCard({super.key, required this.member, this.isLead = false});
 
   void _openUrl(BuildContext context, String url) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Open URL: $url')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Open URL: $url')));
     // Replace above SnackBar with url_launcher if you want to actually open links.
   }
 
