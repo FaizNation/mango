@@ -33,8 +33,8 @@ class AboutScreen extends StatelessWidget {
         role: 'Frontend Developer',
         description: 'Bertanggung jawab atas desain antarmuka dan frontend.',
         imagePath: 'assets/images/user_placeholder.png',
-        githubUrl: 'https://github.com/Jenar',
-        instagramUrl: 'https://instagram.com/Jenar',
+        githubUrl: 'https://github.com/jennn1-jr',
+        instagramUrl: 'https://instagram.com/jenar_aditiya',
       ),
       TeamMember(
         name: 'MiaAu',
