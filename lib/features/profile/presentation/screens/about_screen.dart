@@ -86,12 +86,12 @@ class AboutScreen extends StatelessWidget {
         instagramUrl: 'https://instagram.com/keisa',
       ),
       TeamMember(
-        name: 'Leonbot',
+        name: 'Leony',
         role: 'DevOps',
         description: 'Mengelola deployment dan konfigurasi CI/CD.',
         imagePath: 'assets/images/user_placeholder.png',
-        githubUrl: 'https://github.com/leonbot',
-        instagramUrl: 'https://instagram.com/leonbot',
+        githubUrl: 'https://github.com/leooalderic',
+        instagramUrl: 'https://instagram.com/lny.andika',
       ),
     ];
 
