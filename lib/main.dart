@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'core/config/firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:mango/injection.dart';
 import 'package:mango/core/network/api_client.dart';
 import 'package:mango/features/auth/domain/repositories/auth_repository.dart';
@@ -15,7 +15,7 @@ import 'package:mango/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:mango/core/router/app_router.dart';
 
 void main() async {
-  // usePathUrlStrategy();
+  usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // initialize service locator
