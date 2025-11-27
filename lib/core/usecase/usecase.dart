@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 
 // Using Either from a package like dartz or fpdart is common,
 // but for simplicity, we'll use Futures and throw Failures.
-abstract class UseCase<Type, Params> {
-  Future<Type> call(Params params);
+abstract class UseCase<T, Params> {
+  Future<T> call(Params params);
 }
 
 // A special class for use cases that don't take any parameters.
@@ -13,6 +13,6 @@ class NoParams extends Equatable {
   List<Object> get props => [];
 }
 
-abstract class StreamUseCase<Type, Params> {
-  Stream<Type> call(Params params);
+abstract class StreamUseCase<T, Params> {
+  Stream<T> call(Params params);
 }

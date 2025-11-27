@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mango/core/error/exceptions.dart';
 import 'package:mango/core/error/failure.dart';
@@ -14,19 +16,18 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Stream<UserEntity?> get user {
-    return remoteDataSource.user.asyncMap((firebaseUser) async {
+    return remoteDataSource.user.switchMap((firebaseUser) {
       if (firebaseUser == null) {
-        return null;
+        return Stream.value(null);
       }
-      // The firebaseUser from authStateChanges doesn't have all the info.
-      // We need to fetch our user document from Firestore.
-      final userDoc = await _firestore.collection('users').doc(firebaseUser.uid).get();
-      if (userDoc.exists) {
-        return UserModel.fromFirestore(userDoc);
-      }
-      // This might happen if user is created but firestore doc fails.
-      // We can return a basic entity from the auth user.
-      return UserModel.fromFirebaseAuthUser(firebaseUser);
+      return _firestore.collection('users').doc(firebaseUser.uid).snapshots().map((snapshot) {
+        if (snapshot.exists) {
+          return UserModel.fromFirestore(snapshot);
+        }
+        // This fallback is hit if the doc doesn't exist yet. The stream
+        // will automatically emit a new value when the doc is created.
+        return UserModel.fromFirebaseAuthUser(firebaseUser);
+      });
     });
   }
 
@@ -66,5 +67,37 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       throw ServerFailure(e.message);
     }
+  }
+}
+
+extension StreamSwitchMap<T> on Stream<T> {
+  Stream<E> switchMap<E>(Stream<E> Function(T event) convert) {
+    var controller = StreamController<E>();
+    StreamSubscription<T>? outerSubscription;
+    StreamSubscription<E>? innerSubscription;
+
+    controller.onListen = () {
+      outerSubscription = listen(
+        (event) {
+          innerSubscription?.cancel();
+          innerSubscription = convert(event).listen(
+            controller.add,
+            onError: controller.addError,
+            onDone: () {
+              // Don't close controller, outer stream is still active
+            },
+          );
+        },
+        onError: controller.addError,
+        onDone: controller.close,
+      );
+    };
+
+    controller.onCancel = () {
+      outerSubscription?.cancel();
+      innerSubscription?.cancel();
+    };
+
+    return controller.stream;
   }
 }

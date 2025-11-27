@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/core/utils/image_proxy.dart';
 import 'package:mango/features/history/domain/entities/history_entry_entity.dart';
 
 class HistoryListView extends StatelessWidget {
@@ -52,10 +53,12 @@ class HistoryListView extends StatelessWidget {
                       child:
                           entry.coverImage != null && entry.coverImage!.isNotEmpty
                           ? Image.network(
+                            ImageProxy.proxyWithOptions(
                               entry.coverImage!,
                               width: 100,
                               height: 150,
-                              fit: BoxFit.cover,
+                              fit: 'cover',
+                            ),
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(
                                   width: 100,
