@@ -55,6 +55,7 @@ dependencies:
   flutter_image_compress: ^2.4.0
   permission_handler: ^12.0.1
   dartz: ^0.10.1
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

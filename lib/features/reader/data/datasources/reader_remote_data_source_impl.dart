@@ -12,7 +12,6 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
   @override
   Future<List<ChapterModel>> getChapters(String comicId) async {
     try {
-      // Prefer fetching the comic detail which often contains nested chapters
       final detailResp = await apiClient.dio.get('/api/comics/$comicId');
       final map = JsonParser.extractMap(detailResp.data);
       var chaptersRaw =
@@ -29,7 +28,6 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
         return parsed;
       }
 
-      // Fallback: try direct chapters endpoint
       final resp = await apiClient.dio.get('/api/chapters/$comicId');
       final data = JsonParser.extractList(resp.data);
       var parsed = data
@@ -45,11 +43,9 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
   @override
   Future<List<String>> getChapterImages(String chapterId) async {
     try {
-      // Try direct chapter detail first (often has images embedded)
       final resp = await apiClient.dio.get('/api/chapters/$chapterId');
       final map = JsonParser.extractMap(resp.data);
 
-      // Look for images array in various locations/formats
       var rawImages =
           map['images'] ??
           map['data']?['images'] ??
@@ -69,14 +65,12 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
         }
       }
 
-      // Process each image entry which could be string or object
       return imagesList
           .map((img) {
             String? url;
             if (img is String) {
               url = img;
             } else if (img is Map) {
-              // Try all possible image URL field names
               url =
                   img['url'] ??
                   img['src'] ??
@@ -96,7 +90,6 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
               url = img.toString();
             }
 
-            // Validate URL
             if (url != null &&
                 url.isNotEmpty &&
                 (url.startsWith('http://') || url.startsWith('https://'))) {
@@ -116,9 +109,8 @@ class ReaderRemoteDataSourceImpl implements ReaderRemoteDataSource {
       final an = a.chapterNumber;
       final bn = b.chapterNumber;
       if (an != null && bn != null) return an.compareTo(bn);
-      if (an != null) return -1; // put known numbers first
+      if (an != null) return -1; 
       if (bn != null) return 1;
-      // fallback: try to extract number from title
       final aNum = _extractFirstInt(a.title);
       final bNum = _extractFirstInt(b.title);
       if (aNum != null && bNum != null) return aNum.compareTo(bNum);

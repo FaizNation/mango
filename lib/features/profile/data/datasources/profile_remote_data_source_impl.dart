@@ -46,9 +46,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         throw ServerException('Not signed in');
       }
 
-      // Note: The original service had image compression.
-      // For a pure data source, we assume compression happens before,
-      // or we can add it here. For now, let's keep it simple.
       final mimeType = lookupMimeType('', headerBytes: imageBytes) ?? 'image/jpeg';
       final dataUri = 'data:$mimeType;base64,${base64Encode(imageBytes)}';
 

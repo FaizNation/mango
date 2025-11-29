@@ -8,10 +8,8 @@ abstract class ComicDetailRouteState extends Equatable {
   List<Object> get props => [];
 }
 
-// State saat sedang memuat (UI akan menampilkan loading spinner)
 class ComicDetailRouteLoading extends ComicDetailRouteState {}
 
-// State saat Gagal (UI akan menampilkan pesan error)
 class ComicDetailRouteError extends ComicDetailRouteState {
   final String message;
 
@@ -21,7 +19,6 @@ class ComicDetailRouteError extends ComicDetailRouteState {
   List<Object> get props => [message];
 }
 
-// State saat Sukses (UI akan menampilkan ComicDetailScreen)
 class ComicDetailRouteSuccess extends ComicDetailRouteState {
   final Comic comic;
 

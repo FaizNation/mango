@@ -14,8 +14,6 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
     try {
       return remoteDataSource.getFavorites();
     } on ServerException catch (e) {
-      // This will catch the immediate exception if the user is not logged in.
-      // Errors from the stream itself will be propagated as stream errors.
       throw ServerFailure(e.message);
     }
   }

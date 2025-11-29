@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class HistoryEntryEntity extends Equatable {
-  final String id; // doc id (usually comicId)
+  final String id;
   final String title;
   final String? author;
   final String? coverImage;

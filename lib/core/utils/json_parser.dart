@@ -1,5 +1,4 @@
 class JsonParser {
-  // Helpers to handle variable shapes (Pindahan dari ApiService lama)
   static List extractList(dynamic data) {
     if (data == null) return [];
     if (data is List) return data;

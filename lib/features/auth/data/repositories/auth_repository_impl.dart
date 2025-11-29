@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mango/core/error/exceptions.dart';
 import 'package:mango/core/error/failure.dart';
@@ -24,8 +23,6 @@ class AuthRepositoryImpl implements AuthRepository {
         if (snapshot.exists) {
           return UserModel.fromFirestore(snapshot);
         }
-        // This fallback is hit if the doc doesn't exist yet. The stream
-        // will automatically emit a new value when the doc is created.
         return UserModel.fromFirebaseAuthUser(firebaseUser);
       });
     });

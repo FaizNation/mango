@@ -27,16 +27,14 @@ class ProfileScreen extends StatelessWidget {
 
   Future<Uint8List?> _pickImage(BuildContext context, ImageSource source) async {
     try {
-      // Image picking
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: source);
       if (pickedFile == null) return null;
-      
-      // Read and compress image
+
       final bytes = await pickedFile.readAsBytes();
       return await compressImage(bytes);
     } catch (e) {
-      // Show error to user
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to pick image: $e')),
@@ -60,7 +58,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
-      // Listen for unauthentication to navigate to login
       listener: (context, state) {
         if (state.status == AuthStatus.unauthenticated) {
           context.go('/login');
@@ -69,13 +66,10 @@ class ProfileScreen extends StatelessWidget {
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
           if (authState.status != AuthStatus.authenticated) {
-            // Show a loader or an empty state while waiting for authentication
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
-
-          // We have an authenticated user
           final user = authState.user!;
 
           return Scaffold(

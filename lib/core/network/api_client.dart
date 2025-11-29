@@ -12,6 +12,5 @@ class ApiClient {
           ),
         );
 
-  // Getter untuk mengakses dio jika perlu konfigurasi tambahan (interceptor dll)
   Dio get instance => dio;
 }

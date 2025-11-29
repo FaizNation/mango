@@ -22,10 +22,6 @@ class ChapterModel extends Chapter {
     );
   }
 
-  // Reuse logic from Chapter entity or duplicate it here to be clean.
-  // Since Chapter entity already has logic, I will duplicate it here to decouple Model from Entity logic if I were strict,
-  // but to save time and avoid bugs, I'll copy the logic from Chapter.fromApi.
-
   static String _parseId(Map<String, dynamic> json) {
     return (json['id'] ??
                 json['_id'] ??

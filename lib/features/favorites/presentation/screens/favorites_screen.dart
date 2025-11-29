@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mango/features/favorites/presentation/cubit/favorites_cubit.dart';
-// import 'package:mango/features/favorites/presentation/cubit/favorites_state.dart';
-import 'package:mango/features/home/presentation/widgets/comic_list_view.dart'; // Using the new ComicListView
+import 'package:mango/features/home/presentation/widgets/comic_list_view.dart'; 
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});

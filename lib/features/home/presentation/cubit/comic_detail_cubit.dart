@@ -27,7 +27,6 @@ class ComicDetailCubit extends Cubit<ComicDetailState> {
             .map((e) => Chapter.fromApi(e as Map<String, dynamic>, comicId.toString()))
             .toList();
       } else {
-        // Fallback: try direct chapters endpoint
         final chaptersResp = await _apiClient.dio.get('/api/chapters/$comicId');
         final data = JsonParser.extractList(chaptersResp.data);
         chapters = data

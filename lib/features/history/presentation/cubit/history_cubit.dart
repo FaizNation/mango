@@ -47,10 +47,7 @@ class HistoryCubit extends Cubit<HistoryState> {
     try {
       await _deleteHistoryEntry(DeleteHistoryEntryParams(id: id));
     } on ServerFailure catch (e) {
-      // The stream will eventually report the new state, but we can show an error
-      // This is a good place for a transient error state, maybe with another stream in the cubit.
-      // For now, we'll just let the stream update handle it. The cubit's main state
-      // should reflect the source of truth (the stream).
+
       print('Failed to delete history entry: ${e.message}');
     }
   }

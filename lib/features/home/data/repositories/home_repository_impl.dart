@@ -12,8 +12,6 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<ComicEntity>> getComics({int page = 1}) async {
     try {
-      // The remote data source returns ComicModels, which are subtypes of ComicEntity.
-      // So this direct assignment is valid.
       return await remoteDataSource.getComics(page: page);
     } on ServerException catch (e) {
       throw ServerFailure(e.message);

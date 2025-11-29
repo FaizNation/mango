@@ -21,7 +21,6 @@ class ComicListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (error != null) {
-      // ... (kode error-mu sudah bagus, tidak perlu diubah)
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,24 +37,16 @@ class ComicListView extends StatelessWidget {
     }
 
     if (comics.isEmpty && isLoading) {
-      // ... (kode loading awal sudah bagus)
       return const Center(child: CircularProgressIndicator());
     }
 
     if (comics.isEmpty) {
-      // ... (kode 'no comics' sudah bagus)
       return const Center(child: Text('No comics found'));
     }
 
-    // --- INI PERUBAHANNYA ---
-    // Kita bungkus semua list-nya dengan Center dan ConstrainedBox
     return Center(
       child: ConstrainedBox(
-        // Tentukan lebar maksimum. 800px biasanya ideal untuk daftar
-        // di layar lebar agar tetap nyaman dibaca.
         constraints: const BoxConstraints(maxWidth: 800),
-
-        // Sisa kodemu ada di dalam sini, tidak berubah
         child: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is ScrollEndNotification &&
@@ -81,7 +72,6 @@ class ComicListView extends StatelessWidget {
               }
 
               final comic = comics[index];
-              // Tampilan Card ini (Row) sudah cukup bagus untuk list
               return Card(
                 elevation: 3,
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -120,7 +110,6 @@ class ComicListView extends StatelessWidget {
                                 comic.title,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                // Kamu BISA gunakan Sizer di sini jika mau
                                 style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
@@ -189,6 +178,5 @@ class ComicListView extends StatelessWidget {
         ),
       ),
     );
-    // --- AKHIR PERUBAHAN ---
   }
 }

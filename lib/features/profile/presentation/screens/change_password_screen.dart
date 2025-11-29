@@ -4,8 +4,6 @@ import 'package:mango/features/profile/domain/repositories/profile_repository.da
 import 'package:mango/features/profile/domain/usecases/change_password.dart';
 import 'package:mango/features/profile/presentation/cubit/change_password_cubit.dart';
 
-
-
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
 

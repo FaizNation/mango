@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/features/auth/presentation/cubit/auth_cubit.dart';
-// import 'package:mango/features/auth/presentation/cubit/auth_state.dart';
 import 'package:mango/features/home/presentation/cubit/home_cubit.dart';
-// import 'package:mango/features/home/presentation/cubit/home_state.dart';
 import 'package:mango/features/home/presentation/widgets/comic_list_view.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,10 +10,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use a BlocBuilder for AuthCubit to get user info
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        // Show a loader if auth state is unknown
         if (authState.status != AuthStatus.authenticated) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
@@ -46,7 +42,6 @@ class _HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
                 Container(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -77,7 +72,6 @@ class _HomeView extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                // Search box
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Center(
@@ -101,7 +95,6 @@ class _HomeView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // TabBar and Content
                 DefaultTabController(
                   length: 4,
                   child: Expanded(

@@ -3,7 +3,7 @@ import 'package:mango/core/utils/image_proxy.dart';
 class Chapter {
   final String id;
   final String title;
-  final String comicId; // keep as string to match API ids
+  final String comicId; 
   final List<String> images;
   final int? chapterNumber;
   final DateTime? publishedAt;
@@ -17,8 +17,6 @@ class Chapter {
     this.publishedAt,
   });
 
-  /// Membuat salinan Chapter dengan list gambar kosong.
-  /// Berguna untuk menampilkan daftar chapter tanpa memuat gambar.
   factory Chapter.fromChapterSummary(Chapter chapter, String comicId) {
     return Chapter(
       id: chapter.id, // Lebih aman menggunakan id asli
@@ -30,7 +28,6 @@ class Chapter {
     );
   }
 
-  /// Mem-parsing chapter yang dikembalikan oleh API (dengan berbagai format)
   factory Chapter.fromApi(Map<String, dynamic> json, String comicId) {
     return Chapter(
       id: _parseId(json),
@@ -41,8 +38,6 @@ class Chapter {
       publishedAt: _parsePublishedAt(json),
     );
   }
-
-  // --- Private Static Parsers for fromApi ---
 
   static String _parseId(Map<String, dynamic> json) {
     return (json['id'] ??
@@ -83,14 +78,13 @@ class Chapter {
     final rawImages = json['images'] ?? json['pages'] ?? json['content'] ?? [];
     if (rawImages is List) {
       return rawImages
-          .map(_parseImageItem) // Gunakan helper untuk mem-parsing item
+          .map(_parseImageItem) 
           .where((url) => url.isNotEmpty)
           .toList();
     }
     return [];
   }
 
-  /// Helper untuk mem-parsing satu item gambar (yang bisa jadi String atau Map)
   static String _parseImageItem(dynamic img) {
     if (img is String) return img;
     if (img is Map) {
@@ -103,7 +97,6 @@ class Chapter {
               '')
           .toString();
     }
-    // Fallback untuk tipe data tak terduga (misal: int, dll)
     return img.toString(); 
   }
 }

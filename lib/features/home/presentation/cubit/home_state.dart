@@ -10,8 +10,6 @@ class HomeState extends Equatable {
   final String? errorMessage;
   final int currentPage;
   final bool hasReachedMax;
-
-  // UI-specific state
   final String greeting;
   final String time;
 
