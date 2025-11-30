@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:mango/features/home/presentation/cubit/comic_detail_cubit.dart';
 import 'package:mango/features/home/presentation/cubit/comic_detail_state.dart';
@@ -60,6 +61,10 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                   expandedHeight: 300,
                   pinned: true,
                   backgroundColor: const Color(0xFFE6F2FF),
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => context.pop(),
+                  ),
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
                       ImageProxy.proxyWithOptions(
@@ -234,6 +239,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                   final isFavorite = context.read<FavoritesCubit>().isFavorite(widget.comic.id);
                                   return ElevatedButton.icon(
                                     onPressed: () async {
+                                      final scaffoldMessenger = ScaffoldMessenger.of(context);
                                       final entity = ComicEntity(
                                         id: widget.comic.id,
                                         title: widget.comic.titleEnglish ?? widget.comic.title,
@@ -245,7 +251,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                       );
                                       await context.read<FavoritesCubit>().toggleFavorite(entity);
                                       if (!mounted) return;
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      scaffoldMessenger.showSnackBar(
                                         SnackBar(
                                           content: Text(isFavorite ? 'Removed from favorites' : 'Added to favorites'),
                                           duration: const Duration(seconds: 2),
