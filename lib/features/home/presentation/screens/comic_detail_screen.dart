@@ -22,9 +22,18 @@ class ComicDetailScreen extends StatefulWidget {
 }
 
 class _ComicDetailScreenState extends State<ComicDetailScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
+
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.toLowerCase();
+      });
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
@@ -42,6 +51,21 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
         await historyRepo.addHistoryEntry(entry);
       } catch (_) {}
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<Chapter> _filterChapters(List<Chapter> chapters) {
+    if (_searchQuery.isEmpty) {
+      return chapters;
+    }
+    return chapters.where((chapter) {
+      return chapter.title.toLowerCase().contains(_searchQuery);
+    }).toList();
   }
 
   @override
@@ -341,6 +365,8 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             }
 
                             if (state is ComicDetailLoaded) {
+                              final filteredChapters = _filterChapters(state.chapters);
+                              
                               if (state.chapters.isNotEmpty) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,14 +378,80 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
-                                    ListView.builder(
+                                    const SizedBox(height: 12),
+                                    
+                                    // Search TextField
+                                    TextField(
+                                      controller: _searchController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Search chapters...',
+                                        prefixIcon: const Icon(Icons.search),
+                                        suffixIcon: _searchQuery.isNotEmpty
+                                            ? IconButton(
+                                                icon: const Icon(Icons.clear),
+                                                onPressed: () {
+                                                  _searchController.clear();
+                                                },
+                                              )
+                                            : null,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    
+                                    // Results count
+                                    if (_searchQuery.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 8),
+                                        child: Text(
+                                          'Found ${filteredChapters.length} chapter(s)',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ),
+                                    
+                                    // Chapter list or empty state
+                                    if (filteredChapters.isEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.all(32.0),
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                Icons.search_off,
+                                                size: 48,
+                                                color: Colors.grey[400],
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Text(
+                                                'No chapters found',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    else
+                                        ListView.builder(
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: state.chapters.length,
+                                      itemCount: filteredChapters.length,
                                       itemBuilder: (context, index) {
-                                        final chapter = state.chapters[index];
+                                        final chapter = filteredChapters[index];
                                         return Card(
                                           margin: const EdgeInsets.symmetric(
                                             vertical: 4,
