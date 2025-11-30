@@ -16,15 +16,6 @@ class AboutScreen extends StatelessWidget {
         githubUrl: 'https://github.com/faiznation',
         instagramUrl: 'https://instagram.com/faiznation',
       ),
-      TeamMember(
-        name: 'Dezkrazzer',
-        role: 'Full Stack (Co-Lead)',
-        description:
-            'Menjamin kualitas dan stabilitas aplikasi lewat pengujian menyeluruh.',
-        imagePath: 'assets/images/masakbar.png',
-        githubUrl: 'https://github.com/dezkrazzer',
-        instagramUrl: 'https://instagram.com/dezkrazzer',
-      ),
     ];
 
     final List<TeamMember> otherMembers = [
