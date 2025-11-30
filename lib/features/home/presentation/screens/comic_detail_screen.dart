@@ -386,6 +386,30 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                         );
                                       },
                                     ),
+                                    // Load More Button
+                                    if (state.hasMore || state.isLoadingMore) ...[
+                                      const SizedBox(height: 16),
+                                      Center(
+                                        child: state.isLoadingMore
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(16.0),
+                                                child: CircularProgressIndicator(),
+                                              )
+                                            : ElevatedButton.icon(
+                                                onPressed: () {
+                                                  context.read<ComicDetailCubit>().loadMoreChapters();
+                                                },
+                                                icon: const Icon(Icons.expand_more),
+                                                label: const Text('Load More Chapters'),
+                                                style: ElevatedButton.styleFrom(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 24,
+                                                    vertical: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                      ),
+                                    ],
                                   ],
                                 );
                               } else {

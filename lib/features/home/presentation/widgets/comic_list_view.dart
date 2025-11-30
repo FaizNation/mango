@@ -77,7 +77,7 @@ class ComicListView extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
                   onTap: () {
-                    context.push('/comic/${Uri.encodeComponent(comic.id)}');
+                    context.go('/comic/${Uri.encodeComponent(comic.id)}');
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(12),
