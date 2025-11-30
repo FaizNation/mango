@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mango/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:mango/features/home/presentation/cubit/comic_detail_cubit.dart';
 import 'package:mango/features/home/presentation/cubit/comic_detail_state.dart';
 import 'package:mango/features/reader/presentation/screens/chapter_detail_screen.dart';
 import 'package:mango/core/domain/entities/comic/comic.dart';
 import 'package:mango/features/history/domain/repositories/history_repository.dart';
-import 'package:mango/features/favorites/domain/repositories/favorites_repository.dart';
 import 'package:mango/features/home/domain/entities/comic_entity.dart';
 import 'package:mango/core/domain/entities/chapter.dart';
 import 'package:mango/core/utils/image_proxy.dart';
@@ -229,47 +229,31 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: Builder(
-                                builder: (context) {
-                                  final favRepo = context
-                                      .read<FavoritesRepository>();
+                              child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                                builder: (context, state) {
+                                  final isFavorite = context.read<FavoritesCubit>().isFavorite(widget.comic.id);
                                   return ElevatedButton.icon(
                                     onPressed: () async {
                                       final entity = ComicEntity(
                                         id: widget.comic.id,
-                                        title:
-                                            widget.comic.titleEnglish ??
-                                            widget.comic.title,
+                                        title: widget.comic.titleEnglish ?? widget.comic.title,
                                         imageUrl: widget.comic.imageUrl,
                                         author: widget.comic.author,
                                         synopsis: widget.comic.synopsis,
                                         type: widget.comic.type,
                                         genres: widget.comic.genres,
                                       );
-                                      try {
-                                        await favRepo.addFavorite(entity);
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Added to favorites'),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Failed to add favorite: $e',
-                                            ),
-                                          ),
-                                        );
-                                      }
+                                      await context.read<FavoritesCubit>().toggleFavorite(entity);
+                                      if (!mounted) return;
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(isFavorite ? 'Removed from favorites' : 'Added to favorites'),
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
                                     },
-                                    icon: const Icon(Icons.favorite_border),
-                                    label: const Text('Add to Favorites'),
+                                    icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                    label: Text(isFavorite ? 'Remove from Favorites' : 'Add to Favorites'),
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 12,
