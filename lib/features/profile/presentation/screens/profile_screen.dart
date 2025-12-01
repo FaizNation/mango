@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   Future<void> _launchGitHub() async {
-    final Uri url = Uri.parse("https://github.com/FaizNation");
+    final Uri url = Uri.parse("https://github.com/FaizNation/mango");
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Tidak bisa membuka $url');
     }
@@ -210,7 +210,7 @@ class ProfileScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: _launchGitHub,
                             child: Text(
-                              "Developed by Faiz Nation",
+                              "Github Mango",
                               style: TextStyle(fontSize: 14, color: Colors.grey[700], decoration: TextDecoration.underline),
                             ),
                           ),

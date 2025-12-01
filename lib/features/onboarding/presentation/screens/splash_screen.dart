@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/core/usecase/usecase.dart';
 import 'package:mango/features/auth/domain/usecases/get_current_user.dart';
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -65,6 +64,14 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Anja',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  'Developed by ournation',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
                   ),
                   textAlign: TextAlign.center,
                 ),
