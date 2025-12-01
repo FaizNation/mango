@@ -127,6 +127,7 @@ class _HomeView extends StatelessWidget {
                             isLoading: state.status == HomeStatus.loading,
                             onLoadMore: () => context.read<HomeCubit>().loadComics(),
                             error: state.errorMessage,
+                            from: 'home',
                           ),
                         ),
                       ],

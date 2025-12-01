@@ -9,6 +9,7 @@ class ComicListView extends StatelessWidget {
   final bool isLoading;
   final VoidCallback? onLoadMore;
   final String? error;
+  final String? from; // Track where this list is displayed (home, favorites, history)
 
   const ComicListView({
     super.key,
@@ -16,6 +17,7 @@ class ComicListView extends StatelessWidget {
     this.isLoading = false,
     this.onLoadMore,
     this.error,
+    this.from,
   });
 
   @override
@@ -77,7 +79,10 @@ class ComicListView extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
                   onTap: () {
-                    context.go('/comic/${Uri.encodeComponent(comic.id)}');
+                    final url = from != null 
+                      ? '/comic/${Uri.encodeComponent(comic.id)}?from=$from'
+                      : '/comic/${Uri.encodeComponent(comic.id)}';
+                    context.go(url);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(12),

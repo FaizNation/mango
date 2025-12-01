@@ -74,8 +74,31 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
       create: (context) =>
           // Use service locator for consistency
           sl<ComicDetailCubit>()..fetchChapters(int.parse(widget.comic.id)),
-      child: Scaffold(
-        backgroundColor: const Color(0xFFE6F2FF),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop) return;
+          
+          // Get referrer from query parameter
+          final uri = GoRouterState.of(context).uri;
+          final referrer = uri.queryParameters['from'];
+          
+          // Navigate back to the referrer tab, default to home
+          if (context.mounted) {
+            switch (referrer) {
+              case 'favorites':
+                context.go('/favorites');
+                break;
+              case 'history':
+                context.go('/history');
+                break;
+              default:
+                context.go('/home');
+            }
+          }
+        },
+        child: Scaffold(
+          backgroundColor: const Color(0xFFE6F2FF),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 700),
@@ -87,7 +110,23 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                   backgroundColor: const Color(0xFFE6F2FF),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => context.pop(),
+                    onPressed: () {
+                      // Check if there's a referrer query parameter
+                      final uri = GoRouterState.of(context).uri;
+                      final referrer = uri.queryParameters['from'];
+                      
+                      // Navigate back to the referrer tab, default to home
+                      switch (referrer) {
+                        case 'favorites':
+                          context.go('/favorites');
+                          break;
+                        case 'history':
+                          context.go('/history');
+                          break;
+                        default:
+                          context.go('/home');
+                      }
+                    },
                   ),
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
@@ -258,40 +297,62 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: BlocBuilder<FavoritesCubit, FavoritesState>(
-                                builder: (context, state) {
-                                  final isFavorite = context.read<FavoritesCubit>().isFavorite(widget.comic.id);
-                                  return ElevatedButton.icon(
-                                    onPressed: () async {
-                                      final scaffoldMessenger = ScaffoldMessenger.of(context);
-                                      final entity = ComicEntity(
-                                        id: widget.comic.id,
-                                        title: widget.comic.titleEnglish ?? widget.comic.title,
-                                        imageUrl: widget.comic.imageUrl,
-                                        author: widget.comic.author,
-                                        synopsis: widget.comic.synopsis,
-                                        type: widget.comic.type,
-                                        genres: widget.comic.genres,
-                                      );
-                                      await context.read<FavoritesCubit>().toggleFavorite(entity);
-                                      if (!mounted) return;
-                                      scaffoldMessenger.showSnackBar(
-                                        SnackBar(
-                                          content: Text(isFavorite ? 'Removed from favorites' : 'Added to favorites'),
-                                          duration: const Duration(seconds: 2),
+                              child:
+                                  BlocBuilder<FavoritesCubit, FavoritesState>(
+                                    builder: (context, state) {
+                                      final isFavorite = context
+                                          .read<FavoritesCubit>()
+                                          .isFavorite(widget.comic.id);
+                                      return ElevatedButton.icon(
+                                        onPressed: () async {
+                                          final scaffoldMessenger =
+                                              ScaffoldMessenger.of(context);
+                                          final entity = ComicEntity(
+                                            id: widget.comic.id,
+                                            title:
+                                                widget.comic.titleEnglish ??
+                                                widget.comic.title,
+                                            imageUrl: widget.comic.imageUrl,
+                                            author: widget.comic.author,
+                                            synopsis: widget.comic.synopsis,
+                                            type: widget.comic.type,
+                                            genres: widget.comic.genres,
+                                          );
+                                          await context
+                                              .read<FavoritesCubit>()
+                                              .toggleFavorite(entity);
+                                          if (!mounted) return;
+                                          scaffoldMessenger.showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                isFavorite
+                                                    ? 'Removed from favorites'
+                                                    : 'Added to favorites',
+                                              ),
+                                              duration: const Duration(
+                                                seconds: 2,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        icon: Icon(
+                                          isFavorite
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                        ),
+                                        label: Text(
+                                          isFavorite
+                                              ? 'Remove from Favorites'
+                                              : 'Add to Favorites',
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                          ),
                                         ),
                                       );
                                     },
-                                    icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-                                    label: Text(isFavorite ? 'Remove from Favorites' : 'Add to Favorites'),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                                  ),
                             ),
                             if (widget.comic.chapters != null) ...[
                               const SizedBox(width: 16),
@@ -365,8 +426,10 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                             }
 
                             if (state is ComicDetailLoaded) {
-                              final filteredChapters = _filterChapters(state.chapters);
-                              
+                              final filteredChapters = _filterChapters(
+                                state.chapters,
+                              );
+
                               if (state.chapters.isNotEmpty) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,7 +442,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 12),
-                                    
+
                                     // Search TextField
                                     TextField(
                                       controller: _searchController,
@@ -395,22 +458,27 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                               )
                                             : null,
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         filled: true,
                                         fillColor: Colors.white,
-                                        contentPadding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 12,
-                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 12,
+                                            ),
                                       ),
                                     ),
                                     const SizedBox(height: 12),
-                                    
+
                                     // Results count
                                     if (_searchQuery.isNotEmpty)
                                       Padding(
-                                        padding: const EdgeInsets.only(bottom: 8),
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
                                         child: Text(
                                           'Found ${filteredChapters.length} chapter(s)',
                                           style: TextStyle(
@@ -419,7 +487,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                           ),
                                         ),
                                       ),
-                                    
+
                                     // Chapter list or empty state
                                     if (filteredChapters.isEmpty)
                                       Padding(
@@ -445,59 +513,69 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
                                         ),
                                       )
                                     else
-                                        ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: filteredChapters.length,
-                                      itemBuilder: (context, index) {
-                                        final chapter = filteredChapters[index];
-                                        return Card(
-                                          margin: const EdgeInsets.symmetric(
-                                            vertical: 4,
-                                          ),
-                                          child: ListTile(
-                                            title: Text(chapter.title),
-                                            trailing: const Icon(
-                                              Icons.chevron_right,
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: filteredChapters.length,
+                                        itemBuilder: (context, index) {
+                                          final chapter =
+                                              filteredChapters[index];
+                                          return Card(
+                                            margin: const EdgeInsets.symmetric(
+                                              vertical: 4,
                                             ),
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChapterDetailScreen(
-                                                        chapter: chapter,
-                                                        allChapters:
-                                                            state.chapters,
-                                                      ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                            child: ListTile(
+                                              title: Text(chapter.title),
+                                              trailing: const Icon(
+                                                Icons.chevron_right,
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChapterDetailScreen(
+                                                          chapter: chapter,
+                                                          allChapters:
+                                                              state.chapters,
+                                                        ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     // Load More Button
-                                    if (state.hasMore || state.isLoadingMore) ...[
+                                    if (state.hasMore ||
+                                        state.isLoadingMore) ...[
                                       const SizedBox(height: 16),
                                       Center(
                                         child: state.isLoadingMore
                                             ? const Padding(
                                                 padding: EdgeInsets.all(16.0),
-                                                child: CircularProgressIndicator(),
+                                                child:
+                                                    CircularProgressIndicator(),
                                               )
                                             : ElevatedButton.icon(
                                                 onPressed: () {
-                                                  context.read<ComicDetailCubit>().loadMoreChapters();
+                                                  context
+                                                      .read<ComicDetailCubit>()
+                                                      .loadMoreChapters();
                                                 },
-                                                icon: const Icon(Icons.expand_more),
-                                                label: const Text('Load More Chapters'),
+                                                icon: const Icon(
+                                                  Icons.expand_more,
+                                                ),
+                                                label: const Text(
+                                                  'Load More Chapters',
+                                                ),
                                                 style: ElevatedButton.styleFrom(
-                                                  padding: const EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12,
-                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 24,
+                                                        vertical: 12,
+                                                      ),
                                                 ),
                                               ),
                                       ),
@@ -523,6 +601,8 @@ class _ComicDetailScreenState extends State<ComicDetailScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }
+

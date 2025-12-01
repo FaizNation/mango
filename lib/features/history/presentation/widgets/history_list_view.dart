@@ -41,7 +41,7 @@ class HistoryListView extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: InkWell(
               onTap: () {
-                context.go('/comic/${Uri.encodeComponent(entry.id)}');
+                context.go('/comic/${Uri.encodeComponent(entry.id)}?from=history');
               },
               child: Padding(
                 padding: const EdgeInsets.all(12),

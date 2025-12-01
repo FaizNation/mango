@@ -36,7 +36,10 @@ class FavoritesScreen extends StatelessWidget {
           }
 
           // Using the refactored ComicListView
-          return ComicListView(comics: state.favorites);
+          return ComicListView(
+            comics: state.favorites,
+            from: 'favorites',
+          );
         },
       ),
     );
