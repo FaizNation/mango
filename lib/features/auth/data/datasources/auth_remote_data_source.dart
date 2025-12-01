@@ -19,4 +19,8 @@ abstract class AuthRemoteDataSource {
 
   /// Throws a [ServerException] for all error codes.
   Future<void> signOut();
+
+  /// Get current authenticated user
+  /// Returns null if no user is authenticated
+  auth.User? getCurrentUser();
 }

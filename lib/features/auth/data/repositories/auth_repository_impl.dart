@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mango/core/error/exceptions.dart';
 import 'package:mango/core/error/failure.dart';
+import 'package:mango/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:mango/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:mango/features/auth/data/models/user_model.dart';
 import 'package:mango/features/auth/domain/entities/user_entity.dart';
@@ -9,9 +10,14 @@ import 'package:mango/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
+  final AuthLocalDataSource localDataSource;
   final FirebaseFirestore _firestore;
 
-  AuthRepositoryImpl({required this.remoteDataSource, required FirebaseFirestore firestore}) : _firestore = firestore;
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required FirebaseFirestore firestore,
+  }) : _firestore = firestore;
 
   @override
   Stream<UserEntity?> get user {
@@ -61,8 +67,59 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() async {
     try {
       await remoteDataSource.signOut();
+      await localDataSource.clearUserSession();
     } on ServerException catch (e) {
       throw ServerFailure(e.message);
+    } on CacheException catch (e) {
+      throw CacheFailure(e.message);
+    }
+  }
+
+  @override
+  Future<UserEntity?> getCurrentUser() async {
+    try {
+      final firebaseUser = remoteDataSource.getCurrentUser();
+      if (firebaseUser == null) {
+        return null;
+      }
+
+      // Try to get user data from Firestore
+      final userDoc = await _firestore.collection('users').doc(firebaseUser.uid).get();
+      if (userDoc.exists) {
+        return UserModel.fromFirestore(userDoc);
+      }
+
+      // Fallback to Firebase Auth user data
+      return UserModel.fromFirebaseAuthUser(firebaseUser);
+    } on ServerException catch (e) {
+      throw ServerFailure(e.message);
+    } catch (e) {
+      throw ServerFailure('Failed to get current user: $e');
+    }
+  }
+
+  @override
+  Future<void> saveUserSession(UserEntity user) async {
+    try {
+      final userModel = UserModel(
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoUrl: user.photoUrl,
+        createdAt: user.createdAt,
+      );
+      await localDataSource.saveUserSession(userModel);
+    } on CacheException catch (e) {
+      throw CacheFailure(e.message);
+    }
+  }
+
+  @override
+  Future<void> clearUserSession() async {
+    try {
+      await localDataSource.clearUserSession();
+    } on CacheException catch (e) {
+      throw CacheFailure(e.message);
     }
   }
 }

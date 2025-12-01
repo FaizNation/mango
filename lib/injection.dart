@@ -1,13 +1,17 @@
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mango/core/network/api_client.dart';
 
 // Auth
+import 'package:mango/features/auth/data/datasources/auth_local_data_source.dart';
+import 'package:mango/features/auth/data/datasources/auth_local_data_source_impl.dart';
 import 'package:mango/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:mango/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:mango/features/auth/domain/repositories/auth_repository.dart';
+import 'package:mango/features/auth/domain/usecases/get_current_user.dart';
 import 'package:mango/features/auth/domain/usecases/get_user_stream.dart';
 import 'package:mango/features/auth/domain/usecases/sign_out.dart';
 import 'package:mango/features/auth/domain/usecases/sign_in_with_email.dart';
@@ -71,8 +75,17 @@ Future<void> init() async {
   sl.registerLazySingleton<ApiClient>(() => ApiClient());
   sl.registerLazySingleton<auth.FirebaseAuth>(() => auth.FirebaseAuth.instance);
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  
+  // SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
   // Data sources
+  sl.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSourceImpl(
+      sharedPreferences: sl<SharedPreferences>(),
+    ),
+  );
   sl.registerLazySingleton(
     () => AuthRemoteDataSourceImpl(
       firebaseAuth: sl<auth.FirebaseAuth>(),
@@ -114,6 +127,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       remoteDataSource: sl<AuthRemoteDataSourceImpl>(),
+      localDataSource: sl<AuthLocalDataSource>(),
       firestore: sl<FirebaseFirestore>(),
     ),
   );
@@ -157,6 +171,7 @@ Future<void> init() async {
   );
 
   // Usecases - Auth
+  sl.registerLazySingleton(() => GetCurrentUser(sl<AuthRepository>()));
   sl.registerLazySingleton(() => GetUserStream(sl<AuthRepository>()));
   sl.registerLazySingleton(() => SignOut(sl<AuthRepository>()));
   sl.registerLazySingleton(() => SignInWithEmail(sl<AuthRepository>()));

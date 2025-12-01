@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mango/core/usecase/usecase.dart';
+import 'package:mango/features/auth/domain/usecases/get_current_user.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -19,18 +21,28 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userName = prefs.getString('userName');
-    final userEmail = prefs.getString('userEmail');
-
-    // Wait for 4 seconds for the splash screen
+    // Wait for splash screen animation
     await Future.delayed(const Duration(seconds: 4));
 
     if (!mounted) return;
 
-    if (userName != null && userEmail != null) {
-      context.go('/home', extra: {'userName': userName, 'userEmail': userEmail});
-    } else {
+    try {
+      // Check if user is authenticated via Firebase Auth
+      final getCurrentUser = GetIt.instance<GetCurrentUser>();
+      final user = await getCurrentUser(NoParams());
+
+      if (user != null) {
+        // User is logged in, navigate to home
+        if (!mounted) return;
+        context.go('/home');
+      } else {
+        // No user logged in, navigate to get started
+        if (!mounted) return;
+        context.go('/getstarted');
+      }
+    } catch (e) {
+      // On error, navigate to get started
+      if (!mounted) return;
       context.go('/getstarted');
     }
   }

@@ -19,4 +19,17 @@ abstract class AuthRepository {
 
   /// Throws a [ServerFailure] if a server error occurs.
   Future<void> signOut();
+
+  /// Get current authenticated user
+  /// Returns null if no user is authenticated
+  /// Throws a [ServerFailure] if a server error occurs.
+  Future<UserEntity?> getCurrentUser();
+
+  /// Save user session to local storage
+  /// Throws a [CacheFailure] if saving fails
+  Future<void> saveUserSession(UserEntity user);
+
+  /// Clear user session from local storage
+  /// Throws a [CacheFailure] if clearing fails
+  Future<void> clearUserSession();
 }

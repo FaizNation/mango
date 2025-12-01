@@ -79,4 +79,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException('Sign out failed');
     }
   }
+
+  @override
+  auth.User? getCurrentUser() {
+    return _firebaseAuth.currentUser;
+  }
 }

@@ -1,4 +1,6 @@
+import 'package:get_it/get_it.dart';
 import 'package:mango/features/auth/domain/repositories/auth_repository.dart';
+import 'package:mango/features/auth/domain/usecases/get_current_user.dart';
 import 'package:mango/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:mango/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:mango/core/presentation/widgets/dialogs/exit_dialog.dart';
@@ -29,11 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(
-        signInWithEmail: SignInWithEmail(
-          context.read<AuthRepository>(),
-        ),
-      ),
+      create: (context) {
+        final repository = GetIt.instance<AuthRepository>();
+        return LoginCubit(
+          signInWithEmail: SignInWithEmail(repository),
+          getCurrentUser: GetCurrentUser(repository),
+          repository: repository,
+        );
+      },
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) async {

@@ -52,8 +52,9 @@ void main() async {
         child: Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
               routerConfig: goRouter,
-              title: 'FaizNation',
+              title: 'mango-web',
               theme: ThemeData(
                 useMaterial3: true,
                 colorScheme: ColorScheme.fromSeed(
@@ -75,8 +76,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
-      title: 'FaizNation',
+      title: 'mango-web',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1a94ff)),
