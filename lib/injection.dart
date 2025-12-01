@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mango/core/network/api_client.dart';
+import 'package:mango/core/services/permission_service.dart';
 
 // Auth
 import 'package:mango/features/auth/data/datasources/auth_local_data_source.dart';
@@ -75,16 +76,16 @@ Future<void> init() async {
   sl.registerLazySingleton<ApiClient>(() => ApiClient());
   sl.registerLazySingleton<auth.FirebaseAuth>(() => auth.FirebaseAuth.instance);
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
-  
+  // Permission service
+  sl.registerLazySingleton<PermissionService>(() => PermissionService());
+
   // SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
   // Data sources
   sl.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSourceImpl(
-      sharedPreferences: sl<SharedPreferences>(),
-    ),
+    () => AuthLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
   );
   sl.registerLazySingleton(
     () => AuthRemoteDataSourceImpl(
@@ -155,19 +156,17 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton<ReaderRepository>(
-    () => ReaderRepositoryImpl(
-      remoteDataSource: sl<ReaderRemoteDataSource>(),
-    ),
+    () => ReaderRepositoryImpl(remoteDataSource: sl<ReaderRemoteDataSource>()),
   );
 
   sl.registerLazySingleton<SearchRepository>(
-    () => SearchRepositoryImpl(
-      remoteDataSource: sl<SearchRemoteDataSource>(),
-    ),
+    () => SearchRepositoryImpl(remoteDataSource: sl<SearchRemoteDataSource>()),
   );
 
   sl.registerLazySingleton<ComicDetailRepository>(
-    () => ComicDetailRepositoryImpl(remoteDataSource: sl<ComicDetailRemoteDataSource>()),
+    () => ComicDetailRepositoryImpl(
+      remoteDataSource: sl<ComicDetailRemoteDataSource>(),
+    ),
   );
 
   // Usecases - Auth
@@ -206,7 +205,9 @@ Future<void> init() async {
   sl.registerFactory(() => ChapterRouteCubit(getChapters: sl<GetChapters>()));
 
   // Comic detail route cubit (router)
-  sl.registerFactory(() => ComicDetailRouteCubit(getComicDetail: sl<GetComicDetail>()));
+  sl.registerFactory(
+    () => ComicDetailRouteCubit(getComicDetail: sl<GetComicDetail>()),
+  );
 
   // Comic detail screen cubit
   sl.registerFactory(() => ComicDetailCubit(sl<ApiClient>()));
