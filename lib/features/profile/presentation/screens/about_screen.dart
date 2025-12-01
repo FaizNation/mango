@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -12,77 +14,76 @@ class AboutScreen extends StatelessWidget {
         role: 'Lead Developer (Ketua Tim)',
         description:
             'Memimpin arsitektur dan mengawasi implementasi fitur inti aplikasi.',
-        imagePath: 'assets/images/masjenar.png',
+        imageUrl: 'https://unavatar.io/github/faiznation',
         githubUrl: 'https://github.com/faiznation',
-        instagramUrl: 'https://instagram.com/faiznation',
+        instagramUrl: 'https://www.instagram.com/faiz_natioon/',
       ),
     ];
 
     final List<TeamMember> otherMembers = [
       TeamMember(
-        name: 'Jenar',
+        name: 'Jenar Aditiya B',
         role: 'Frontend Developer',
         description: 'Bertanggung jawab atas desain antarmuka dan frontend.',
-        imagePath: 'assets/images/user_placeholder.png',
+        imageUrl: 'https://unavatar.io/github/jennn1-jr',
         githubUrl: 'https://github.com/jennn1-jr',
-        instagramUrl: 'https://instagram.com/jenar_aditiya',
+        instagramUrl: 'https://www.instagram.com/jenar_aditiya/',
       ),
       TeamMember(
-        name: 'MiaAu',
+        name: 'Mia Audina I A',
         role: 'UI/UX Designer',
-        description:
-            'Bertanggung jawab atas desain antarmuka pengguna, dan pengimplementasian UI.',
-        imagePath: 'assets/images/user_placeholder.png',
+        description: 'Bertanggung jawab atas desain antarmuka pengguna, Dan Pengimplementasian UI.',
+        imageUrl: 'https://unavatar.io/github/MyaruL',
         githubUrl: 'https://github.com/MyaruL',
-        instagramUrl: 'https://instagram.com/Mia',
+        instagramUrl: 'https://www.instagram.com/myariesh/',
       ),
       TeamMember(
-        name: 'Febri',
+        name: 'Febriana N A',
         role: 'Backend & Database Manager',
         description: 'Mengelola koneksi server dan memastikan data aman',
-        imagePath: 'assets/images/user_placeholder.png',
-        githubUrl: 'https://github.com/Febri',
-        instagramUrl: 'https://instagram.com/Febri',
+        imageUrl: 'https://unavatar.io/github/beeena4',
+        githubUrl: 'https://github.com/beeena4',
+        instagramUrl: 'https://www.instagram.com/fbenaa/',
       ),
       TeamMember(
-        name: 'Faqih',
+        name: 'Faqih Rafasha A',
         role: 'Hacker & Bug Hunter',
         description: 'Menganalisis pola penggunaan, mengidentifikasi *bug*, .',
-        imagePath: 'assets/images/user_placeholder.png',
-        githubUrl: 'https://github.com/faqih',
-        instagramUrl: 'https://instagram.com/faqih',
+        imageUrl: 'https://unavatar.io/github/Argandhi23',
+        githubUrl: 'https://github.com/Argandhi23',
+        instagramUrl: 'https://www.instagram.com/argandhi__/',
       ),
       TeamMember(
         name: 'Manda Fatimah A',
         role: 'Backend Developer',
         description: 'Membangun.',
-        imagePath: 'assets/images/user_placeholder.png',
+        imageUrl: 'https://unavatar.io/github/mandaazaziah',
         githubUrl: 'https://github.com/mandaazaziah',
-        instagramUrl: 'https://instagram.com/manda',
+        instagramUrl: 'https://www.instagram.com/fattyma.nda/',
       ),
       TeamMember(
-        name: 'Felicia',
+        name: 'Felicia Andara L',
         role: 'Frontend Developer',
         description: 'Menyusun komponen UI dan interaksi pengguna.',
-        imagePath: 'assets/images/user_placeholder.png',
+        imageUrl: 'https://unavatar.io/github/feliciaandaraaa',
         githubUrl: 'https://github.com/feliciaandaraaa',
-        instagramUrl: 'https://instagram.com/felicia',
+        instagramUrl: 'https://www.instagram.com/flcaadr/',
       ),
       TeamMember(
-        name: 'Keisa Aushafa Dzihni',
+        name: 'Keisa Aushafa D',
         role: 'QA Engineer',
         description: 'Menulis skenario pengujian dan melaporkan bug.',
-        imagePath: 'assets/images/user_placeholder.png',
+        imageUrl: 'https://unavatar.io/github/KeisaAushafa',
         githubUrl: 'https://github.com/KeisaAushafa',
-        instagramUrl: 'https://instagram.com/keisa',
+        instagramUrl: 'https://www.instagram.com/keshfaa/',
       ),
       TeamMember(
-        name: 'Leony',
+        name: 'Leony Andika T',
         role: 'DevOps',
         description: 'Mengelola deployment dan konfigurasi CI/CD.',
-        imagePath: 'assets/images/user_placeholder.png',
+        imageUrl: 'https://unavatar.io/github/leooalderic',
         githubUrl: 'https://github.com/leooalderic',
-        instagramUrl: 'https://instagram.com/lny.andika',
+        instagramUrl: 'https://www.instagram.com/lny.andika/',
       ),
     ];
 
@@ -106,10 +107,7 @@ class AboutScreen extends StatelessWidget {
                 const Text(
                   'Our Team',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
+                      fontSize: 24, fontWeight: FontWeight.bold, height: 1.2),
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -120,59 +118,48 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // LEADS: King Faiz & Dezkrazzer (always at top, side by side)
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final double cardWidth = constraints.maxWidth > 800
-                        ? 420
-                        : constraints.maxWidth / 1.05;
-                    return Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: leadMembers
-                          .map(
-                            (m) => SizedBox(
+                LayoutBuilder(builder: (context, constraints) {
+                  final double cardWidth =
+                      constraints.maxWidth > 800 ? 420 : constraints.maxWidth / 1.05;
+                  return Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: leadMembers
+                        .map((m) => SizedBox(
                               width: cardWidth,
                               child: TeamCard(member: m, isLead: true),
-                            ),
-                          )
-                          .toList(),
-                    );
-                  },
-                ),
+                            ))
+                        .toList(),
+                  );
+                }),
 
                 const SizedBox(height: 28),
 
                 // OTHER MEMBERS (8 members) - grid-like responsive
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    const double spacing = 16;
-                    final double maxW = constraints.maxWidth;
-                    // Breakpoints:
-                    // >=1000 -> 4 columns (desktop)
-                    // >=700  -> 3 columns (tablet)
-                    // <700   -> 2 columns (phone)
-                    final int columns = maxW >= 1000
-                        ? 4
-                        : (maxW >= 700 ? 3 : 2);
-                    final double totalSpacing = spacing * (columns - 1);
-                    final double itemWidth = (maxW - totalSpacing) / columns;
+                LayoutBuilder(builder: (context, constraints) {
+                  const double spacing = 16;
+                  final double maxW = constraints.maxWidth;
+                  // Breakpoints:
+                  // >=1000 -> 4 columns (desktop)
+                  // >=700  -> 3 columns (tablet)
+                  // <700   -> 2 columns (phone)
+                  final int columns = maxW >= 1000 ? 4 : (maxW >= 700 ? 3 : 2);
+                  final double totalSpacing = spacing * (columns - 1);
+                  final double itemWidth = (maxW - totalSpacing) / columns;
 
-                    return Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: spacing,
-                      runSpacing: 16,
-                      children: otherMembers
-                          .map(
-                            (m) => SizedBox(
+                  return Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: spacing,
+                    runSpacing: 16,
+                    children: otherMembers
+                        .map((m) => SizedBox(
                               width: itemWidth.clamp(200, 420),
                               child: TeamCard(member: m),
-                            ),
-                          )
-                          .toList(),
-                    );
-                  },
-                ),
+                            ))
+                        .toList(),
+                  );
+                }),
 
                 const SizedBox(height: 28),
 
@@ -181,11 +168,7 @@ class AboutScreen extends StatelessWidget {
                   child: Text(
                     'This application was developed by our team to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      height: 1.4,
-                      color: Colors.black87,
-                    ),
+                    style: TextStyle(fontSize: 15, height: 1.4, color: Colors.black87),
                   ),
                 ),
 
@@ -211,7 +194,7 @@ class TeamMember {
   final String name;
   final String role;
   final String description;
-  final String imagePath;
+  final String imageUrl; 
   final String githubUrl;
   final String instagramUrl;
 
@@ -219,7 +202,7 @@ class TeamMember {
     required this.name,
     required this.role,
     required this.description,
-    required this.imagePath,
+    required this.imageUrl, 
     required this.githubUrl,
     required this.instagramUrl,
   });
@@ -231,11 +214,20 @@ class TeamCard extends StatelessWidget {
   final bool isLead;
   const TeamCard({super.key, required this.member, this.isLead = false});
 
-  void _openUrl(BuildContext context, String url) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Open URL: $url')));
-    // Replace above SnackBar with url_launcher if you want to actually open links.
+  void _openUrl(BuildContext context, String url) async {
+    final Uri uri = Uri.parse(url);
+
+    try {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault, 
+        webOnlyWindowName: '_blank',      
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Tidak bisa membuka link: $url')),
+      );
+    }
   }
 
   @override
@@ -253,7 +245,9 @@ class TeamCard extends StatelessWidget {
             CircleAvatar(
               radius: 40,
               backgroundColor: Colors.blue.shade50,
-              backgroundImage: AssetImage(member.imagePath),
+              backgroundImage: member.imageUrl.startsWith('http')
+                  ? NetworkImage(member.imageUrl)
+                  : AssetImage(member.imageUrl) as ImageProvider,
             ),
             const SizedBox(height: 12),
             Text(
@@ -294,13 +288,13 @@ class TeamCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.code),
+                  icon: const FaIcon(FontAwesomeIcons.github),
                   tooltip: 'GitHub',
                   onPressed: () => _openUrl(context, member.githubUrl),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.camera_alt),
+                  icon: const FaIcon(FontAwesomeIcons.instagram),
                   color: Colors.pink,
                   tooltip: 'Instagram',
                   onPressed: () => _openUrl(context, member.instagramUrl),
