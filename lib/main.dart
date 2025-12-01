@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'core/config/firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sizer/sizer.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:mango/injection.dart';
 import 'package:mango/core/network/api_client.dart';

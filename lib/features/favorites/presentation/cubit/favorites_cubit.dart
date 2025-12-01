@@ -54,10 +54,10 @@ class FavoritesCubit extends Cubit<FavoritesState> {
       } else {
         await _addFavorite(AddFavoriteParams(comic: comic));
       }
-    } on ServerFailure catch (e) {
+    } on ServerFailure {
       // The stream will eventually report the new state, so we don't need to emit a failure state here
       // for the main list. A transient snackbar could be shown in the UI.
-      print('Failed to toggle favorite: ${e.message}');
+      // print('Failed to toggle favorite: ${e.message}');
     }
   }
 

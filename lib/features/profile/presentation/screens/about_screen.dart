@@ -11,9 +11,9 @@ class AboutScreen extends StatelessWidget {
     final List<TeamMember> leadMembers = [
       TeamMember(
         name: 'King Faiz Nation',
-        role: 'Lead Developer (Ketua Tim)',
+        role: 'Lead Developer',
         description:
-            'Memimpin arsitektur dan mengawasi implementasi fitur inti aplikasi.',
+            'Memimpin pengembangan aplikasi dan mengoordinasikan tim teknis.',
         imageUrl: 'https://unavatar.io/github/faiznation',
         githubUrl: 'https://github.com/faiznation',
         instagramUrl: 'https://www.instagram.com/faiz_natioon/',
@@ -31,16 +31,16 @@ class AboutScreen extends StatelessWidget {
       ),
       TeamMember(
         name: 'Mia Audina I A',
-        role: 'UI/UX Designer',
-        description: 'Bertanggung jawab atas desain antarmuka pengguna, Dan Pengimplementasian UI.',
+        role: 'Content Writer',
+        description: 'Membuat konten informatif dan menarik untuk pengguna.',
         imageUrl: 'https://unavatar.io/github/MyaruL',
         githubUrl: 'https://github.com/MyaruL',
         instagramUrl: 'https://www.instagram.com/myariesh/',
       ),
       TeamMember(
         name: 'Febriana N A',
-        role: 'Backend & Database Manager',
-        description: 'Mengelola koneksi server dan memastikan data aman',
+        role: 'Content Writer',
+        description: 'Menghasilkan teks deskriptif dan panduan penggunaan aplikasi.',
         imageUrl: 'https://unavatar.io/github/beeena4',
         githubUrl: 'https://github.com/beeena4',
         instagramUrl: 'https://www.instagram.com/fbenaa/',
@@ -55,24 +55,24 @@ class AboutScreen extends StatelessWidget {
       ),
       TeamMember(
         name: 'Manda Fatimah A',
-        role: 'Backend Developer',
-        description: 'Membangun.',
+        role: 'Content Writer',
+        description: 'Menyusun konten yang jelas dan mudah dipahami pengguna.',
         imageUrl: 'https://unavatar.io/github/mandaazaziah',
         githubUrl: 'https://github.com/mandaazaziah',
         instagramUrl: 'https://www.instagram.com/fattyma.nda/',
       ),
       TeamMember(
         name: 'Felicia Andara L',
-        role: 'Frontend Developer',
-        description: 'Menyusun komponen UI dan interaksi pengguna.',
+        role: 'Content Writer',
+        description: 'Membuat konten yang menarik dan relevan untuk aplikasi.',
         imageUrl: 'https://unavatar.io/github/feliciaandaraaa',
         githubUrl: 'https://github.com/feliciaandaraaa',
         instagramUrl: 'https://www.instagram.com/flcaadr/',
       ),
       TeamMember(
         name: 'Keisa Aushafa D',
-        role: 'QA Engineer',
-        description: 'Menulis skenario pengujian dan melaporkan bug.',
+        role: 'Content Writer',
+        description: 'Menghasilkan konten yang informatif dan engaging untuk pengguna.',
         imageUrl: 'https://unavatar.io/github/KeisaAushafa',
         githubUrl: 'https://github.com/KeisaAushafa',
         instagramUrl: 'https://www.instagram.com/keshfaa/',
@@ -163,17 +163,6 @@ class AboutScreen extends StatelessWidget {
 
                 const SizedBox(height: 28),
 
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    'This application was developed by our team to fulfill the midterm assignment for the platform-based programming course at Surabaya State University.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, height: 1.4, color: Colors.black87),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Close'),
@@ -224,6 +213,7 @@ class TeamCard extends StatelessWidget {
         webOnlyWindowName: '_blank',      
       );
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Tidak bisa membuka link: $url')),
       );

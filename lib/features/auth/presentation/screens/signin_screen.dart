@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
           final confirm = await showExitConfirmationDialog(context);
           if (!mounted) return;
           if (confirm) {
+            // ignore: use_build_context_synchronously
             context.go('/getstarted');
           }
         },
@@ -63,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () async {
                   final confirm = await showExitConfirmationDialog(context);
                   if (!mounted) return;
+                  // ignore: use_build_context_synchronously
                   if (confirm) context.go('/getstarted');
                 },
               ),

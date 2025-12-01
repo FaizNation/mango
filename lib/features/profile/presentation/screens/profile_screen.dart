@@ -47,6 +47,7 @@ class ProfileScreen extends StatelessWidget {
   Future<void> _handlePhotoEdit(BuildContext context) async {
     final source = await showEditPhotoDialog(context);
     if (source != null) {
+      // ignore: use_build_context_synchronously
       final imageBytes = await _pickImage(context, source);
       if (imageBytes != null) {
         // ignore: use_build_context_synchronously

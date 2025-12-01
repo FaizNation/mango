@@ -35,13 +35,16 @@ class HomeCubit extends Cubit<HomeState> {
     final now = DateTime.now();
     final hour = now.hour;
     String newGreeting;
-    if (hour >= 5 && hour < 12)
+    if (hour >= 5 && hour < 12) {
       newGreeting = "Ohayō!";
-    else if (hour >= 12 && hour < 15)
+    } else if (hour >= 12 && hour < 15)
+      // ignore: curly_braces_in_flow_control_structures
       newGreeting = "Konnichiwa!";
     else if (hour >= 15 && hour < 18)
+      // ignore: curly_braces_in_flow_control_structures
       newGreeting = "Yūgata!";
     else
+      // ignore: curly_braces_in_flow_control_structures
       newGreeting = "Konbanwa!";
     final newTime =
         "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";

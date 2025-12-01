@@ -46,17 +46,17 @@ class HistoryCubit extends Cubit<HistoryState> {
   Future<void> deleteHistoryEntry(String id) async {
     try {
       await _deleteHistoryEntry(DeleteHistoryEntryParams(id: id));
-    } on ServerFailure catch (e) {
+    // ignore: empty_catches
+    } on ServerFailure {
 
-      print('Failed to delete history entry: ${e.message}');
     }
   }
 
   Future<void> clearAllHistory() async {
     try {
       await _clearAllHistory(NoParams());
-    } on ServerFailure catch (e) {
-      print('Failed to clear history: ${e.message}');
+    // ignore: empty_catches
+    } on ServerFailure {
     }
   }
 
